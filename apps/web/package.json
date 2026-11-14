@@ -1,0 +1,35 @@
+{
+  "name": "@avenir/web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5173 --host",
+    "build": "vite build",
+    "preview": "vite preview --port 5173",
+    "codegen": "orval --config ./orval.config.ts"
+  },
+  "dependencies": {
+    "@avenir/shared": "1.0.0",
+    "@tamagui/config": "^1.125.17",
+    "@tamagui/core": "^1.125.17",
+    "@tamagui/web": "^1.125.17",
+    "axios": "^1.7.9",
+    "better-auth": "^1.2.5",
+    "jotai": "^2.11.2",
+    "lucide-react": "^0.475.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-native-web": "^0.19.13",
+    "tamagui": "^1.125.17"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "orval": "^7.5.0",
+    "typescript": "^5.7.3",
+    "vite": "^6.1.0"
+  }
+}
+

@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: projet-avenir-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: avenir
+      POSTGRES_PASSWORD: avenir_password
+      POSTGRES_DB: projet_avenir
+    ports:
+      - "5433:5432"
+    volumes:
+      - avenir_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U avenir -d projet_avenir"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  avenir_pgdata:
+

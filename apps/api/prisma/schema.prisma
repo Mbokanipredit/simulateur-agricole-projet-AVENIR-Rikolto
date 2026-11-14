@@ -1,0 +1,178 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String       @id @default(cuid())
+  name          String
+  email         String       @unique
+  emailVerified Boolean      @default(false)
+  image         String?
+  role          String       @default("FACILITATOR") // ADMIN | FACILITATOR | PRODUCER
+  organization  String?      @default("Rikolto RDC - Projet AVENIR")
+  province      String?      @default("Kwilu")
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  simulations   Simulation[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+
+  @@map("verification")
+}
+
+model CropTemplate {
+  id                    String                @id @default(cuid())
+  code                  String                @unique
+  nameFr                String
+  localName             String?
+  category              String                // PERENNIAL (Café/Cacao) | FOOD_CROP (Vivrier/Nutrition)
+  icon                  String
+  descriptionFr         String
+  cycleDurationMonths   Int
+  recommendedProvince   String                @default("Kwilu & Kwango")
+  defaultSurfaceArea    Float                 @default(1)
+  defaultSurfaceUnit    String                @default("HA")
+  defaultYieldPerHa     Float
+  defaultCommercialQty  Float
+  productionUnit        String                @default("KG")
+  unitWeightKg          Float                 @default(1)
+  defaultSalePriceUsd   Float
+  nutritionTipFr        String
+  agronomicTipFr        String
+  isActive              Boolean               @default(true)
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+  defaultExpenses       CropExpenseTemplate[]
+
+  @@map("crop_template")
+}
+
+model CropExpenseTemplate {
+  id             String       @id @default(cuid())
+  cropTemplateId String
+  cropTemplate   CropTemplate @relation(fields: [cropTemplateId], references: [id], onDelete: Cascade)
+  stage          String       // LAND_PREP | SEEDS | PLANTING | MAINTENANCE | INPUTS | LABOR | HARVEST | LOGISTICS
+  label          String
+  unit           String
+  quantity       Float
+  unitCostUsd    Float
+  costType       String       @default("VARIABLE") // FIXED | VARIABLE
+  sortOrder      Int          @default(0)
+
+  @@map("crop_expense_template")
+}
+
+model Simulation {
+  id                     String   @id @default(cuid())
+  shareCode              String   @unique
+  title                  String
+  producerName           String?
+  province               String   @default("Kwilu")
+  cropCode               String
+  cropName               String
+  surfaceArea            Float
+  surfaceUnit            String   @default("HA")
+  expectedYieldTotal     Float
+  commercializedQty      Float
+  productionUnit         String   @default("KG")
+  unitSalePriceUsd       Float
+  otherRevenueUsd        Float    @default(0)
+  exchangeRateCdfPerUsd  Float    @default(2850)
+  expensesJson           Json
+  resultsJson            Json
+  targetProfitUsd        Float?
+  notes                  String?
+  userId                 String?
+  user                   User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  @@map("simulation")
+}
+
+model ToolboxCategory {
+  id            String           @id @default(cuid())
+  slug          String           @unique
+  titleFr       String
+  descriptionFr String
+  icon          String
+  colorHex      String           @default("#1B5E20")
+  sortOrder     Int              @default(0)
+  articles      ToolboxArticle[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  @@map("toolbox_category")
+}
+
+model ToolboxArticle {
+  id                  String          @id @default(cuid())
+  slug                String          @unique
+  categoryId          String
+  category            ToolboxCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  titleFr             String
+  subtitleFr          String
+  readingTimeMinutes  Int             @default(4)
+  targetAudience      String          @default("Producteurs & Animateurs")
+  linkedSimulatorStage String?        // Optional link to simulator step or metric
+  summaryFr           String
+  keyFormulaFr        String?
+  contentSectionsJson Json            // Array of { heading, body, practicalExample, illustrationIcon }
+  checklistJson       Json            // Array of actionable points for farmers
+  facilitatorNoteFr   String          // Specific guidance for Rikolto field facilitators (animateurs)
+  isPublished         Boolean         @default(true)
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+
+  @@map("toolbox_article")
+}
+

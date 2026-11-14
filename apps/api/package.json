@@ -1,0 +1,36 @@
+{
+  "name": "@avenir/api",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json && node dist/src/main.js",
+    "start": "node dist/src/main.js",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:seed": "tsx prisma/seed.ts",
+    "openapi:generate": "tsc -p tsconfig.json && node dist/src/generate-openapi.js",
+    "test": "node --import tsx --test src/**/*.spec.ts"
+  },
+  "dependencies": {
+    "@avenir/shared": "1.0.0",
+    "@nestjs/common": "^11.0.10",
+    "@nestjs/core": "^11.0.10",
+    "@nestjs/platform-express": "^11.0.10",
+    "@nestjs/swagger": "^11.0.5",
+    "@prisma/client": "^6.4.1",
+    "better-auth": "^1.2.5",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "dotenv": "^16.4.7",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.4",
+    "prisma": "^6.4.1",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3"
+  }
+}

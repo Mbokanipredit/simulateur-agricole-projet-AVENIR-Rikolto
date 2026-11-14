@@ -1,0 +1,1171 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/auth-portal/status": {
+      "get": {
+        "operationId": "AuthController_getStatus",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthPortalResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Vérifier le statut de la plateforme (accès public sans compte actif + BetterAuth)",
+        "tags": [
+          "Auth (BetterAuth - Rikolto & Animateurs)"
+        ]
+      }
+    },
+    "/api/auth-portal/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FacilitatorRegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthPortalResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Créer un compte Animateur de terrain ou Administrateur Rikolto via BetterAuth",
+        "tags": [
+          "Auth (BetterAuth - Rikolto & Animateurs)"
+        ]
+      }
+    },
+    "/api/auth-portal/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FacilitatorLoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthPortalResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Connexion Animateur / Équipe Rikolto via BetterAuth",
+        "tags": [
+          "Auth (BetterAuth - Rikolto & Animateurs)"
+        ]
+      }
+    },
+    "/api/crops": {
+      "get": {
+        "operationId": "CropsController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CropTemplateDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Lister tous les modèles de cultures avec leurs 8 étapes de dépenses de référence",
+        "tags": [
+          "Crops (Référentiels Cultures Kwilu & Kwango)"
+        ]
+      }
+    },
+    "/api/crops/{code}": {
+      "get": {
+        "operationId": "CropsController_findByCode",
+        "parameters": [
+          {
+            "name": "code",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CropTemplateDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Obtenir le référentiel détaillé d’une culture par son code (ex: CAFE_ROBUSTA)",
+        "tags": [
+          "Crops (Référentiels Cultures Kwilu & Kwango)"
+        ]
+      }
+    },
+    "/api/simulations/calculate": {
+      "post": {
+        "operationId": "SimulationsController_calculate",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSimulationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EconomicResultsDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Calculer les résultats économiques complets d’une simulation agricole",
+        "tags": [
+          "Simulations (Calculs Économiques & Partage Sans Compte)"
+        ]
+      }
+    },
+    "/api/simulations": {
+      "post": {
+        "operationId": "SimulationsController_save",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSimulationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedSimulationDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Enregistrer une simulation sans compte obligatoire et générer un code de partage (ex: AVN-XXXX)",
+        "tags": [
+          "Simulations (Calculs Économiques & Partage Sans Compte)"
+        ]
+      },
+      "get": {
+        "operationId": "SimulationsController_findRecent",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SavedSimulationDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Lister les simulations récentes partagées (pour suivi par les animateurs Rikolto)",
+        "tags": [
+          "Simulations (Calculs Économiques & Partage Sans Compte)"
+        ]
+      }
+    },
+    "/api/simulations/share/{shareCode}": {
+      "get": {
+        "operationId": "SimulationsController_findByShareCode",
+        "parameters": [
+          {
+            "name": "shareCode",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedSimulationDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Récupérer une simulation sauvegardée via son code court (ex: AVN-2026)",
+        "tags": [
+          "Simulations (Calculs Économiques & Partage Sans Compte)"
+        ]
+      }
+    },
+    "/api/toolbox/categories": {
+      "get": {
+        "operationId": "ToolboxController_findAllCategories",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ToolboxCategoryDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Lister toutes les thématiques de la boîte à outils avec leurs fiches pratiques",
+        "tags": [
+          "Toolbox (Boîte à Outils Pédagogique & Éducation Entrepreneuriale)"
+        ]
+      }
+    },
+    "/api/toolbox/articles/{slug}": {
+      "get": {
+        "operationId": "ToolboxController_findArticleBySlug",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolboxArticleDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Obtenir une fiche pratique complète par son slug",
+        "tags": [
+          "Toolbox (Boîte à Outils Pédagogique & Éducation Entrepreneuriale)"
+        ]
+      }
+    },
+    "/api/toolbox/articles": {
+      "post": {
+        "operationId": "ToolboxController_createArticle",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateToolboxArticleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolboxArticleDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Publier une nouvelle fiche pédagogique dans la boîte à outils (Équipe Rikolto)",
+        "tags": [
+          "Toolbox (Boîte à Outils Pédagogique & Éducation Entrepreneuriale)"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Projet AVENIR — Rikolto RDC API",
+    "description": "API de la boîte à outils interactive d’éducation entrepreneuriale et du simulateur économique agricole (Provinces du Kwilu et du Kwango).",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "AuthPortalUserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "organization": {
+            "type": "string"
+          },
+          "province": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email",
+          "role",
+          "organization",
+          "province"
+        ]
+      },
+      "AuthPortalResponseDto": {
+        "type": "object",
+        "properties": {
+          "authenticated": {
+            "type": "boolean"
+          },
+          "token": {
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/AuthPortalUserDto"
+          }
+        },
+        "required": [
+          "authenticated"
+        ]
+      },
+      "FacilitatorRegisterDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Jean-Paul Mbemba"
+          },
+          "email": {
+            "type": "string",
+            "example": "animateur.kwilu@rikolto.org"
+          },
+          "password": {
+            "type": "string",
+            "example": "Avenir2026!"
+          },
+          "province": {
+            "type": "string",
+            "example": "Kwilu"
+          },
+          "role": {
+            "type": "string",
+            "example": "FACILITATOR"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password"
+        ]
+      },
+      "FacilitatorLoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "animateur.kwilu@rikolto.org"
+          },
+          "password": {
+            "type": "string",
+            "example": "Avenir2026!"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "CropExpenseTemplateDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "stage": {
+            "type": "string",
+            "example": "LAND_PREP",
+            "description": "LAND_PREP | SEEDS | PLANTING | MAINTENANCE | INPUTS | LABOR | HARVEST | LOGISTICS"
+          },
+          "label": {
+            "type": "string",
+            "example": "Sarclage et taille d’entretien"
+          },
+          "unit": {
+            "type": "string",
+            "example": "H/J"
+          },
+          "quantity": {
+            "type": "number",
+            "example": 45
+          },
+          "unitCostUsd": {
+            "type": "number",
+            "example": 3.5
+          },
+          "costType": {
+            "type": "string",
+            "example": "VARIABLE"
+          },
+          "sortOrder": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "required": [
+          "id",
+          "stage",
+          "label",
+          "unit",
+          "quantity",
+          "unitCostUsd",
+          "costType",
+          "sortOrder"
+        ]
+      },
+      "CropTemplateDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string",
+            "example": "CAFE_ROBUSTA"
+          },
+          "nameFr": {
+            "type": "string",
+            "example": "Café Robusta (Campagne annuelle en production)"
+          },
+          "localName": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "example": "PERENNIAL"
+          },
+          "icon": {
+            "type": "string",
+            "example": "☕"
+          },
+          "descriptionFr": {
+            "type": "string"
+          },
+          "cycleDurationMonths": {
+            "type": "number",
+            "example": 12
+          },
+          "recommendedProvince": {
+            "type": "string",
+            "example": "Kwilu & Kwango"
+          },
+          "defaultSurfaceArea": {
+            "type": "number",
+            "example": 1
+          },
+          "defaultSurfaceUnit": {
+            "type": "string",
+            "example": "HA"
+          },
+          "defaultYieldPerHa": {
+            "type": "number",
+            "example": 1200
+          },
+          "defaultCommercialQty": {
+            "type": "number",
+            "example": 1150
+          },
+          "productionUnit": {
+            "type": "string",
+            "example": "KG"
+          },
+          "unitWeightKg": {
+            "type": "number",
+            "example": 1
+          },
+          "defaultSalePriceUsd": {
+            "type": "number",
+            "example": 1.85
+          },
+          "nutritionTipFr": {
+            "type": "string"
+          },
+          "agronomicTipFr": {
+            "type": "string"
+          },
+          "defaultExpenses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CropExpenseTemplateDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "nameFr",
+          "category",
+          "icon",
+          "descriptionFr",
+          "cycleDurationMonths",
+          "recommendedProvince",
+          "defaultSurfaceArea",
+          "defaultSurfaceUnit",
+          "defaultYieldPerHa",
+          "defaultCommercialQty",
+          "productionUnit",
+          "unitWeightKg",
+          "defaultSalePriceUsd",
+          "nutritionTipFr",
+          "agronomicTipFr",
+          "defaultExpenses"
+        ]
+      },
+      "ExpenseLineItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "stage": {
+            "type": "string",
+            "example": "LAND_PREP",
+            "description": "LAND_PREP | SEEDS | PLANTING | MAINTENANCE | INPUTS | LABOR | HARVEST | LOGISTICS"
+          },
+          "label": {
+            "type": "string",
+            "example": "Défrichage et labour"
+          },
+          "unit": {
+            "type": "string",
+            "example": "H/J"
+          },
+          "quantity": {
+            "type": "number",
+            "example": 30
+          },
+          "unitCostUsd": {
+            "type": "number",
+            "example": 3.5
+          },
+          "costType": {
+            "type": "string",
+            "example": "VARIABLE"
+          }
+        },
+        "required": [
+          "id",
+          "stage",
+          "label",
+          "unit",
+          "quantity",
+          "unitCostUsd",
+          "costType"
+        ]
+      },
+      "CreateSimulationDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Simulation Café 1.5 ha - Ménage Kwilu"
+          },
+          "producerName": {
+            "type": "string",
+            "example": "Coopérative Kikwit"
+          },
+          "province": {
+            "type": "string",
+            "example": "Kwilu"
+          },
+          "cropCode": {
+            "type": "string",
+            "example": "CAFE_ROBUSTA"
+          },
+          "cropName": {
+            "type": "string",
+            "example": "Café Robusta"
+          },
+          "surfaceArea": {
+            "type": "number",
+            "example": 1
+          },
+          "surfaceUnit": {
+            "type": "string",
+            "example": "HA"
+          },
+          "expectedYieldTotal": {
+            "type": "number",
+            "example": 1200
+          },
+          "commercializedQty": {
+            "type": "number",
+            "example": 1150
+          },
+          "productionUnit": {
+            "type": "string",
+            "example": "KG"
+          },
+          "unitSalePriceUsd": {
+            "type": "number",
+            "example": 1.85
+          },
+          "otherRevenueUsd": {
+            "type": "number",
+            "example": 0
+          },
+          "exchangeRateCdfPerUsd": {
+            "type": "number",
+            "example": 2850
+          },
+          "targetProfitUsd": {
+            "type": "number",
+            "example": 1000
+          },
+          "notes": {
+            "type": "string"
+          },
+          "expenses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLineItemDto"
+            }
+          }
+        },
+        "required": [
+          "title",
+          "province",
+          "cropCode",
+          "cropName",
+          "surfaceArea",
+          "surfaceUnit",
+          "expectedYieldTotal",
+          "commercializedQty",
+          "productionUnit",
+          "unitSalePriceUsd",
+          "otherRevenueUsd",
+          "exchangeRateCdfPerUsd",
+          "expenses"
+        ]
+      },
+      "StageBreakdownDto": {
+        "type": "object",
+        "properties": {
+          "stage": {
+            "type": "string"
+          },
+          "labelFr": {
+            "type": "string"
+          },
+          "shortLabelFr": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "amountUsd": {
+            "type": "number"
+          },
+          "sharePercent": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "stage",
+          "labelFr",
+          "shortLabelFr",
+          "icon",
+          "amountUsd",
+          "sharePercent"
+        ]
+      },
+      "PedagogicalDiagnosticDto": {
+        "type": "object",
+        "properties": {
+          "level": {
+            "type": "string",
+            "example": "PROFITABLE"
+          },
+          "headlineFr": {
+            "type": "string"
+          },
+          "recommendationsFr": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "relatedToolboxSlugs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "level",
+          "headlineFr",
+          "recommendationsFr",
+          "relatedToolboxSlugs"
+        ]
+      },
+      "EconomicResultsDto": {
+        "type": "object",
+        "properties": {
+          "surfaceInHectares": {
+            "type": "number"
+          },
+          "totalFixedCostUsd": {
+            "type": "number"
+          },
+          "totalVariableCostUsd": {
+            "type": "number"
+          },
+          "totalCostUsd": {
+            "type": "number"
+          },
+          "costPerHectareUsd": {
+            "type": "number"
+          },
+          "unitProductionCostUsd": {
+            "type": "number"
+          },
+          "commercializedRevenueUsd": {
+            "type": "number"
+          },
+          "selfConsumedQty": {
+            "type": "number"
+          },
+          "selfConsumedValueUsd": {
+            "type": "number"
+          },
+          "otherRevenueUsd": {
+            "type": "number"
+          },
+          "totalCashRevenueUsd": {
+            "type": "number"
+          },
+          "totalEconomicValueUsd": {
+            "type": "number"
+          },
+          "grossMarginUsd": {
+            "type": "number"
+          },
+          "grossMarginPercent": {
+            "type": "number"
+          },
+          "netProfitUsd": {
+            "type": "number"
+          },
+          "roiPercent": {
+            "type": "number"
+          },
+          "breakEvenQuantity": {
+            "type": "number"
+          },
+          "breakEvenSafetyMarginPercent": {
+            "type": "number"
+          },
+          "breakEvenMinPriceUsd": {
+            "type": "number"
+          },
+          "stageBreakdown": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StageBreakdownDto"
+            }
+          },
+          "diagnostic": {
+            "$ref": "#/components/schemas/PedagogicalDiagnosticDto"
+          }
+        },
+        "required": [
+          "surfaceInHectares",
+          "totalFixedCostUsd",
+          "totalVariableCostUsd",
+          "totalCostUsd",
+          "costPerHectareUsd",
+          "unitProductionCostUsd",
+          "commercializedRevenueUsd",
+          "selfConsumedQty",
+          "selfConsumedValueUsd",
+          "otherRevenueUsd",
+          "totalCashRevenueUsd",
+          "totalEconomicValueUsd",
+          "grossMarginUsd",
+          "grossMarginPercent",
+          "netProfitUsd",
+          "roiPercent",
+          "breakEvenQuantity",
+          "breakEvenSafetyMarginPercent",
+          "breakEvenMinPriceUsd",
+          "stageBreakdown",
+          "diagnostic"
+        ]
+      },
+      "SavedSimulationDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "shareCode": {
+            "type": "string",
+            "example": "AVN-2026"
+          },
+          "title": {
+            "type": "string"
+          },
+          "producerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "province": {
+            "type": "string"
+          },
+          "cropCode": {
+            "type": "string"
+          },
+          "cropName": {
+            "type": "string"
+          },
+          "surfaceArea": {
+            "type": "number"
+          },
+          "surfaceUnit": {
+            "type": "string"
+          },
+          "expectedYieldTotal": {
+            "type": "number"
+          },
+          "commercializedQty": {
+            "type": "number"
+          },
+          "productionUnit": {
+            "type": "string"
+          },
+          "unitSalePriceUsd": {
+            "type": "number"
+          },
+          "otherRevenueUsd": {
+            "type": "number"
+          },
+          "exchangeRateCdfPerUsd": {
+            "type": "number"
+          },
+          "targetProfitUsd": {
+            "type": "number",
+            "nullable": true
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "expenses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLineItemDto"
+            }
+          },
+          "results": {
+            "$ref": "#/components/schemas/EconomicResultsDto"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "shareCode",
+          "title",
+          "province",
+          "cropCode",
+          "cropName",
+          "surfaceArea",
+          "surfaceUnit",
+          "expectedYieldTotal",
+          "commercializedQty",
+          "productionUnit",
+          "unitSalePriceUsd",
+          "otherRevenueUsd",
+          "exchangeRateCdfPerUsd",
+          "expenses",
+          "results",
+          "createdAt"
+        ]
+      },
+      "ToolboxContentSectionDto": {
+        "type": "object",
+        "properties": {
+          "heading": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "practicalExample": {
+            "type": "string"
+          },
+          "illustrationIcon": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "heading",
+          "body",
+          "practicalExample",
+          "illustrationIcon"
+        ]
+      },
+      "ToolboxArticleDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "categoryId": {
+            "type": "string"
+          },
+          "titleFr": {
+            "type": "string"
+          },
+          "subtitleFr": {
+            "type": "string"
+          },
+          "readingTimeMinutes": {
+            "type": "number"
+          },
+          "targetAudience": {
+            "type": "string"
+          },
+          "linkedSimulatorStage": {
+            "type": "string",
+            "nullable": true
+          },
+          "summaryFr": {
+            "type": "string"
+          },
+          "keyFormulaFr": {
+            "type": "string",
+            "nullable": true
+          },
+          "contentSections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ToolboxContentSectionDto"
+            }
+          },
+          "checklist": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "facilitatorNoteFr": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "slug",
+          "categoryId",
+          "titleFr",
+          "subtitleFr",
+          "readingTimeMinutes",
+          "targetAudience",
+          "summaryFr",
+          "contentSections",
+          "checklist",
+          "facilitatorNoteFr"
+        ]
+      },
+      "ToolboxCategoryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "titleFr": {
+            "type": "string"
+          },
+          "descriptionFr": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "colorHex": {
+            "type": "string"
+          },
+          "sortOrder": {
+            "type": "number"
+          },
+          "articles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ToolboxArticleDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "slug",
+          "titleFr",
+          "descriptionFr",
+          "icon",
+          "colorHex",
+          "sortOrder",
+          "articles"
+        ]
+      },
+      "CreateToolboxArticleDto": {
+        "type": "object",
+        "properties": {
+          "categorySlug": {
+            "type": "string",
+            "example": "planification-exploitation"
+          },
+          "titleFr": {
+            "type": "string",
+            "example": "Tenir un cahier de caisse simplifié au village"
+          },
+          "subtitleFr": {
+            "type": "string",
+            "example": "Noter chaque entrée et sortie en Francs Congolais et USD"
+          },
+          "readingTimeMinutes": {
+            "type": "number",
+            "example": 4
+          },
+          "targetAudience": {
+            "type": "string",
+            "example": "Producteurs & OP"
+          },
+          "linkedSimulatorStage": {
+            "type": "string",
+            "example": "RESULTS"
+          },
+          "summaryFr": {
+            "type": "string"
+          },
+          "keyFormulaFr": {
+            "type": "string"
+          },
+          "facilitatorNoteFr": {
+            "type": "string"
+          },
+          "contentSections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ToolboxContentSectionDto"
+            }
+          },
+          "checklist": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "categorySlug",
+          "titleFr",
+          "subtitleFr",
+          "readingTimeMinutes",
+          "targetAudience",
+          "summaryFr",
+          "facilitatorNoteFr",
+          "contentSections",
+          "checklist"
+        ]
+      }
+    }
+  }
+}
