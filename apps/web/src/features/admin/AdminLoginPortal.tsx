@@ -156,60 +156,25 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSucce
           padding: 'clamp(20px, 4vw, 48px) 16px',
         }}
       >
-        <div
-          style={{
-            maxWidth: '1020px',
-            width: '100%',
-            backgroundColor: '#FFFFFF',
-            borderRadius: '24px',
-            border: '1px solid #EEF2F6',
-            boxShadow: '0 20px 60px rgba(18, 36, 24, 0.05)',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 380px), 1fr))',
-            overflow: 'hidden',
-          }}
-        >
-          {/* Column 1: Humanized Visual & Agricultural Impact Story */}
+        <div className="avenir-login-card">
+          {/* Column 1: Humanized Visual & Agricultural Impact Story (Visible on desktop, hidden on mobile) */}
           <div
+            className="avenir-login-visual"
             style={{
               position: 'relative',
               backgroundColor: '#0E4523',
               backgroundImage: `
-                linear-gradient(180deg, rgba(14, 69, 35, 0.85) 0%, rgba(10, 52, 27, 0.94) 100%),
+                linear-gradient(180deg, rgba(14, 69, 35, 0.88) 0%, rgba(10, 52, 27, 0.95) 100%),
                 url(/images/agri-1.jpg)
               `,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               color: '#FFFFFF',
               padding: 'clamp(28px, 5vw, 44px)',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
               minHeight: '380px',
             }}
           >
             <div>
-              <div
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.12)',
-                  backdropFilter: 'blur(6px)',
-                  padding: '4px 12px',
-                  borderRadius: '999px',
-                  fontSize: '11px',
-                  fontWeight: 800,
-                  color: '#F2B632',
-                  letterSpacing: '0.6px',
-                  textTransform: 'uppercase',
-                  marginBottom: '20px',
-                }}
-              >
-                <Sprout size={13} color="#F2B632" />
-                <span>Campagne Agricole 2026</span>
-              </div>
-
               <h2
                 style={{
                   fontSize: 'clamp(22px, 3.2vw, 28px)',
@@ -283,16 +248,32 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSucce
           {/* Column 2: Clean Humanized Login Form (White Background) */}
           <div
             style={{
-              padding: 'clamp(28px, 5vw, 44px)',
+              padding: 'clamp(24px, 5vw, 42px)',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
               backgroundColor: '#FFFFFF',
+              boxSizing: 'border-box',
             }}
           >
-            <div style={{ marginBottom: '24px' }}>
-              <div style={{ fontSize: '13px', fontWeight: 800, color: '#1F6338', marginBottom: '4px' }}>
-                BIENVENUE 👋
+            <div style={{ marginBottom: '22px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                <div
+                  style={{
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '8px',
+                    backgroundColor: '#0E4523',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Sprout size={18} color="#F2B632" />
+                </div>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#1F6338', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
+                  PORTAIL OFFICIEL AVENIR
+                </span>
               </div>
               <h1
                 style={{

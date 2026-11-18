@@ -222,6 +222,34 @@
         }
       }
 
+      /* Admin Login Portal Responsive Layout */
+      .avenir-login-card {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        max-width: 980px;
+        width: 100%;
+        background-color: #ffffff;
+        border-radius: 24px;
+        border: 1px solid #eef2f6;
+        box-shadow: 0 20px 60px rgba(18, 36, 24, 0.06);
+        overflow: hidden;
+      }
+      .avenir-login-visual {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      @media (max-width: 860px) {
+        .avenir-login-card {
+          grid-template-columns: 1fr !important;
+          max-width: 460px !important;
+          box-shadow: 0 10px 30px rgba(18, 36, 24, 0.05) !important;
+        }
+        .avenir-login-visual {
+          display: none !important;
+        }
+      }
+
       @media (max-width: 920px) {
         .avenir-admin-main-pane {
           margin-left: 0 !important;
