@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAtom } from 'jotai';
 import { YStack, XStack, Text, Button } from 'tamagui';
-import { Sprout, ArrowRight, Menu, X, ShieldCheck } from 'lucide-react';
+import { Sprout, ArrowRight, Menu, X } from 'lucide-react';
 import {
   activeMainSectionAtom,
   displayCurrencyAtom,
@@ -153,28 +153,6 @@ export const Header: React.FC = () => {
               })}
             </XStack>
 
-            {/* Admin Portal Shortcut Button */}
-            <button
-              type="button"
-              title="Portail Direction & Administration"
-              onClick={() => {
-                navigateTo('ADMIN');
-              }}
-              style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '8px',
-                border: '1px solid #D5DDD5',
-                backgroundColor: '#FAF8F3',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-              }}
-            >
-              <ShieldCheck size={16} color="#1F6338" />
-            </button>
-
             <div className="avenir-header-cta-btn">
               <Button
                 size="$3.5"
@@ -244,31 +222,6 @@ export const Header: React.FC = () => {
                 </button>
               );
             })}
-
-            <button
-              type="button"
-              onClick={() => {
-                navigateTo('ADMIN');
-              }}
-              style={{
-                width: '100%',
-                padding: '10px 14px',
-                textAlign: 'left',
-                borderRadius: '8px',
-                border: '1px solid #DCE5DC',
-                backgroundColor: '#F3FAF5',
-                color: '#1F6338',
-                fontSize: '13.5px',
-                fontWeight: 800,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-              }}
-            >
-              <ShieldCheck size={16} color="#1F6338" />
-              <span>Portail Direction & Administration</span>
-            </button>
 
             <button
               type="button"

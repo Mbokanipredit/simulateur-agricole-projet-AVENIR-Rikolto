@@ -21,10 +21,10 @@ interface AdminLoginPortalProps {
 }
 
 export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSuccess, onBackToPublic }) => {
-  const [email, setEmail] = useState('admin@rikolto.org');
-  const [password, setPassword] = useState('Avenir2026!');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(true);
+  const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [showHelp, setShowHelp] = useState(false);
@@ -407,7 +407,7 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSucce
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="prenom.nom@rikolto.org"
+                    placeholder="admin@rikolto.org"
                     style={{
                       width: '100%',
                       height: '46px',

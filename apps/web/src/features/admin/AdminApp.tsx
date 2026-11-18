@@ -36,33 +36,28 @@ export const AdminApp: React.FC<AdminAppProps> = ({ onBackToPublicSite }) => {
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
-    // Check persisted admin session
-    if (!authUser) {
-      const savedSession = localStorage.getItem('avenir_admin_session');
-      if (savedSession) {
-        try {
-          const user = JSON.parse(savedSession);
-          if (user?.email) {
-            setAuthUser(user);
-          }
-        } catch {}
-      }
-    }
+    // Clean up any old persisted sessions so visiting /admin always presents the login portal
+    try {
+      localStorage.removeItem('avenir_admin_session');
+      sessionStorage.removeItem('avenir_admin_session');
+    } catch {}
 
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
-  }, [authUser, setAuthUser]);
+  }, []);
 
   const handleLoginSuccess = (user: AuthPortalUserDto) => {
     setAuthUser(user);
-    localStorage.setItem('avenir_admin_session', JSON.stringify(user));
   };
 
   const handleLogout = () => {
     setAuthUser(null);
-    localStorage.removeItem('avenir_admin_session');
+    try {
+      localStorage.removeItem('avenir_admin_session');
+      sessionStorage.removeItem('avenir_admin_session');
+    } catch {}
   };
 
   const handleBackToPublic = () => {
