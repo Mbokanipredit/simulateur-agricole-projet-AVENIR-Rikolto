@@ -66,17 +66,21 @@ export const AdminApp: React.FC<AdminAppProps> = ({ onBackToPublicSite }) => {
   };
 
   const handleBackToPublic = () => {
+    if (onBackToPublicSite) {
+      onBackToPublicSite();
+      return;
+    }
+    if (window.history.length > 1) {
+      window.history.back();
+      return;
+    }
     if (window.location.pathname.startsWith('/admin')) {
       window.location.href = '/';
       return;
     }
-    if (onBackToPublicSite) {
-      onBackToPublicSite();
-    } else {
-      window.location.hash = '';
-      setMainSection('HOME');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    window.location.hash = '';
+    setMainSection('HOME');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleOpenSimulationInSimulator = (sim: SavedSimulationDto) => {

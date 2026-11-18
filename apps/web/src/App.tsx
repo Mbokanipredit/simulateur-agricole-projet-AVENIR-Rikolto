@@ -176,10 +176,13 @@ export const App: React.FC = () => {
   const [mainSection, setMainSection] = useAtom(activeMainSectionAtom);
   const setCropTemplates = useSetAtom(cropTemplatesAtom);
   const setToolboxCategories = useSetAtom(toolboxCategoriesAtom);
-  const setSelectedArticleSlug = useSetAtom(selectedToolboxArticleSlugAtom);
+  const [selectedArticleSlug, setSelectedArticleSlug] = useAtom(selectedToolboxArticleSlugAtom);
   const results = useAtomValue(economicResultsAtom);
   const simInput = useAtomValue(simulationInputAtom);
   const currency = useAtomValue(displayCurrencyAtom);
+
+  const isPopstateRef = React.useRef(false);
+  const isInitializedRef = React.useRef(false);
 
   useEffect(() => {
     cropsControllerFindAll()
@@ -209,40 +212,181 @@ export const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // 1. Initial route sync & history primer
   useEffect(() => {
-    const handleRouteSync = () => {
-      const path = window.location.pathname;
-      const hash = window.location.hash;
+    const path = window.location.pathname;
+    const hash = window.location.hash;
+    const isAdmin = path.startsWith('/admin') || hash === '#admin';
 
-      if (path.startsWith('/admin') || hash === '#admin') {
+    let initialSection: MainSection = 'HOME';
+    let initialArticleSlug: string | null = null;
+
+    if (isAdmin) {
+      initialSection = 'ADMIN';
+    } else if (hash === '#simulateur') {
+      initialSection = 'SIMULATOR';
+    } else if (hash === '#resultats') {
+      initialSection = 'RESULTS';
+    } else if (hash.startsWith('#boite-a-outils')) {
+      initialSection = 'TOOLBOX';
+      const parts = hash.split('/');
+      if (parts.length > 1 && parts[1]) {
+        initialArticleSlug = parts[1];
+      }
+    } else if (hash === '#comment-ca-marche') {
+      initialSection = 'HOW_IT_WORKS';
+    } else {
+      initialSection = 'HOME';
+    }
+
+    const hasPriorSiteHistory = Boolean(window.history.state?.primed);
+
+    // If entering directly in a fresh browser tab with no prior history (length <= 1):
+    // Replace current state with HOME ('/') and push the target page.
+    // This immediately turns the browser's native Back button '←' and swipe-back gestures ACTIVE!
+    if (!hasPriorSiteHistory) {
+      if (isAdmin) {
+        window.history.replaceState({ section: 'HOME', primed: true }, '', '/');
+        const adminUrl = path.startsWith('/admin') ? '/admin' : '/#admin';
+        window.history.pushState({ section: 'ADMIN', primed: true }, '', adminUrl);
         setMainSection('ADMIN');
-      } else if (hash === '#simulateur') {
+      } else if (hash && hash !== '#accueil') {
+        window.history.replaceState({ section: 'HOME', primed: true }, '', '/');
+        window.history.pushState(
+          { section: initialSection, slug: initialArticleSlug, primed: true },
+          '',
+          window.location.href
+        );
+        setMainSection(initialSection);
+        if (initialArticleSlug) {
+          setSelectedArticleSlug(initialArticleSlug);
+        }
+      } else {
+        window.history.replaceState({ section: 'HOME', primed: true }, '', '/');
+        setMainSection('HOME');
+      }
+    } else {
+      setMainSection(initialSection);
+      if (initialArticleSlug) {
+        setSelectedArticleSlug(initialArticleSlug);
+      }
+    }
+
+    isInitializedRef.current = true;
+
+    // Handle browser Back / Forward buttons & mobile edge swipe gestures
+    const handlePopState = (e: PopStateEvent) => {
+      isPopstateRef.current = true;
+      const curPath = window.location.pathname;
+      const curHash = window.location.hash;
+      const stateSection = e.state?.section as MainSection | undefined;
+      const stateSlug = e.state?.slug as string | null | undefined;
+
+      if (stateSection) {
+        setMainSection(stateSection);
+        setSelectedArticleSlug(stateSlug || null);
+      } else if (curPath.startsWith('/admin') || curHash === '#admin') {
+        setMainSection('ADMIN');
+      } else if (curHash === '#simulateur') {
         setMainSection('SIMULATOR');
-      } else if (hash === '#resultats') {
+      } else if (curHash === '#resultats') {
         setMainSection('RESULTS');
-      } else if (hash === '#boite-a-outils') {
+      } else if (curHash.startsWith('#boite-a-outils')) {
         setMainSection('TOOLBOX');
-      } else if (hash === '#comment-ca-marche') {
+        const parts = curHash.split('/');
+        setSelectedArticleSlug(parts.length > 1 && parts[1] ? parts[1] : null);
+      } else if (curHash === '#comment-ca-marche') {
         setMainSection('HOW_IT_WORKS');
-      } else if (hash === '#accueil' || (hash === '' && path === '/')) {
+      } else {
+        setMainSection('HOME');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const handleHashChange = () => {
+      if (isPopstateRef.current) return;
+      const curHash = window.location.hash;
+      if (curHash === '#admin') {
+        setMainSection('ADMIN');
+      } else if (curHash === '#simulateur') {
+        setMainSection('SIMULATOR');
+      } else if (curHash === '#resultats') {
+        setMainSection('RESULTS');
+      } else if (curHash.startsWith('#boite-a-outils')) {
+        setMainSection('TOOLBOX');
+      } else if (curHash === '#comment-ca-marche') {
+        setMainSection('HOW_IT_WORKS');
+      } else if (curHash === '#accueil' || curHash === '') {
         setMainSection('HOME');
       }
     };
 
-    handleRouteSync();
-    window.addEventListener('hashchange', handleRouteSync);
-    window.addEventListener('popstate', handleRouteSync);
+    window.addEventListener('popstate', handlePopState);
+    window.addEventListener('hashchange', handleHashChange);
 
     return () => {
-      window.removeEventListener('hashchange', handleRouteSync);
-      window.removeEventListener('popstate', handleRouteSync);
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('hashchange', handleHashChange);
     };
-  }, [setMainSection]);
+  }, [setMainSection, setSelectedArticleSlug]);
+
+  // 2. Automatically push history entries when user clicks buttons in the app
+  useEffect(() => {
+    if (!isInitializedRef.current) return;
+
+    if (isPopstateRef.current) {
+      isPopstateRef.current = false;
+      return;
+    }
+
+    const curPath = window.location.pathname;
+    const curHash = window.location.hash;
+
+    let targetUrl = '/';
+    let targetHash = '';
+
+    if (mainSection === 'ADMIN') {
+      targetUrl = curPath.startsWith('/admin') ? '/admin' : '/#admin';
+      targetHash = '#admin';
+    } else if (mainSection === 'SIMULATOR') {
+      targetUrl = '/#simulateur';
+      targetHash = '#simulateur';
+    } else if (mainSection === 'RESULTS') {
+      targetUrl = '/#resultats';
+      targetHash = '#resultats';
+    } else if (mainSection === 'TOOLBOX') {
+      targetUrl = selectedArticleSlug ? `/#boite-a-outils/${selectedArticleSlug}` : '/#boite-a-outils';
+      targetHash = selectedArticleSlug ? `#boite-a-outils/${selectedArticleSlug}` : '#boite-a-outils';
+    } else if (mainSection === 'HOW_IT_WORKS') {
+      targetUrl = '/#comment-ca-marche';
+      targetHash = '#comment-ca-marche';
+    } else {
+      targetUrl = '/';
+      targetHash = '';
+    }
+
+    const isCurrentMatch =
+      (mainSection === 'ADMIN' && (curPath.startsWith('/admin') || curHash === '#admin')) ||
+      (mainSection === 'HOME' && curHash === '' && curPath === '/') ||
+      curHash === targetHash;
+
+    if (!isCurrentMatch) {
+      window.history.pushState(
+        { section: mainSection, slug: mainSection === 'TOOLBOX' ? selectedArticleSlug : null, primed: true },
+        '',
+        targetUrl
+      );
+    }
+  }, [mainSection, selectedArticleSlug]);
 
   if (mainSection === 'ADMIN') {
     return (
       <AdminApp
         onBackToPublicSite={() => {
+          if (window.history.length > 1) {
+            window.history.back();
+            return;
+          }
           if (window.location.pathname.startsWith('/admin')) {
             window.location.href = '/';
             return;

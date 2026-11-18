@@ -205,8 +205,12 @@ export const ResultsPage: React.FC = () => {
               color="#FFFFFF"
               fontWeight="700"
               onPress={() => {
-                setMainSection('SIMULATOR');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                if (window.history.length > 1 && window.history.state?.section === 'RESULTS') {
+                  window.history.back();
+                } else {
+                  setMainSection('SIMULATOR');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
               }}
             >
               <XStack alignItems="center" gap="$2">
@@ -838,8 +842,12 @@ export const ResultsPage: React.FC = () => {
             color="#18241B"
             fontWeight="700"
             onPress={() => {
-              setMainSection('SIMULATOR');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
+              if (window.history.length > 1 && window.history.state?.section === 'RESULTS') {
+                window.history.back();
+              } else {
+                setMainSection('SIMULATOR');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
             }}
           >
             <XStack alignItems="center" gap="$2" justifyContent="center">

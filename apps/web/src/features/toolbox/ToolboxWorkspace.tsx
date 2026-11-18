@@ -499,8 +499,12 @@ export const ToolboxWorkspace: React.FC = () => {
             borderWidth={1.5}
             borderColor="#1F6338"
             onPress={() => {
-              setSelectedSlug(null);
-              window.scrollTo({ top: 0, behavior: 'smooth' });
+              if (window.history.length > 1 && window.history.state?.slug) {
+                window.history.back();
+              } else {
+                setSelectedSlug(null);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
             }}
           >
             <XStack alignItems="center" gap="$2">

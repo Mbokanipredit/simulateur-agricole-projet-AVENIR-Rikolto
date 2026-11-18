@@ -25,16 +25,6 @@ export const Header: React.FC = () => {
   const navigateTo = (section: MainSection, anchorId?: string) => {
     setMainSection(section);
     setMobileMenuOpen(false);
-    const hash = sectionToHash[section] || '';
-    if (window.location.hash !== hash) {
-      if (hash === '#accueil' || !hash) {
-        if (window.location.hash) {
-          window.history.pushState(null, '', window.location.pathname);
-        }
-      } else {
-        window.location.hash = hash;
-      }
-    }
     if (anchorId) {
       setTimeout(() => {
         const el = document.getElementById(anchorId);
@@ -168,7 +158,6 @@ export const Header: React.FC = () => {
               type="button"
               title="Portail Direction & Administration"
               onClick={() => {
-                window.location.hash = '#admin';
                 navigateTo('ADMIN');
               }}
               style={{
@@ -259,7 +248,6 @@ export const Header: React.FC = () => {
             <button
               type="button"
               onClick={() => {
-                window.location.hash = '#admin';
                 navigateTo('ADMIN');
               }}
               style={{
