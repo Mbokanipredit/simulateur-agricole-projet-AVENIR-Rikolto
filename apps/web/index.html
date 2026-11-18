@@ -166,6 +166,40 @@
         flex-wrap: wrap;
       }
 
+      /* Toolbox Responsive Navigation */
+      .avenir-toolbox-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .avenir-toolbox-nav-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .avenir-toolbox-nav-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .avenir-toolbox-next-full {
+        display: inline;
+      }
+      .avenir-toolbox-next-short {
+        display: none;
+      }
+      .avenir-toolbox-tab-full {
+        display: inline;
+      }
+      .avenir-toolbox-tab-short {
+        display: none;
+      }
+
       @media (max-width: 1080px) {
         .avenir-steps-grid {
           grid-template-columns: repeat(2, 1fr);
@@ -237,6 +271,57 @@
         .avenir-results-bottom-actions .tamagui-button,
         .avenir-results-bottom-actions > * {
           width: 100% !important;
+        }
+
+        /* Toolbox Navigation & Actions on Mobile */
+        .avenir-toolbox-nav {
+          flex-direction: column !important;
+          align-items: stretch !important;
+          gap: 10px !important;
+          width: 100% !important;
+        }
+        .avenir-toolbox-nav-left {
+          width: 100% !important;
+        }
+        .avenir-toolbox-nav-left button,
+        .avenir-toolbox-nav-left .tamagui-button,
+        .avenir-toolbox-nav-left > * {
+          width: 100% !important;
+          justify-content: center !important;
+        }
+        .avenir-toolbox-nav-right {
+          width: 100% !important;
+          display: grid !important;
+          grid-template-columns: 1fr 1fr !important;
+          gap: 8px !important;
+        }
+        .avenir-toolbox-nav-right > button,
+        .avenir-toolbox-nav-right > .tamagui-button,
+        .avenir-toolbox-nav-right > * {
+          width: 100% !important;
+          justify-content: center !important;
+          min-width: 0 !important;
+          box-sizing: border-box !important;
+        }
+        .avenir-toolbox-sim-btn {
+          grid-column: span 2 !important;
+          width: 100% !important;
+        }
+        .avenir-toolbox-paging-single {
+          grid-column: span 2 !important;
+          width: 100% !important;
+        }
+        .avenir-toolbox-next-full {
+          display: none !important;
+        }
+        .avenir-toolbox-next-short {
+          display: inline !important;
+        }
+        .avenir-toolbox-tab-full {
+          display: none !important;
+        }
+        .avenir-toolbox-tab-short {
+          display: inline !important;
         }
       }
 

@@ -485,10 +485,11 @@ export const ToolboxWorkspace: React.FC = () => {
       practicalTip: '',
     };
 
-    return (
-      <YStack gap="$5" paddingBottom="$9">
-        {/* Top Navigation Bar */}
-        <XStack justifyContent="space-between" alignItems="center" flexWrap="wrap" gap="$3">
+    const onlyOnePaging = Boolean((prevItem && !nextItem) || (!prevItem && nextItem));
+
+    const renderDetailNavigation = (isBottom = false) => (
+      <div className="avenir-toolbox-nav">
+        <div className="avenir-toolbox-nav-left">
           <Button
             size="$3.5"
             height={40}
@@ -497,100 +498,122 @@ export const ToolboxWorkspace: React.FC = () => {
             backgroundColor="#FFFFFF"
             borderWidth={1.5}
             borderColor="#1F6338"
-            onPress={() => setSelectedSlug(null)}
+            onPress={() => {
+              setSelectedSlug(null);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
           >
             <XStack alignItems="center" gap="$2">
               <ArrowLeft size={15} color="#1F6338" />
               <Text fontSize={13} fontWeight="700" color="#1F6338">
-                Parcours des 12 images
+                {isBottom ? 'Retour aux 12 images' : 'Parcours des 12 images'}
               </Text>
             </XStack>
           </Button>
+        </div>
 
-          <XStack gap="$2.5" flexWrap="wrap">
-            {prevItem && (
-              <Button
-                size="$3.5"
-                height={40}
-                borderRadius={999}
-                paddingHorizontal="$3.5"
-                backgroundColor="#FFFFFF"
-                borderWidth={1}
-                borderColor="#D5DDD5"
-                onPress={() => {
-                  setSelectedSlug(prevItem.slug);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-              >
-                <XStack alignItems="center" gap="$1.5">
-                  <ArrowLeft size={14} color="#18241B" />
-                  <Text fontSize={12.5} fontWeight="700" color="#18241B">
-                    Image {prevItem.number}
-                  </Text>
-                </XStack>
-              </Button>
-            )}
+        <div className="avenir-toolbox-nav-right">
+          {prevItem && (
+            <Button
+              size="$3.5"
+              height={40}
+              borderRadius={999}
+              paddingHorizontal="$3.5"
+              backgroundColor="#FFFFFF"
+              borderWidth={1}
+              borderColor="#D5DDD5"
+              className={onlyOnePaging ? 'avenir-toolbox-paging-single' : 'avenir-toolbox-paging-btn'}
+              onPress={() => {
+                setSelectedSlug(prevItem.slug);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            >
+              <XStack alignItems="center" gap="$1.5" justifyContent="center">
+                <ArrowLeft size={14} color="#18241B" />
+                <Text fontSize={12.5} fontWeight="700" color="#18241B">
+                  Image {prevItem.number}
+                </Text>
+              </XStack>
+            </Button>
+          )}
 
-            {nextItem && (
-              <Button
-                size="$3.5"
-                height={40}
-                borderRadius={999}
-                paddingHorizontal="$4"
-                backgroundColor="#1F6338"
-                onPress={() => {
-                  setSelectedSlug(nextItem.slug);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-              >
-                <XStack alignItems="center" gap="$1.5">
-                  <Text fontSize={12.5} fontWeight="700" color="#FFFFFF">
-                    {activeItem.number === 12
-                      ? 'Saison suivante · Image 1'
-                      : `Image ${nextItem.number} : ${nextItem.title}`}
-                  </Text>
-                  <ArrowRight size={14} color="#FFFFFF" />
-                </XStack>
-              </Button>
-            )}
-
+          {nextItem && (
             <Button
               size="$3.5"
               height={40}
               borderRadius={999}
               paddingHorizontal="$4"
-              backgroundColor="#F2B632"
+              backgroundColor="#1F6338"
+              className={onlyOnePaging ? 'avenir-toolbox-paging-single' : 'avenir-toolbox-paging-btn'}
               onPress={() => {
-                setMainSection('SIMULATOR');
+                setSelectedSlug(nextItem.slug);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
             >
-              <XStack alignItems="center" gap="$1.5">
-                <Calculator size={14} color="#18241B" />
-                <Text fontSize={12.5} fontWeight="700" color="#18241B">
-                  Ouvrir le simulateur
+              <XStack alignItems="center" gap="$1.5" justifyContent="center">
+                <Text fontSize={12.5} fontWeight="700" color="#FFFFFF">
+                  {activeItem.number === 12 ? (
+                    <>
+                      <span className="avenir-toolbox-next-full">Saison suivante · Image 1</span>
+                      <span className="avenir-toolbox-next-short">Saison suivante</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="avenir-toolbox-next-full">{`Image ${nextItem.number} : ${nextItem.title}`}</span>
+                      <span className="avenir-toolbox-next-short">{`Image ${nextItem.number}`}</span>
+                    </>
+                  )}
                 </Text>
+                <ArrowRight size={14} color="#FFFFFF" />
               </XStack>
             </Button>
-          </XStack>
-        </XStack>
+          )}
+
+          <Button
+            size="$3.5"
+            height={40}
+            borderRadius={999}
+            paddingHorizontal="$4"
+            backgroundColor="#F2B632"
+            className="avenir-toolbox-sim-btn"
+            onPress={() => {
+              setMainSection('SIMULATOR');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          >
+            <XStack alignItems="center" gap="$1.5" justifyContent="center">
+              <Calculator size={14} color="#18241B" />
+              <Text fontSize={12.5} fontWeight="700" color="#18241B">
+                Ouvrir le simulateur
+              </Text>
+            </XStack>
+          </Button>
+        </div>
+      </div>
+    );
+
+    return (
+      <YStack gap="$5" paddingBottom="$9">
+        {/* Top Navigation Bar */}
+        {renderDetailNavigation(false)}
 
         {/* Main Fiche-Image Sheet (Exact PDF Layout) */}
         <YStack
           backgroundColor="#FFFFFF"
           borderRadius={16}
-          padding="$6"
+          padding="clamp(16px, 4vw, 24px)"
           borderWidth={1}
           borderColor="#E2E0D8"
           gap="$5"
-          style={{ boxShadow: '0 6px 24px rgba(24, 36, 27, 0.05)' }}
+          style={{ boxShadow: '0 6px 24px rgba(24, 36, 27, 0.05)', maxWidth: '100%', boxSizing: 'border-box' }}
         >
           {/* Header: Number Box + Title + Phase Pill */}
           <XStack justifyContent="space-between" alignItems="center" flexWrap="wrap" gap="$3">
-            <XStack alignItems="center" gap="$3.5" flex={1} minWidth={260}>
+            <XStack alignItems="center" gap="$3" flex={1} minWidth="min(100%, 250px)">
               <YStack
-                width={52}
-                height={52}
+                width={48}
+                height={48}
+                flexShrink={0}
                 backgroundColor="#1F6338"
                 borderRadius={12}
                 borderWidth={2}
@@ -599,22 +622,29 @@ export const ToolboxWorkspace: React.FC = () => {
                 justifyContent="center"
                 style={{ boxShadow: '0 6px 16px rgba(31, 99, 56, 0.2)' }}
               >
-                <Text fontSize={24} fontWeight="900" color="#FFFFFF">
+                <Text fontSize={22} fontWeight="900" color="#FFFFFF">
                   {activeItem.number}
                 </Text>
               </YStack>
-              <Text fontSize={28} fontWeight="800" color="#122017" lineHeight={34} flex={1}>
+              <Text
+                fontSize="clamp(20px, 4.5vw, 28px)"
+                fontWeight="800"
+                color="#122017"
+                lineHeight="clamp(26px, 5.5vw, 34px)"
+                flex={1}
+              >
                 {activeItem.title}
               </Text>
             </XStack>
 
             <YStack
               backgroundColor={activeItem.phaseColor}
-              paddingHorizontal="$4"
+              paddingHorizontal="$3.5"
               paddingVertical={6}
               borderRadius={999}
+              flexShrink={0}
             >
-              <Text fontSize={12} fontWeight="800" color="#FFFFFF" letterSpacing={0.6}>
+              <Text fontSize={11.5} fontWeight="800" color="#FFFFFF" letterSpacing={0.6}>
                 {activeItem.phaseLabel}
               </Text>
             </YStack>
@@ -867,6 +897,9 @@ export const ToolboxWorkspace: React.FC = () => {
             </XStack>
           </YStack>
         </YStack>
+
+        {/* Bottom Navigation Bar */}
+        {renderDetailNavigation(true)}
       </YStack>
     );
   }
@@ -911,7 +944,7 @@ export const ToolboxWorkspace: React.FC = () => {
         />
 
         <YStack
-          padding="$6"
+          padding="clamp(18px, 4vw, 24px)"
           gap="$3.5"
           style={{ position: 'relative', zIndex: 2 }}
         >
@@ -925,11 +958,21 @@ export const ToolboxWorkspace: React.FC = () => {
             PROJET AVENIR · KWILU ET KWANGO
           </Text>
 
-          <Text fontSize={36} fontWeight="800" color="#FFFFFF" lineHeight={42}>
+          <Text
+            fontSize="clamp(22px, 5vw, 36px)"
+            fontWeight="800"
+            color="#FFFFFF"
+            lineHeight="clamp(28px, 6vw, 42px)"
+          >
             Boîte à images sur l’entrepreneuriat agricole
           </Text>
 
-          <Text fontSize={15} color="#DCE7DF" lineHeight={23} maxWidth={780}>
+          <Text
+            fontSize="clamp(13px, 3.5vw, 15px)"
+            color="#DCE7DF"
+            lineHeight="clamp(19px, 4.5vw, 23px)"
+            maxWidth={780}
+          >
             Cahier de contenu illustré : les 12 images, scène par scène, comme une bande dessinée, avec les messages, les questions et la grille de contribution de l’équipe.
           </Text>
 
@@ -939,16 +982,19 @@ export const ToolboxWorkspace: React.FC = () => {
               {
                 id: 'PARCOURS' as const,
                 label: 'Parcours des 12 images (Bande dessinée)',
+                shortLabel: '12 images (BD)',
                 icon: <Layers size={15} color={subView === 'PARCOURS' ? '#122017' : '#FFFFFF'} />,
               },
               {
                 id: 'CADRE' as const,
                 label: 'Cadre pédagogique & Objectifs',
+                shortLabel: 'Cadre & Objectifs',
                 icon: <BookOpen size={15} color={subView === 'CADRE' ? '#122017' : '#FFFFFF'} />,
               },
               {
                 id: 'GRILLE' as const,
                 label: 'Grille de travail & Contributions',
+                shortLabel: 'Grille & Contributions',
                 icon: <ClipboardList size={15} color={subView === 'GRILLE' ? '#122017' : '#FFFFFF'} />,
               },
             ].map((tab) => {
@@ -959,7 +1005,7 @@ export const ToolboxWorkspace: React.FC = () => {
                   size="$3.5"
                   height={40}
                   borderRadius={999}
-                  paddingHorizontal="$4"
+                  paddingHorizontal="$3.5"
                   backgroundColor={active ? '#F2B632' : 'rgba(255, 255, 255, 0.14)'}
                   borderWidth={1}
                   borderColor={active ? '#F2B632' : 'rgba(255, 255, 255, 0.24)'}
@@ -968,11 +1014,12 @@ export const ToolboxWorkspace: React.FC = () => {
                   <XStack alignItems="center" gap="$2">
                     {tab.icon}
                     <Text
-                      fontSize={13}
+                      fontSize={12.5}
                       fontWeight="700"
                       color={active ? '#122017' : '#FFFFFF'}
                     >
-                      {tab.label}
+                      <span className="avenir-toolbox-tab-full">{tab.label}</span>
+                      <span className="avenir-toolbox-tab-short">{tab.shortLabel}</span>
                     </Text>
                   </XStack>
                 </Button>
@@ -1281,7 +1328,7 @@ export const ToolboxWorkspace: React.FC = () => {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(460px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))',
               gap: '20px',
               width: '100%',
             }}

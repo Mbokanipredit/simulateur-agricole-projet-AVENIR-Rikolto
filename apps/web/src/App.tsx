@@ -225,7 +225,7 @@ export const App: React.FC = () => {
               maxWidth: '1380px',
               width: '100%',
               margin: '0 auto',
-              padding: 'clamp(16px, 3vw, 32px) clamp(14px, 3vw, 28px) 0',
+              padding: 'clamp(14px, 2.5vw, 32px) clamp(10px, 2.5vw, 28px) 0',
               boxSizing: 'border-box',
             }}
           >
