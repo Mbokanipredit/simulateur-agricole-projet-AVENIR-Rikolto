@@ -98,6 +98,86 @@ export class SimulationsService {
     return list.map((item) => this.mapToDto(item));
   }
 
+  async findAll(query?: { province?: string; cropCode?: string; search?: string }): Promise<SavedSimulationDto[]> {
+    const where: any = {};
+    if (query?.province && query.province !== 'ALL') {
+      where.province = query.province;
+    }
+    if (query?.cropCode && query.cropCode !== 'ALL') {
+      where.cropCode = query.cropCode;
+    }
+    if (query?.search && query.search.trim()) {
+      const q = query.search.trim();
+      where.OR = [
+        { title: { contains: q, mode: 'insensitive' } },
+        { producerName: { contains: q, mode: 'insensitive' } },
+        { shareCode: { contains: q, mode: 'insensitive' } },
+      ];
+    }
+    const list = await this.prisma.simulation.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+    });
+    return list.map((item) => this.mapToDto(item));
+  }
+
+  async getStats() {
+    const list = await this.prisma.simulation.findMany();
+    const targetHouseholds = 8000;
+    const count = list.length;
+    let totalSurfaceAreaHa = 0;
+    let totalProductionKg = 0;
+    let totalRevenueUsd = 0;
+    let totalCostUsd = 0;
+    let totalNetProfitUsd = 0;
+
+    const countByProvince: Record<string, number> = { Kwilu: 0, Kwango: 0 };
+    const countByCrop: Record<string, number> = {};
+
+    for (const sim of list) {
+      totalSurfaceAreaHa += Number(sim.surfaceArea) || 0;
+      totalProductionKg += Number(sim.expectedYieldTotal) || 0;
+
+      const res: any = sim.resultsJson || {};
+      const rev = Number(res.grossRevenueUsd) || 0;
+      const cost = Number(res.totalExpensesUsd) || 0;
+      const profit = Number(res.netProfitUsd) || (rev - cost);
+
+      totalRevenueUsd += rev;
+      totalCostUsd += cost;
+      totalNetProfitUsd += profit;
+
+      const prov = sim.province || 'Kwilu';
+      countByProvince[prov] = (countByProvince[prov] || 0) + 1;
+
+      const crop = sim.cropName || sim.cropCode || 'Autre';
+      countByCrop[crop] = (countByCrop[crop] || 0) + 1;
+    }
+
+    const averageNetMarginPercent =
+      totalRevenueUsd > 0 ? (totalNetProfitUsd / totalRevenueUsd) * 100 : 0;
+    const progressGoalPercent = Math.min(100, Math.round((count / targetHouseholds) * 100 * 10) / 10);
+
+    return {
+      totalSimulations: count,
+      targetHouseholds,
+      progressGoalPercent,
+      totalSurfaceAreaHa: Math.round(totalSurfaceAreaHa * 10) / 10,
+      totalProductionKg: Math.round(totalProductionKg),
+      totalRevenueUsd: Math.round(totalRevenueUsd),
+      totalCostUsd: Math.round(totalCostUsd),
+      totalNetProfitUsd: Math.round(totalNetProfitUsd),
+      averageNetMarginPercent: Math.round(averageNetMarginPercent * 10) / 10,
+      countByProvince,
+      countByCrop,
+    };
+  }
+
+  async delete(id: string): Promise<{ success: boolean }> {
+    await this.prisma.simulation.delete({ where: { id } });
+    return { success: true };
+  }
+
   private mapToDto(sim: any): SavedSimulationDto {
     return {
       id: sim.id,

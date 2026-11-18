@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateSimulationDto, EconomicResultsDto, SavedSimulationDto } from './dto/simulation.dto';
 import { SimulationsService } from './simulations.service';
@@ -26,6 +26,27 @@ export class SimulationsController {
     return this.simulationsService.saveSimulation(dto);
   }
 
+  @Get('stats')
+  @ApiOperation({
+    summary: 'Statistiques globales de suivi-évaluation du Projet AVENIR (Kwilu & Kwango)',
+  })
+  getStats() {
+    return this.simulationsService.getStats();
+  }
+
+  @Get('all')
+  @ApiOperation({
+    summary: 'Lister toutes les simulations enregistrées avec filtres (Administration)',
+  })
+  @ApiResponse({ status: 200, type: [SavedSimulationDto] })
+  findAll(
+    @Query('province') province?: string,
+    @Query('cropCode') cropCode?: string,
+    @Query('search') search?: string,
+  ): Promise<SavedSimulationDto[]> {
+    return this.simulationsService.findAll({ province, cropCode, search });
+  }
+
   @Get()
   @ApiOperation({
     summary: 'Lister les simulations récentes partagées (pour suivi par les animateurs Rikolto)',
@@ -42,6 +63,14 @@ export class SimulationsController {
   @ApiResponse({ status: 200, type: SavedSimulationDto })
   findByShareCode(@Param('shareCode') shareCode: string): Promise<SavedSimulationDto> {
     return this.simulationsService.findByShareCode(shareCode);
+  }
+
+  @Delete(':id')
+  @ApiOperation({
+    summary: 'Supprimer une simulation enregistrée (Administration)',
+  })
+  delete(@Param('id') id: string): Promise<{ success: boolean }> {
+    return this.simulationsService.delete(id);
   }
 }
 

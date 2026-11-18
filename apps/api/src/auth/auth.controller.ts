@@ -1,4 +1,15 @@
-import { Body, Controller, Get, Post, Req, Res, UnauthorizedException } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Req,
+  Res,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ApiOperation, ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { toNodeHandler } from 'better-auth/node';
 import { Request, Response } from 'express';
@@ -174,6 +185,62 @@ export class AuthController {
     } catch {
       throw new UnauthorizedException('Identifiants invalides');
     }
+  }
+
+  @Get('users')
+  @ApiOperation({
+    summary: 'Lister tous les utilisateurs et animateurs (pour l’administration)',
+  })
+  @ApiResponse({ status: 200, type: [AuthPortalUserDto] })
+  async listUsers(): Promise<AuthPortalUserDto[]> {
+    const users = await this.prisma.user.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
+    return users.map((u) => ({
+      id: u.id,
+      name: u.name,
+      email: u.email,
+      role: u.role,
+      organization: u.organization || 'Rikolto RDC - Projet AVENIR',
+      province: u.province || 'Kwilu',
+    }));
+  }
+
+  @Put('users/:id')
+  @ApiOperation({
+    summary: 'Mettre à jour le rôle ou les informations d’un utilisateur',
+  })
+  @ApiResponse({ status: 200, type: AuthPortalUserDto })
+  async updateUser(
+    @Param('id') id: string,
+    @Body() dto: { role?: string; province?: string; organization?: string; name?: string },
+  ): Promise<AuthPortalUserDto> {
+    const updated = await this.prisma.user.update({
+      where: { id },
+      data: {
+        ...(dto.role ? { role: dto.role } : {}),
+        ...(dto.province ? { province: dto.province } : {}),
+        ...(dto.organization ? { organization: dto.organization } : {}),
+        ...(dto.name ? { name: dto.name } : {}),
+      },
+    });
+    return {
+      id: updated.id,
+      name: updated.name,
+      email: updated.email,
+      role: updated.role,
+      organization: updated.organization || 'Rikolto RDC - Projet AVENIR',
+      province: updated.province || 'Kwilu',
+    };
+  }
+
+  @Delete('users/:id')
+  @ApiOperation({
+    summary: 'Supprimer un utilisateur',
+  })
+  async deleteUser(@Param('id') id: string): Promise<{ success: boolean }> {
+    await this.prisma.user.delete({ where: { id } });
+    return { success: true };
   }
 
   async handleRawBetterAuth(req: Request, res: Response) {

@@ -88,6 +88,18 @@ export const Footer: React.FC = () => {
               >
                 Comment ça marche
               </Text>
+              <Text
+                fontSize={13}
+                color="#F2B632"
+                fontWeight="700"
+                cursor="pointer"
+                onPress={() => {
+                  window.location.hash = '#admin';
+                  go('ADMIN');
+                }}
+              >
+                🔒 Portail Direction & Administration
+              </Text>
             </XStack>
           </YStack>
 

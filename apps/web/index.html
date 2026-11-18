@@ -200,6 +200,29 @@
         display: none;
       }
 
+      /* Admin Panel Layout */
+      @media (min-width: 921px) {
+        .avenir-admin-sidebar-responsive {
+          transform: translateX(0) !important;
+        }
+        .avenir-admin-main-pane {
+          margin-left: 280px !important;
+        }
+        .avenir-admin-mobile-toggle {
+          display: none !important;
+        }
+      }
+
+      @media (max-width: 920px) {
+        .avenir-admin-main-pane {
+          margin-left: 0 !important;
+          width: 100% !important;
+        }
+        .avenir-admin-mobile-toggle {
+          display: inline-flex !important;
+        }
+      }
+
       @media (max-width: 1080px) {
         .avenir-steps-grid {
           grid-template-columns: repeat(2, 1fr);

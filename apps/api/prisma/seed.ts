@@ -421,78 +421,233 @@ async function main() {
     });
   }
 
-  // 3. Seed a sample shared Simulation (Code: AVN-2026) so users/facilitators can test loading a shared code right away
-  const sampleCrop = crops[0];
-  const sampleInput: SimulationInput = {
-    title: 'Campagne Café Robusta 1 ha - Coopérative Kwilu',
-    cropCode: sampleCrop.code,
-    cropName: sampleCrop.nameFr,
-    province: 'Kwilu',
-    surfaceArea: 1,
-    surfaceUnit: 'HA',
-    expectedYieldTotal: 1200,
-    commercializedQty: 1150,
-    productionUnit: 'KG',
-    unitSalePriceUsd: 1.85,
-    otherRevenueUsd: 50,
-    exchangeRateCdfPerUsd: 2850,
-    expenses: sampleCrop.expenses.map((e, idx) => ({
-      id: `seed-exp-${idx + 1}`,
-      stage: e.stage as any,
-      label: e.label,
-      unit: e.unit,
-      quantity: e.quantity,
-      unitCostUsd: e.unitCostUsd,
-      costType: e.costType as 'FIXED' | 'VARIABLE',
-    })),
-  };
-
-  const sampleResults = calculateEconomicResults(sampleInput);
-
-  await prisma.simulation.upsert({
-    where: { shareCode: 'AVN-2026' },
-    update: {
-      title: sampleInput.title,
-      producerName: 'Groupement Pilote Kikwit',
-      province: 'Kwilu',
-      cropCode: sampleInput.cropCode,
-      cropName: sampleInput.cropName,
-      surfaceArea: sampleInput.surfaceArea,
-      surfaceUnit: sampleInput.surfaceUnit,
-      expectedYieldTotal: sampleInput.expectedYieldTotal,
-      commercializedQty: sampleInput.commercializedQty,
-      productionUnit: sampleInput.productionUnit,
-      unitSalePriceUsd: sampleInput.unitSalePriceUsd,
-      otherRevenueUsd: sampleInput.otherRevenueUsd,
-      exchangeRateCdfPerUsd: sampleInput.exchangeRateCdfPerUsd,
-      expensesJson: sampleInput.expenses as any,
-      resultsJson: sampleResults as any,
-      targetProfitUsd: 1000,
-      notes: 'Simulation de référence pour 1 ha de Café Robusta séché sur claies.',
+  // 3. Seed Users (Administration & Animateurs de terrain)
+  const usersToSeed = [
+    {
+      id: 'user-admin-1',
+      name: 'Direction Projet AVENIR (Rikolto RDC)',
+      email: 'admin@rikolto.org',
+      role: 'ADMIN',
+      organization: 'Rikolto RDC — Projet AVENIR',
+      province: 'Kwilu & Kwango',
     },
-    create: {
+    {
+      id: 'user-fac-1',
+      name: 'Yvonne Kapinga',
+      email: 'yvonne.kapinga@rikolto.org',
+      role: 'FACILITATOR',
+      organization: 'Rikolto RDC — Antenne Kikwit',
+      province: 'Kwilu',
+    },
+    {
+      id: 'user-fac-2',
+      name: 'Jean-Paul Mbemba',
+      email: 'jeanpaul.mbemba@rikolto.org',
+      role: 'FACILITATOR',
+      organization: 'Rikolto RDC — Antenne Kenge',
+      province: 'Kwango',
+    },
+    {
+      id: 'user-fac-3',
+      name: 'Alain Mukwa',
+      email: 'alain.mukwa@rikolto.org',
+      role: 'FACILITATOR',
+      organization: 'Rikolto RDC — Antenne Bulungu',
+      province: 'Kwilu',
+    },
+    {
+      id: 'user-prod-1',
+      name: 'Thérèse Nzuzi (Coopérative CAPSA)',
+      email: 'therese.nzuzi@capsa.org',
+      role: 'PRODUCER',
+      organization: 'Coopérative Agricole CAPSA Idiofa',
+      province: 'Kwilu',
+    },
+  ];
+
+  for (const u of usersToSeed) {
+    await prisma.user.upsert({
+      where: { email: u.email },
+      update: u,
+      create: u,
+    });
+  }
+
+  // 4. Seed Multi-Province Field Simulations (Kwilu & Kwango)
+  const simulationsToSeed: {
+    shareCode: string;
+    title: string;
+    producerName: string;
+    province: string;
+    crop: (typeof crops)[0];
+    surfaceArea: number;
+    yieldTotal: number;
+    commQty: number;
+    priceUsd: number;
+    otherRevUsd: number;
+    targetProfitUsd: number;
+    notes: string;
+  }[] = [
+    {
       shareCode: 'AVN-2026',
-      title: sampleInput.title,
+      title: 'Campagne Café Robusta 1 ha - Coopérative Kwilu',
       producerName: 'Groupement Pilote Kikwit',
       province: 'Kwilu',
-      cropCode: sampleInput.cropCode,
-      cropName: sampleInput.cropName,
-      surfaceArea: sampleInput.surfaceArea,
-      surfaceUnit: sampleInput.surfaceUnit,
-      expectedYieldTotal: sampleInput.expectedYieldTotal,
-      commercializedQty: sampleInput.commercializedQty,
-      productionUnit: sampleInput.productionUnit,
-      unitSalePriceUsd: sampleInput.unitSalePriceUsd,
-      otherRevenueUsd: sampleInput.otherRevenueUsd,
-      exchangeRateCdfPerUsd: sampleInput.exchangeRateCdfPerUsd,
-      expensesJson: sampleInput.expenses as any,
-      resultsJson: sampleResults as any,
+      crop: crops[0],
+      surfaceArea: 1,
+      yieldTotal: 1200,
+      commQty: 1150,
+      priceUsd: 1.85,
+      otherRevUsd: 50,
       targetProfitUsd: 1000,
       notes: 'Simulation de référence pour 1 ha de Café Robusta séché sur claies.',
     },
-  });
+    {
+      shareCode: 'AVN-5842',
+      title: 'Cacaoyère villageoise durable — Coopérative Bulungu',
+      producerName: 'Coopérative Agricole de Bulungu (2 ha)',
+      province: 'Kwilu',
+      crop: crops[1],
+      surfaceArea: 2,
+      yieldTotal: 2000,
+      commQty: 1950,
+      priceUsd: 2.6,
+      otherRevUsd: 100,
+      targetProfitUsd: 2500,
+      notes: 'Vente groupée avec l’OP pour obtenir un meilleur prix au kilo bord-champ.',
+    },
+    {
+      shareCode: 'AVN-7139',
+      title: 'Manioc amélioré TMC 419 & cossettes — Kenge',
+      producerName: 'Ménage Kiese & Fils (1.5 ha)',
+      province: 'Kwango',
+      crop: crops[2],
+      surfaceArea: 1.5,
+      yieldTotal: 4800,
+      commQty: 3900,
+      priceUsd: 0.55,
+      otherRevUsd: 40,
+      targetProfitUsd: 1000,
+      notes: 'Boutures saines TMC 419 résistantes à la mosaïque et séchage sur claies.',
+    },
+    {
+      shareCode: 'AVN-3904',
+      title: 'Maïs grain jaune hybride — Masi-Manimba',
+      producerName: 'Groupement Paysan Lukula',
+      province: 'Kwilu',
+      crop: crops[3],
+      surfaceArea: 1,
+      yieldTotal: 2500,
+      commQty: 2200,
+      priceUsd: 0.5,
+      otherRevUsd: 30,
+      targetProfitUsd: 650,
+      notes: 'Campagne maïs saison A avec semis en ligne et fertilisation organique.',
+    },
+    {
+      shareCode: 'AVN-8421',
+      title: 'Café Robusta séché sur claies — Idiofa',
+      producerName: 'Union des Planteurs d’Idiofa',
+      province: 'Kwilu',
+      crop: crops[0],
+      surfaceArea: 1.2,
+      yieldTotal: 1450,
+      commQty: 1400,
+      priceUsd: 1.9,
+      otherRevUsd: 60,
+      targetProfitUsd: 1200,
+      notes: 'Récolte sélective de cerises mûres et tri de qualité pour marché de spécialité.',
+    },
+    {
+      shareCode: 'AVN-6215',
+      title: 'Niébé & Légumineuses associées — Popokabaka',
+      producerName: 'Association Féminine de Popokabaka',
+      province: 'Kwango',
+      crop: crops[4],
+      surfaceArea: 0.8,
+      yieldTotal: 720,
+      commQty: 650,
+      priceUsd: 1.2,
+      otherRevUsd: 25,
+      targetProfitUsd: 450,
+      notes: 'Culture vivrière et nutritionnelle enrichissant les sols en azote.',
+    },
+  ];
 
-  console.log('✅ Seed completed: 5 Kwilu/Kwango Crop Templates, 5 Toolbox Categories & Practical Sheets, 1 Shared Simulation (AVN-2026).');
+  for (const sim of simulationsToSeed) {
+    const input: SimulationInput = {
+      title: sim.title,
+      cropCode: sim.crop.code,
+      cropName: sim.crop.nameFr,
+      province: sim.province,
+      surfaceArea: sim.surfaceArea,
+      surfaceUnit: 'HA',
+      expectedYieldTotal: sim.yieldTotal,
+      commercializedQty: sim.commQty,
+      productionUnit: sim.crop.productionUnit as any,
+      unitSalePriceUsd: sim.priceUsd,
+      otherRevenueUsd: sim.otherRevUsd,
+      exchangeRateCdfPerUsd: 2850,
+      expenses: sim.crop.expenses.map((e, idx) => ({
+        id: `seed-${sim.shareCode}-${idx + 1}`,
+        stage: e.stage as any,
+        label: e.label,
+        unit: e.unit,
+        quantity: e.quantity * sim.surfaceArea,
+        unitCostUsd: e.unitCostUsd,
+        costType: e.costType as 'FIXED' | 'VARIABLE',
+      })),
+    };
+
+    const results = calculateEconomicResults(input);
+
+    await prisma.simulation.upsert({
+      where: { shareCode: sim.shareCode },
+      update: {
+        title: sim.title,
+        producerName: sim.producerName,
+        province: sim.province,
+        cropCode: sim.crop.code,
+        cropName: sim.crop.nameFr,
+        surfaceArea: sim.surfaceArea,
+        surfaceUnit: 'HA',
+        expectedYieldTotal: sim.yieldTotal,
+        commercializedQty: sim.commQty,
+        productionUnit: sim.crop.productionUnit,
+        unitSalePriceUsd: sim.priceUsd,
+        otherRevenueUsd: sim.otherRevUsd,
+        exchangeRateCdfPerUsd: 2850,
+        expensesJson: input.expenses as any,
+        resultsJson: results as any,
+        targetProfitUsd: sim.targetProfitUsd,
+        notes: sim.notes,
+      },
+      create: {
+        shareCode: sim.shareCode,
+        title: sim.title,
+        producerName: sim.producerName,
+        province: sim.province,
+        cropCode: sim.crop.code,
+        cropName: sim.crop.nameFr,
+        surfaceArea: sim.surfaceArea,
+        surfaceUnit: 'HA',
+        expectedYieldTotal: sim.yieldTotal,
+        commercializedQty: sim.commQty,
+        productionUnit: sim.crop.productionUnit,
+        unitSalePriceUsd: sim.priceUsd,
+        otherRevenueUsd: sim.otherRevUsd,
+        exchangeRateCdfPerUsd: 2850,
+        expensesJson: input.expenses as any,
+        resultsJson: results as any,
+        targetProfitUsd: sim.targetProfitUsd,
+        notes: sim.notes,
+      },
+    });
+  }
+
+  console.log(
+    '✅ Seed completed: 5 Crop Templates, 5 Categories, 5 Users (Admin + Facilitators), 6 Shared Simulations (AVN-XXXX).'
+  );
 }
 
 main()

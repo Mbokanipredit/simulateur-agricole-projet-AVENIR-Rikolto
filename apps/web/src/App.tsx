@@ -31,6 +31,7 @@ import {
   GoldenWheatOrnament,
 } from './features/simulator/PastSimulatedProjectsSection';
 import { ToolboxWorkspace } from './features/toolbox/ToolboxWorkspace';
+import { AdminApp } from './features/admin/AdminApp';
 
 const FALLBACK_TEMPLATES: CropTemplateDto[] = [
   {
@@ -207,6 +208,32 @@ export const App: React.FC = () => {
     setMainSection('TOOLBOX');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    const checkAdminRoute = () => {
+      if (
+        window.location.pathname.startsWith('/admin') ||
+        window.location.hash === '#admin'
+      ) {
+        setMainSection('ADMIN');
+      }
+    };
+    checkAdminRoute();
+    window.addEventListener('hashchange', checkAdminRoute);
+    return () => window.removeEventListener('hashchange', checkAdminRoute);
+  }, [setMainSection]);
+
+  if (mainSection === 'ADMIN') {
+    return (
+      <AdminApp
+        onBackToPublicSite={() => {
+          window.location.hash = '';
+          setMainSection('HOME');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
+    );
+  }
 
   return (
     <YStack minHeight="100vh" backgroundColor="#FAF8F3" justifyContent="space-between">

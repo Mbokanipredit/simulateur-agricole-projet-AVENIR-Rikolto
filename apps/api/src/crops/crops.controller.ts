@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CropsService } from './crops.service';
 import { CropTemplateDto } from './dto/crop.dto';
@@ -24,6 +24,32 @@ export class CropsController {
   @ApiResponse({ status: 200, type: CropTemplateDto })
   findByCode(@Param('code') code: string): Promise<CropTemplateDto> {
     return this.cropsService.findByCode(code);
+  }
+
+  @Post()
+  @ApiOperation({
+    summary: 'Créer un nouveau modèle de culture (Administration)',
+  })
+  @ApiResponse({ status: 201, type: CropTemplateDto })
+  create(@Body() dto: any): Promise<CropTemplateDto> {
+    return this.cropsService.create(dto);
+  }
+
+  @Put(':id')
+  @ApiOperation({
+    summary: 'Mettre à jour un modèle de culture et ses dépenses de référence (Administration)',
+  })
+  @ApiResponse({ status: 200, type: CropTemplateDto })
+  update(@Param('id') id: string, @Body() dto: any): Promise<CropTemplateDto> {
+    return this.cropsService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @ApiOperation({
+    summary: 'Supprimer un modèle de culture (Administration)',
+  })
+  delete(@Param('id') id: string): Promise<{ success: boolean }> {
+    return this.cropsService.delete(id);
   }
 }
 

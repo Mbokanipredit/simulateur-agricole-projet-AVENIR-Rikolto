@@ -22,7 +22,8 @@ export type MainSection =
   | 'RESULTS'
   | 'TOOLBOX'
   | 'HOW_IT_WORKS'
-  | 'FACILITATOR';
+  | 'FACILITATOR'
+  | 'ADMIN';
 export type SimulatorTab = 'PLANNING' | 'EXPENSES' | 'RESULTS' | 'DECISION';
 
 export const activeMainSectionAtom = atom<MainSection>('HOME');
