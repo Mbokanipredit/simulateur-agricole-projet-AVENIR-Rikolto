@@ -210,23 +210,43 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    const checkAdminRoute = () => {
-      if (
-        window.location.pathname.startsWith('/admin') ||
-        window.location.hash === '#admin'
-      ) {
+    const handleRouteSync = () => {
+      const path = window.location.pathname;
+      const hash = window.location.hash;
+
+      if (path.startsWith('/admin') || hash === '#admin') {
         setMainSection('ADMIN');
+      } else if (hash === '#simulateur') {
+        setMainSection('SIMULATOR');
+      } else if (hash === '#resultats') {
+        setMainSection('RESULTS');
+      } else if (hash === '#boite-a-outils') {
+        setMainSection('TOOLBOX');
+      } else if (hash === '#comment-ca-marche') {
+        setMainSection('HOW_IT_WORKS');
+      } else if (hash === '#accueil' || (hash === '' && path === '/')) {
+        setMainSection('HOME');
       }
     };
-    checkAdminRoute();
-    window.addEventListener('hashchange', checkAdminRoute);
-    return () => window.removeEventListener('hashchange', checkAdminRoute);
+
+    handleRouteSync();
+    window.addEventListener('hashchange', handleRouteSync);
+    window.addEventListener('popstate', handleRouteSync);
+
+    return () => {
+      window.removeEventListener('hashchange', handleRouteSync);
+      window.removeEventListener('popstate', handleRouteSync);
+    };
   }, [setMainSection]);
 
   if (mainSection === 'ADMIN') {
     return (
       <AdminApp
         onBackToPublicSite={() => {
+          if (window.location.pathname.startsWith('/admin')) {
+            window.location.href = '/';
+            return;
+          }
           window.location.hash = '';
           setMainSection('HOME');
           window.scrollTo({ top: 0, behavior: 'smooth' });

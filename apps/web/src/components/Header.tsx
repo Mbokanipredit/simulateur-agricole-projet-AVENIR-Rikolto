@@ -13,9 +13,28 @@ export const Header: React.FC = () => {
   const [currency, setCurrency] = useAtom(displayCurrencyAtom);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const sectionToHash: Record<MainSection, string> = {
+    HOME: '#accueil',
+    SIMULATOR: '#simulateur',
+    RESULTS: '#resultats',
+    TOOLBOX: '#boite-a-outils',
+    HOW_IT_WORKS: '#comment-ca-marche',
+    ADMIN: '#admin',
+  };
+
   const navigateTo = (section: MainSection, anchorId?: string) => {
     setMainSection(section);
     setMobileMenuOpen(false);
+    const hash = sectionToHash[section] || '';
+    if (window.location.hash !== hash) {
+      if (hash === '#accueil' || !hash) {
+        if (window.location.hash) {
+          window.history.pushState(null, '', window.location.pathname);
+        }
+      } else {
+        window.location.hash = hash;
+      }
+    }
     if (anchorId) {
       setTimeout(() => {
         const el = document.getElementById(anchorId);

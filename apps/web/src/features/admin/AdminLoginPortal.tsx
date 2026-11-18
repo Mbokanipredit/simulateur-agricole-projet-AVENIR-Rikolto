@@ -106,7 +106,14 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSucce
       >
         <button
           type="button"
-          onClick={onBackToPublic}
+          onClick={() => {
+            if (onBackToPublic) {
+              onBackToPublic();
+            }
+            if (window.location.pathname.startsWith('/admin')) {
+              window.location.href = '/';
+            }
+          }}
           style={{
             background: '#FAF8F3',
             border: '1px solid #DCE7DF',

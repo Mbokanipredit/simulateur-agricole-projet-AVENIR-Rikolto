@@ -66,6 +66,10 @@ export const AdminApp: React.FC<AdminAppProps> = ({ onBackToPublicSite }) => {
   };
 
   const handleBackToPublic = () => {
+    if (window.location.pathname.startsWith('/admin')) {
+      window.location.href = '/';
+      return;
+    }
     if (onBackToPublicSite) {
       onBackToPublicSite();
     } else {
