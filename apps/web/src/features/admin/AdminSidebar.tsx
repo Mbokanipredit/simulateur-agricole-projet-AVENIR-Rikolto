@@ -73,7 +73,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           label: 'Boîte à Images (BD)',
           icon: <Layers size={18} />,
           badge: '12',
-          badgeColor: '#3B82F6',
+          badgeColor: '#D97706',
         },
       ],
     },

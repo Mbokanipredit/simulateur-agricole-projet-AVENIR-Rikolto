@@ -32,7 +32,7 @@ interface AdminDashboardTabProps {
   onOpenSimulation: (sim: SavedSimulationDto) => void;
 }
 
-// Facilitators metadata for realistic humanized representation
+// Facilitators metadata for realistic humanized representation (Kwilu & Kwango)
 const FACILITATORS: Record<string, { name: string; avatar: string; role: string; province: string }> = {
   Kwilu: {
     name: 'Yvonne Kapinga',
@@ -152,7 +152,7 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
   const maxMonthRev = Math.max(1, ...stats.monthlyBars.map((b) => Math.max(b.revenue, b.expense)));
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '100%', boxSizing: 'border-box' }}>
       {/* Top Banner / Strategy Header */}
       <div
         style={{
@@ -160,18 +160,18 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
           justifyContent: 'space-between',
           alignItems: 'center',
           flexWrap: 'wrap',
-          gap: '16px',
-          padding: '4px 2px',
+          gap: '14px',
+          padding: '2px 0',
         }}
       >
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+        <div style={{ minWidth: '240px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
             <span
               style={{
                 fontSize: '11px',
                 fontWeight: 800,
-                color: '#2563EB',
-                backgroundColor: '#EFF6FF',
+                color: '#1F6338',
+                backgroundColor: '#EBF4EC',
                 padding: '3px 10px',
                 borderRadius: '999px',
                 textTransform: 'uppercase',
@@ -180,17 +180,17 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
             >
               Suivi-Évaluation (M&E) · Rikolto RDC
             </span>
-            <span style={{ fontSize: '12px', color: '#64748B' }}>•</span>
-            <span style={{ fontSize: '12px', color: '#64748B', fontWeight: 600 }}>
+            <span style={{ fontSize: '12px', color: '#768278' }}>•</span>
+            <span style={{ fontSize: '12px', color: '#5F685F', fontWeight: 600 }}>
               Campagne Agricole Kwilu & Kwango 2026
             </span>
           </div>
           <h1
             style={{
               margin: 0,
-              fontSize: 'clamp(20px, 3.2vw, 26px)',
+              fontSize: 'clamp(19px, 3vw, 25px)',
               fontWeight: 800,
-              color: '#0F172A',
+              color: '#122017',
               letterSpacing: '-0.3px',
             }}
           >
@@ -198,19 +198,22 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
           </h1>
         </div>
 
-        {/* Action Controls & Global Filter */}
+        {/* Action Controls & Periodic Filter Ribbon */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-          {/* Periodic Filter Pills Selector */}
+          {/* Periodic Filter Pills Selector with Mobile Scroll */}
           <div
             style={{
               display: 'inline-flex',
               alignItems: 'center',
               backgroundColor: '#FFFFFF',
-              padding: '4px',
+              padding: '3px',
               borderRadius: '12px',
-              border: '1px solid #E2E8F0',
-              boxShadow: '0 2px 8px rgba(15, 23, 42, 0.04)',
+              border: '1px solid #DCE7DF',
+              boxShadow: '0 2px 8px rgba(18, 36, 24, 0.03)',
               gap: '2px',
+              overflowX: 'auto',
+              maxWidth: '100%',
+              WebkitOverflowScrolling: 'touch',
             }}
           >
             {periodOptions.map((opt) => {
@@ -225,12 +228,13 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                     padding: '6px 13px',
                     borderRadius: '8px',
                     border: 'none',
-                    backgroundColor: active ? '#2563EB' : 'transparent',
-                    color: active ? '#FFFFFF' : '#64748B',
-                    fontSize: '12.5px',
+                    backgroundColor: active ? '#1F6338' : 'transparent',
+                    color: active ? '#FFFFFF' : '#5F685F',
+                    fontSize: '12px',
                     fontWeight: active ? 800 : 600,
                     cursor: 'pointer',
                     transition: 'all 0.18s ease',
+                    whiteSpace: 'nowrap',
                   }}
                 >
                   {opt.label}
@@ -244,22 +248,23 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
             onClick={loadData}
             disabled={loading}
             style={{
-              height: '38px',
+              height: '36px',
               padding: '0 14px',
               borderRadius: '10px',
               backgroundColor: '#FFFFFF',
-              border: '1px solid #E2E8F0',
-              color: '#334155',
+              border: '1px solid #DCE7DF',
+              color: '#122017',
               fontSize: '12.5px',
               fontWeight: 700,
               cursor: 'pointer',
               display: 'inline-flex',
               alignItems: 'center',
               gap: '7px',
-              boxShadow: '0 2px 6px rgba(15, 23, 42, 0.03)',
+              boxShadow: '0 2px 6px rgba(18, 36, 24, 0.03)',
+              whiteSpace: 'nowrap',
             }}
           >
-            <RefreshCw size={13} className={loading ? 'animate-spin' : ''} color="#2563EB" />
+            <RefreshCw size={13} className={loading ? 'animate-spin' : ''} color="#1F6338" />
             <span>{loading ? 'Calcul...' : 'Actualiser'}</span>
           </button>
 
@@ -267,19 +272,20 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
             type="button"
             onClick={() => onNavigateToTab('SIMULATIONS')}
             style={{
-              height: '38px',
+              height: '36px',
               padding: '0 16px',
               borderRadius: '10px',
-              backgroundColor: '#2563EB',
+              backgroundColor: '#1F6338',
               border: 'none',
               color: '#FFFFFF',
               fontSize: '12.5px',
-              fontWeight: 700,
+              fontWeight: 800,
               cursor: 'pointer',
               display: 'inline-flex',
               alignItems: 'center',
               gap: '7px',
-              boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)',
+              boxShadow: '0 4px 14px rgba(31, 99, 56, 0.2)',
+              whiteSpace: 'nowrap',
             }}
           >
             <Download size={13} color="#FFFFFF" />
@@ -288,22 +294,22 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
         </div>
       </div>
 
-      {/* Row 1: The 4 Top Metric Wave Cards (Panda SaaS Style) */}
+      {/* Row 1: The 4 Top Metric Wave Cards (Pure White Cards, Agricultural Colors, Midpoint Dots) */}
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 250px), 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))',
           gap: '16px',
         }}
       >
-        {/* Card 1: Households & Beneficiaries */}
+        {/* Card 1: Households & Beneficiaries (Forest Green #1F6338) */}
         <div
           style={{
             backgroundColor: '#FFFFFF',
             borderRadius: '18px',
             padding: '20px',
-            border: '1px solid #EEF2F6',
-            boxShadow: '0 4px 18px rgba(15, 23, 42, 0.03)',
+            border: '1px solid #E8EDE8',
+            boxShadow: '0 4px 18px rgba(18, 36, 24, 0.03)',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
@@ -317,72 +323,71 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                 width: '36px',
                 height: '36px',
                 borderRadius: '50%',
-                backgroundColor: '#EFF6FF',
+                backgroundColor: '#EBF4EC',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <Users size={18} color="#2563EB" />
+              <Users size={18} color="#1F6338" />
             </div>
             <span
               style={{
                 fontSize: '11px',
-                fontWeight: 700,
-                color: '#2563EB',
-                backgroundColor: '#EFF6FF',
+                fontWeight: 800,
+                color: '#1F6338',
+                backgroundColor: '#EBF4EC',
                 padding: '3px 9px',
                 borderRadius: '999px',
               }}
             >
-              {stats.progressGoalPercent}% objectif
+              {stats.progressGoalPercent}% cible
             </span>
           </div>
 
-          {/* Smooth Sine Wave Curve with Midpoint Data Dot */}
+          {/* Smooth Sine Wave Curve with Forest Green Fill & Midpoint Dot */}
           <div style={{ margin: '8px -20px 4px -20px', height: '54px', position: 'relative' }}>
             <svg width="100%" height="54" viewBox="0 0 280 54" preserveAspectRatio="none" style={{ display: 'block' }}>
               <defs>
-                <linearGradient id="waveBlue" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#2563EB" stopOpacity="0.22" />
-                  <stop offset="100%" stopColor="#2563EB" stopOpacity="0.01" />
+                <linearGradient id="waveForest" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#1F6338" stopOpacity="0.22" />
+                  <stop offset="100%" stopColor="#1F6338" stopOpacity="0.01" />
                 </linearGradient>
               </defs>
               <path
                 d="M 0 34 C 45 10, 85 48, 140 26 C 195 5, 235 44, 280 18 L 280 54 L 0 54 Z"
-                fill="url(#waveBlue)"
+                fill="url(#waveForest)"
               />
               <path
                 d="M 0 34 C 45 10, 85 48, 140 26 C 195 5, 235 44, 280 18"
                 fill="none"
-                stroke="#2563EB"
+                stroke="#1F6338"
                 strokeWidth="2.5"
                 strokeLinecap="round"
               />
-              {/* Highlight Circle Dot at Midpoint Peak */}
-              <circle cx="140" cy="26" r="4.5" fill="#FFFFFF" stroke="#2563EB" strokeWidth="2.5" />
+              <circle cx="140" cy="26" r="4.5" fill="#FFFFFF" stroke="#1F6338" strokeWidth="2.5" />
             </svg>
           </div>
 
           <div>
-            <div style={{ fontSize: '24px', fontWeight: 800, color: '#0F172A', lineHeight: 1.1 }}>
+            <div style={{ fontSize: '24px', fontWeight: 800, color: '#122017', lineHeight: 1.1 }}>
               {stats.totalHouseholds.toLocaleString('fr-FR')}{' '}
-              <span style={{ fontSize: '13px', color: '#64748B', fontWeight: 600 }}>/ 8 000</span>
+              <span style={{ fontSize: '13px', color: '#768278', fontWeight: 600 }}>/ 8 000</span>
             </div>
-            <div style={{ fontSize: '12px', color: '#64748B', marginTop: '4px', fontWeight: 600 }}>
+            <div style={{ fontSize: '12px', color: '#5F685F', marginTop: '4px', fontWeight: 600 }}>
               Ménages accompagnés (Kwilu & Kwango)
             </div>
           </div>
         </div>
 
-        {/* Card 2: Surface & Crop Volume */}
+        {/* Card 2: Surface & Crop Volume (Leaf Green #16A34A) */}
         <div
           style={{
             backgroundColor: '#FFFFFF',
             borderRadius: '18px',
             padding: '20px',
-            border: '1px solid #EEF2F6',
-            boxShadow: '0 4px 18px rgba(15, 23, 42, 0.03)',
+            border: '1px solid #E8EDE8',
+            boxShadow: '0 4px 18px rgba(18, 36, 24, 0.03)',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
@@ -402,13 +407,13 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                 justifyContent: 'center',
               }}
             >
-              <Sprout size={18} color="#10B981" />
+              <Sprout size={18} color="#16A34A" />
             </div>
             <span
               style={{
                 fontSize: '11px',
-                fontWeight: 700,
-                color: '#10B981',
+                fontWeight: 800,
+                color: '#16A34A',
                 backgroundColor: '#ECFDF5',
                 padding: '3px 9px',
                 borderRadius: '999px',
@@ -418,49 +423,49 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
             </span>
           </div>
 
-          {/* Smooth Sine Wave Curve (Green) */}
+          {/* Smooth Sine Wave Curve (Leaf Green) */}
           <div style={{ margin: '8px -20px 4px -20px', height: '54px', position: 'relative' }}>
             <svg width="100%" height="54" viewBox="0 0 280 54" preserveAspectRatio="none" style={{ display: 'block' }}>
               <defs>
-                <linearGradient id="waveGreen" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#10B981" stopOpacity="0.22" />
-                  <stop offset="100%" stopColor="#10B981" stopOpacity="0.01" />
+                <linearGradient id="waveLeaf" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#16A34A" stopOpacity="0.22" />
+                  <stop offset="100%" stopColor="#16A34A" stopOpacity="0.01" />
                 </linearGradient>
               </defs>
               <path
                 d="M 0 30 C 50 48, 90 12, 140 24 C 190 38, 230 10, 280 28 L 280 54 L 0 54 Z"
-                fill="url(#waveGreen)"
+                fill="url(#waveLeaf)"
               />
               <path
                 d="M 0 30 C 50 48, 90 12, 140 24 C 190 38, 230 10, 280 28"
                 fill="none"
-                stroke="#10B981"
+                stroke="#16A34A"
                 strokeWidth="2.5"
                 strokeLinecap="round"
               />
-              <circle cx="140" cy="24" r="4.5" fill="#FFFFFF" stroke="#10B981" strokeWidth="2.5" />
+              <circle cx="140" cy="24" r="4.5" fill="#FFFFFF" stroke="#16A34A" strokeWidth="2.5" />
             </svg>
           </div>
 
           <div>
-            <div style={{ fontSize: '24px', fontWeight: 800, color: '#0F172A', lineHeight: 1.1 }}>
+            <div style={{ fontSize: '24px', fontWeight: 800, color: '#122017', lineHeight: 1.1 }}>
               {stats.totalProductionKg.toLocaleString('fr-FR')}{' '}
-              <span style={{ fontSize: '13px', color: '#64748B', fontWeight: 600 }}>kg</span>
+              <span style={{ fontSize: '13px', color: '#768278', fontWeight: 600 }}>kg</span>
             </div>
-            <div style={{ fontSize: '12px', color: '#64748B', marginTop: '4px', fontWeight: 600 }}>
+            <div style={{ fontSize: '12px', color: '#5F685F', marginTop: '4px', fontWeight: 600 }}>
               Volume de récolte totale estimée
             </div>
           </div>
         </div>
 
-        {/* Card 3: Gross Economic Value */}
+        {/* Card 3: Gross Economic Value (Warm Gold #D97706 / #F2B632) */}
         <div
           style={{
             backgroundColor: '#FFFFFF',
             borderRadius: '18px',
             padding: '20px',
-            border: '1px solid #EEF2F6',
-            boxShadow: '0 4px 18px rgba(15, 23, 42, 0.03)',
+            border: '1px solid #E8EDE8',
+            boxShadow: '0 4px 18px rgba(18, 36, 24, 0.03)',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
@@ -485,8 +490,8 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
             <span
               style={{
                 fontSize: '11px',
-                fontWeight: 700,
-                color: '#D97706',
+                fontWeight: 800,
+                color: '#B45309',
                 backgroundColor: '#FEF3C7',
                 padding: '3px 9px',
                 borderRadius: '999px',
@@ -512,32 +517,32 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
               <path
                 d="M 0 38 C 45 15, 80 44, 140 20 C 190 2, 235 38, 280 15"
                 fill="none"
-                stroke="#F59E0B"
+                stroke="#D97706"
                 strokeWidth="2.5"
                 strokeLinecap="round"
               />
-              <circle cx="140" cy="20" r="4.5" fill="#FFFFFF" stroke="#F59E0B" strokeWidth="2.5" />
+              <circle cx="140" cy="20" r="4.5" fill="#FFFFFF" stroke="#D97706" strokeWidth="2.5" />
             </svg>
           </div>
 
           <div>
-            <div style={{ fontSize: '24px', fontWeight: 800, color: '#0F172A', lineHeight: 1.1 }}>
+            <div style={{ fontSize: '24px', fontWeight: 800, color: '#122017', lineHeight: 1.1 }}>
               {formatUsd(stats.totalRevenueUsd)}
             </div>
-            <div style={{ fontSize: '12px', color: '#64748B', marginTop: '4px', fontWeight: 600 }}>
+            <div style={{ fontSize: '12px', color: '#5F685F', marginTop: '4px', fontWeight: 600 }}>
               ≈ {formatCdf(stats.totalRevenueUsd)}
             </div>
           </div>
         </div>
 
-        {/* Card 4: Net Profit & Margin */}
+        {/* Card 4: Net Profit & Margin (Emerald #15803D) */}
         <div
           style={{
             backgroundColor: '#FFFFFF',
             borderRadius: '18px',
             padding: '20px',
-            border: '1px solid #EEF2F6',
-            boxShadow: '0 4px 18px rgba(15, 23, 42, 0.03)',
+            border: '1px solid #E8EDE8',
+            boxShadow: '0 4px 18px rgba(18, 36, 24, 0.03)',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
@@ -551,20 +556,20 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                 width: '36px',
                 height: '36px',
                 borderRadius: '50%',
-                backgroundColor: '#F3E8FF',
+                backgroundColor: '#DCFCE7',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <TrendingUp size={18} color="#8B5CF6" />
+              <TrendingUp size={18} color="#15803D" />
             </div>
             <span
               style={{
                 fontSize: '11px',
-                fontWeight: 700,
-                color: '#8B5CF6',
-                backgroundColor: '#F3E8FF',
+                fontWeight: 800,
+                color: '#15803D',
+                backgroundColor: '#DCFCE7',
                 padding: '3px 9px',
                 borderRadius: '999px',
               }}
@@ -573,46 +578,46 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
             </span>
           </div>
 
-          {/* Smooth Sine Wave Curve (Violet) */}
+          {/* Smooth Sine Wave Curve (Emerald) */}
           <div style={{ margin: '8px -20px 4px -20px', height: '54px', position: 'relative' }}>
             <svg width="100%" height="54" viewBox="0 0 280 54" preserveAspectRatio="none" style={{ display: 'block' }}>
               <defs>
-                <linearGradient id="waveViolet" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#8B5CF6" stopOpacity="0.22" />
-                  <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0.01" />
+                <linearGradient id="waveEmerald" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#10B981" stopOpacity="0.22" />
+                  <stop offset="100%" stopColor="#10B981" stopOpacity="0.01" />
                 </linearGradient>
               </defs>
               <path
                 d="M 0 32 C 40 45, 85 15, 140 28 C 190 40, 235 12, 280 22 L 280 54 L 0 54 Z"
-                fill="url(#waveViolet)"
+                fill="url(#waveEmerald)"
               />
               <path
                 d="M 0 32 C 40 45, 85 15, 140 28 C 190 40, 235 12, 280 22"
                 fill="none"
-                stroke="#8B5CF6"
+                stroke="#10B981"
                 strokeWidth="2.5"
                 strokeLinecap="round"
               />
-              <circle cx="140" cy="28" r="4.5" fill="#FFFFFF" stroke="#8B5CF6" strokeWidth="2.5" />
+              <circle cx="140" cy="28" r="4.5" fill="#FFFFFF" stroke="#10B981" strokeWidth="2.5" />
             </svg>
           </div>
 
           <div>
-            <div style={{ fontSize: '24px', fontWeight: 800, color: '#0F172A', lineHeight: 1.1 }}>
+            <div style={{ fontSize: '24px', fontWeight: 800, color: '#15803D', lineHeight: 1.1 }}>
               {formatUsd(stats.totalNetProfitUsd)}
             </div>
-            <div style={{ fontSize: '12px', color: '#64748B', marginTop: '4px', fontWeight: 600 }}>
+            <div style={{ fontSize: '12px', color: '#5F685F', marginTop: '4px', fontWeight: 600 }}>
               Bénéfice net global après 8 étapes
             </div>
           </div>
         </div>
       </div>
 
-      {/* Row 2: Two Middle Cards (Panda "Invoice Overview" & "Revenue" Bar Chart) */}
+      {/* Row 2: Two Middle Cards (Donut Progress & Vertical Bar Chart) */}
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))',
           gap: '20px',
         }}
       >
@@ -622,19 +627,19 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
             backgroundColor: '#FFFFFF',
             borderRadius: '20px',
             padding: '24px',
-            border: '1px solid #EEF2F6',
-            boxShadow: '0 4px 20px rgba(15, 23, 42, 0.03)',
+            border: '1px solid #E8EDE8',
+            boxShadow: '0 4px 20px rgba(18, 36, 24, 0.03)',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
           }}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <div>
-              <h2 style={{ margin: 0, fontSize: '17px', fontWeight: 800, color: '#0F172A' }}>
+              <h2 style={{ margin: 0, fontSize: '17px', fontWeight: 800, color: '#122017' }}>
                 Objectif d'Impact & Équilibre Financier
               </h2>
-              <div style={{ fontSize: '12px', color: '#64748B', marginTop: '2px' }}>
+              <div style={{ fontSize: '12px', color: '#5F685F', marginTop: '2px' }}>
                 Période active : {periodOptions.find((p) => p.id === selectedPeriod)?.tooltip}
               </div>
             </div>
@@ -642,11 +647,11 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span
                 style={{
-                  fontSize: '12px',
+                  fontSize: '11.5px',
                   fontWeight: 700,
-                  color: '#64748B',
-                  backgroundColor: '#F8FAFC',
-                  border: '1px solid #E2E8F0',
+                  color: '#1F6338',
+                  backgroundColor: '#EBF4EC',
+                  border: '1px solid #DCE7DF',
                   padding: '4px 10px',
                   borderRadius: '8px',
                 }}
@@ -659,7 +664,7 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  color: '#94A3B8',
+                  color: '#768278',
                   padding: '4px',
                 }}
               >
@@ -668,23 +673,23 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
             </div>
           </div>
 
-          {/* Donut Gauge & Metrics Side-by-Side */}
+          {/* Donut Gauge & Metrics Side-by-Side (Fully Responsive on Small Screens) */}
           <div
             style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
               flexWrap: 'wrap',
-              gap: '24px',
-              padding: '8px 0',
+              gap: '20px',
+              padding: '6px 0',
             }}
           >
-            {/* SVG Donut Progress Gauge */}
+            {/* SVG Donut Progress Gauge with Agricultural Green to Gold Gradient */}
             <div
               style={{
                 position: 'relative',
-                width: '150px',
-                height: '150px',
+                width: '145px',
+                height: '145px',
                 flexShrink: 0,
                 display: 'flex',
                 alignItems: 'center',
@@ -692,12 +697,12 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                 margin: '0 auto',
               }}
             >
-              <svg width="150" height="150" viewBox="0 0 160 160">
+              <svg width="145" height="145" viewBox="0 0 160 160">
                 <defs>
-                  <linearGradient id="donutGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#2563EB" />
-                    <stop offset="50%" stopColor="#8B5CF6" />
-                    <stop offset="100%" stopColor="#EC4899" />
+                  <linearGradient id="donutAvenir" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#0E4523" />
+                    <stop offset="50%" stopColor="#1F6338" />
+                    <stop offset="100%" stopColor="#F2B632" />
                   </linearGradient>
                 </defs>
                 {/* Background Ring */}
@@ -706,7 +711,7 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                   cy="80"
                   r="64"
                   fill="none"
-                  stroke="#F1F5F9"
+                  stroke="#EBF4EC"
                   strokeWidth="14"
                 />
                 {/* Animated Value Ring */}
@@ -715,7 +720,7 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                   cy="80"
                   r="64"
                   fill="none"
-                  stroke="url(#donutGradient)"
+                  stroke="url(#donutAvenir)"
                   strokeWidth="14"
                   strokeLinecap="round"
                   strokeDasharray={`${(stats.progressGoalPercent / 100) * (2 * Math.PI * 64)} ${(2 * Math.PI * 64)}`}
@@ -725,25 +730,25 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
               </svg>
 
               <div style={{ position: 'absolute', textAlign: 'center' }}>
-                <div style={{ fontSize: '24px', fontWeight: 800, color: '#0F172A', lineHeight: 1 }}>
+                <div style={{ fontSize: '24px', fontWeight: 900, color: '#122017', lineHeight: 1 }}>
                   {stats.progressGoalPercent}%
                 </div>
-                <div style={{ fontSize: '10px', color: '#64748B', fontWeight: 600, marginTop: '3px' }}>
-                  de l'objectif
+                <div style={{ fontSize: '10.5px', color: '#5F685F', fontWeight: 600, marginTop: '3px' }}>
+                  de la cible
                 </div>
               </div>
             </div>
 
             {/* Financial Details Columns */}
-            <div style={{ flex: 1, minWidth: '220px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ flex: 1, minWidth: '220px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <div>
-                <div style={{ fontSize: '11.5px', color: '#64748B', fontWeight: 600 }}>
+                <div style={{ fontSize: '11.5px', color: '#5F685F', fontWeight: 600 }}>
                   Valeur Économique Consolidée
                 </div>
-                <div style={{ fontSize: '22px', fontWeight: 800, color: '#0F172A', marginTop: '2px' }}>
+                <div style={{ fontSize: '22px', fontWeight: 800, color: '#122017', marginTop: '2px' }}>
                   {formatUsd(stats.totalRevenueUsd)}
                 </div>
-                <div style={{ fontSize: '11px', color: '#10B981', fontWeight: 700, marginTop: '2px' }}>
+                <div style={{ fontSize: '11px', color: '#16A34A', fontWeight: 700, marginTop: '2px' }}>
                   ↑ Marge bénéficiaire nette : {stats.averageNetMarginPercent}%
                 </div>
               </div>
@@ -753,29 +758,29 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                 style={{
                   display: 'grid',
                   gridTemplateColumns: '1fr 1fr',
-                  gap: '12px',
-                  backgroundColor: '#F8FAFC',
+                  gap: '10px',
+                  backgroundColor: '#FAF8F3',
                   padding: '12px',
                   borderRadius: '12px',
-                  border: '1px solid #E2E8F0',
+                  border: '1px solid #E8EDE8',
                 }}
               >
                 <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: '#64748B' }}>
-                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#2563EB' }} />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: '#5F685F' }}>
+                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#1F6338' }} />
                     <span>Recettes</span>
                   </div>
-                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#0F172A', marginTop: '3px' }}>
+                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#122017', marginTop: '3px' }}>
                     {formatUsd(stats.totalRevenueUsd)}
                   </div>
                 </div>
 
                 <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: '#64748B' }}>
-                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#F59E0B' }} />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: '#5F685F' }}>
+                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#F2B632' }} />
                     <span>Dépenses</span>
                   </div>
-                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#0F172A', marginTop: '3px' }}>
+                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#122017', marginTop: '3px' }}>
                     {formatUsd(stats.totalCostUsd)}
                   </div>
                 </div>
@@ -789,7 +794,7 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                   height: '38px',
                   width: '100%',
                   borderRadius: '10px',
-                  backgroundColor: '#2563EB',
+                  backgroundColor: '#1F6338',
                   border: 'none',
                   color: '#FFFFFF',
                   fontSize: '12.5px',
@@ -799,7 +804,7 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '6px',
-                  boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)',
+                  boxShadow: '0 4px 12px rgba(31, 99, 56, 0.2)',
                 }}
               >
                 <span>Consulter les simulations complètes</span>
@@ -809,25 +814,25 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
           </div>
         </div>
 
-        {/* Middle-Right Card: Vertical Grouped Bar Chart (Recettes vs Dépenses) */}
+        {/* Middle-Right Card: Vertical Grouped Bar Chart (Recettes Forest Green vs Dépenses Gold) */}
         <div
           style={{
             backgroundColor: '#FFFFFF',
             borderRadius: '20px',
             padding: '24px',
-            border: '1px solid #EEF2F6',
-            boxShadow: '0 4px 20px rgba(15, 23, 42, 0.03)',
+            border: '1px solid #E8EDE8',
+            boxShadow: '0 4px 20px rgba(18, 36, 24, 0.03)',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
           }}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
             <div>
-              <h2 style={{ margin: 0, fontSize: '17px', fontWeight: 800, color: '#0F172A' }}>
+              <h2 style={{ margin: 0, fontSize: '17px', fontWeight: 800, color: '#122017' }}>
                 Flux Mensuel : Recettes vs Dépenses
               </h2>
-              <div style={{ fontSize: '12px', color: '#64748B', marginTop: '2px' }}>
+              <div style={{ fontSize: '12px', color: '#5F685F', marginTop: '2px' }}>
                 Comparaison sur les 6 derniers mois de campagne (USD)
               </div>
             </div>
@@ -836,12 +841,12 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
               {/* Chart Legend */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12px', fontWeight: 700 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                  <div style={{ width: '10px', height: '10px', borderRadius: '3px', backgroundColor: '#2563EB' }} />
-                  <span style={{ color: '#475569' }}>Recettes</span>
+                  <div style={{ width: '10px', height: '10px', borderRadius: '3px', backgroundColor: '#1F6338' }} />
+                  <span style={{ color: '#122017' }}>Recettes</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                  <div style={{ width: '10px', height: '10px', borderRadius: '3px', backgroundColor: '#F59E0B' }} />
-                  <span style={{ color: '#475569' }}>Dépenses</span>
+                  <div style={{ width: '10px', height: '10px', borderRadius: '3px', backgroundColor: '#F2B632' }} />
+                  <span style={{ color: '#122017' }}>Dépenses</span>
                 </div>
               </div>
 
@@ -851,7 +856,7 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  color: '#94A3B8',
+                  color: '#768278',
                   padding: '4px',
                 }}
               >
@@ -861,21 +866,19 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
           </div>
 
           {/* SVG Grouped Vertical Bar Chart */}
-          <div style={{ width: '100%', height: '190px', position: 'relative', marginTop: '10px' }}>
+          <div style={{ width: '100%', height: '190px', position: 'relative', marginTop: '6px' }}>
             <svg width="100%" height="190" viewBox="0 0 440 190" preserveAspectRatio="none">
               {/* Horizontal guide lines */}
-              <line x1="10" y1="30" x2="430" y2="30" stroke="#F1F5F9" strokeWidth="1" strokeDasharray="3 3" />
-              <line x1="10" y1="80" x2="430" y2="80" stroke="#F1F5F9" strokeWidth="1" strokeDasharray="3 3" />
-              <line x1="10" y1="130" x2="430" y2="130" stroke="#F1F5F9" strokeWidth="1" strokeDasharray="3 3" />
-              <line x1="10" y1="165" x2="430" y2="165" stroke="#E2E8F0" strokeWidth="1" />
+              <line x1="10" y1="30" x2="430" y2="30" stroke="#F0F4F0" strokeWidth="1" strokeDasharray="3 3" />
+              <line x1="10" y1="80" x2="430" y2="80" stroke="#F0F4F0" strokeWidth="1" strokeDasharray="3 3" />
+              <line x1="10" y1="130" x2="430" y2="130" stroke="#F0F4F0" strokeWidth="1" strokeDasharray="3 3" />
+              <line x1="10" y1="165" x2="430" y2="165" stroke="#E2E8E2" strokeWidth="1" />
 
               {/* 6 Monthly Pairs */}
               {stats.monthlyBars.map((bar, index) => {
-                const groupWidth = 60;
                 const startX = 30 + index * 66;
                 const chartHeight = 135;
 
-                // Scale bar heights proportionally
                 const revHeight = Math.max(6, (bar.revenue / maxMonthRev) * chartHeight);
                 const expHeight = Math.max(6, (bar.expense / maxMonthRev) * chartHeight);
 
@@ -884,7 +887,7 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
 
                 return (
                   <g key={bar.month}>
-                    {/* Revenue Bar (Blue) */}
+                    {/* Revenue Bar (Forest Green #1F6338) */}
                     <rect
                       x={startX}
                       y={revY}
@@ -892,13 +895,13 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                       height={revHeight}
                       rx="4"
                       ry="4"
-                      fill="#2563EB"
+                      fill="#1F6338"
                       style={{ transition: 'all 0.4s ease' }}
                     >
                       <title>{`${bar.month} - Recettes: ${formatUsd(bar.revenue)}`}</title>
                     </rect>
 
-                    {/* Expense Bar (Yellow/Amber) */}
+                    {/* Expense Bar (Warm Gold #F2B632) */}
                     <rect
                       x={startX + 18}
                       y={expY}
@@ -906,7 +909,7 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                       height={expHeight}
                       rx="4"
                       ry="4"
-                      fill="#F59E0B"
+                      fill="#F2B632"
                       style={{ transition: 'all 0.4s ease' }}
                     >
                       <title>{`${bar.month} - Dépenses: ${formatUsd(bar.expense)}`}</title>
@@ -917,7 +920,7 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                       x={startX + 17}
                       y="182"
                       textAnchor="middle"
-                      fill="#64748B"
+                      fill="#5F685F"
                       fontSize="11.5"
                       fontWeight="700"
                     >
@@ -936,22 +939,22 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
               justifyContent: 'space-between',
               alignItems: 'center',
               fontSize: '11.5px',
-              color: '#64748B',
+              color: '#5F685F',
               paddingTop: '8px',
-              borderTop: '1px solid #F1F5F9',
+              borderTop: '1px solid #F0F4F0',
             }}
           >
             <span>Données issues du registre des 16 exploitations pilotes</span>
-            <span style={{ fontWeight: 700, color: '#10B981' }}>Solde net global : {formatUsd(stats.totalNetProfitUsd)}</span>
+            <span style={{ fontWeight: 800, color: '#15803D' }}>Solde net global : {formatUsd(stats.totalNetProfitUsd)}</span>
           </div>
         </div>
       </div>
 
-      {/* Row 3: Bottom Two Cards (Panda "Active Projects" Table + "Current Statistic" Concentric Rings) */}
+      {/* Row 3: Bottom Two Cards (Active Simulations Table & Concentric Regional Rings) */}
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'minmax(0, 1.8fr) minmax(320px, 1fr)',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))',
           gap: '20px',
         }}
       >
@@ -960,9 +963,9 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
           style={{
             backgroundColor: '#FFFFFF',
             borderRadius: '20px',
-            padding: '24px',
-            border: '1px solid #EEF2F6',
-            boxShadow: '0 4px 20px rgba(15, 23, 42, 0.03)',
+            padding: '22px',
+            border: '1px solid #E8EDE8',
+            boxShadow: '0 4px 20px rgba(18, 36, 24, 0.03)',
             display: 'flex',
             flexDirection: 'column',
           }}
@@ -979,10 +982,10 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
             }}
           >
             <div>
-              <h2 style={{ margin: 0, fontSize: '17px', fontWeight: 800, color: '#0F172A' }}>
+              <h2 style={{ margin: 0, fontSize: '17px', fontWeight: 800, color: '#122017' }}>
                 Simulations d'Exploitations Agricoles
               </h2>
-              <div style={{ fontSize: '12px', color: '#64748B', marginTop: '2px' }}>
+              <div style={{ fontSize: '12px', color: '#5F685F', marginTop: '2px' }}>
                 {filteredSims.length} exploitations enregistrées sur la période sélectionnée
               </div>
             </div>
@@ -992,10 +995,10 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
               <div
                 style={{
                   display: 'inline-flex',
-                  backgroundColor: '#F8FAFC',
+                  backgroundColor: '#FAF8F3',
                   padding: '3px',
                   borderRadius: '10px',
-                  border: '1px solid #E2E8F0',
+                  border: '1px solid #DCE7DF',
                   gap: '2px',
                 }}
               >
@@ -1005,12 +1008,12 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                     type="button"
                     onClick={() => setSelectedPeriod(opt.id)}
                     style={{
-                      padding: '4px 10px',
+                      padding: '4px 9px',
                       borderRadius: '6px',
                       border: 'none',
-                      backgroundColor: selectedPeriod === opt.id ? '#2563EB' : 'transparent',
-                      color: selectedPeriod === opt.id ? '#FFFFFF' : '#64748B',
-                      fontSize: '11.5px',
+                      backgroundColor: selectedPeriod === opt.id ? '#1F6338' : 'transparent',
+                      color: selectedPeriod === opt.id ? '#FFFFFF' : '#5F685F',
+                      fontSize: '11px',
                       fontWeight: selectedPeriod === opt.id ? 800 : 600,
                       cursor: 'pointer',
                     }}
@@ -1028,50 +1031,38 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                   alignItems: 'center',
                 }}
               >
-                <Search size={13} color="#94A3B8" style={{ position: 'absolute', left: '10px' }} />
+                <Search size={13} color="#768278" style={{ position: 'absolute', left: '10px' }} />
                 <input
                   type="text"
                   placeholder="Filtrer..."
                   value={tableSearch}
                   onChange={(e) => setTableSearch(e.target.value)}
                   style={{
-                    height: '32px',
+                    height: '30px',
                     padding: '0 10px 0 28px',
                     borderRadius: '8px',
-                    border: '1px solid #E2E8F0',
+                    border: '1px solid #DCE7DF',
                     fontSize: '12px',
                     outline: 'none',
-                    width: '130px',
-                    backgroundColor: '#FFFFFF',
+                    width: '120px',
+                    backgroundColor: '#FAF8F3',
+                    color: '#122017',
                   }}
                 />
               </div>
-
-              <button
-                type="button"
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  color: '#94A3B8',
-                  padding: '4px',
-                }}
-              >
-                <MoreVertical size={16} />
-              </button>
             </div>
           </div>
 
-          {/* Simulations Table */}
+          {/* Simulations Table with Smooth Horizontal Overflow for Mobile */}
           {filteredSims.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '36px', color: '#94A3B8', fontSize: '13px' }}>
+            <div style={{ textAlign: 'center', padding: '36px', color: '#768278', fontSize: '13px' }}>
               Aucune simulation trouvée pour cette période ou ce filtre.
             </div>
           ) : (
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '12.5px' }}>
+            <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '12.5px', minWidth: '600px' }}>
                 <thead>
-                  <tr style={{ borderBottom: '1px solid #E2E8F0', color: '#64748B' }}>
+                  <tr style={{ borderBottom: '1px solid #E8EDE8', color: '#5F685F' }}>
                     <th style={{ padding: '10px 8px', fontWeight: 700 }}>Exploitation & Filière</th>
                     <th style={{ padding: '10px 8px', fontWeight: 700 }}>Animateur Référent</th>
                     <th style={{ padding: '10px 8px', fontWeight: 700 }}>Marge & Avancement</th>
@@ -1082,7 +1073,7 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredSims.slice(0, 7).map((sim, idx) => {
+                  {filteredSims.slice(0, 6).map((sim) => {
                     const profit = sim.results?.netProfitUsd ?? 0;
                     const margin = Math.round(sim.results?.netProfitMarginPercent ?? 50);
                     const facilitator = FACILITATORS[sim.province || 'Kwilu'] || FACILITATORS['Kwilu'];
@@ -1095,17 +1086,17 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                       <tr
                         key={sim.id}
                         style={{
-                          borderBottom: '1px solid #F1F5F9',
+                          borderBottom: '1px solid #F0F4F0',
                           transition: 'background-color 0.15s',
                         }}
                       >
                         {/* 1. Name & Crop */}
                         <td style={{ padding: '12px 8px' }}>
-                          <div style={{ fontWeight: 800, color: '#0F172A', fontSize: '13px' }}>
+                          <div style={{ fontWeight: 800, color: '#122017', fontSize: '13px' }}>
                             {sim.title}
                           </div>
-                          <div style={{ fontSize: '11px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
-                            <span style={{ fontWeight: 700, color: '#2563EB' }}>{sim.shareCode}</span>
+                          <div style={{ fontSize: '11px', color: '#5F685F', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
+                            <span style={{ fontWeight: 800, color: '#1F6338' }}>{sim.shareCode}</span>
                             <span>•</span>
                             <span>{sim.cropName}</span>
                             <span>•</span>
@@ -1122,10 +1113,10 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                               style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover' }}
                             />
                             <div>
-                              <div style={{ fontWeight: 700, color: '#0F172A', fontSize: '12px' }}>
+                              <div style={{ fontWeight: 700, color: '#122017', fontSize: '12px' }}>
                                 {facilitator.name}
                               </div>
-                              <div style={{ fontSize: '10.5px', color: '#64748B' }}>
+                              <div style={{ fontSize: '10.5px', color: '#5F685F' }}>
                                 📍 {sim.province}
                               </div>
                             </div>
@@ -1133,16 +1124,16 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                         </td>
 
                         {/* 3. Progress / Margin Bar */}
-                        <td style={{ padding: '12px 8px', minWidth: '130px' }}>
+                        <td style={{ padding: '12px 8px', minWidth: '120px' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <span style={{ fontSize: '11.5px', fontWeight: 800, color: isProfitable ? '#10B981' : '#EF4444', minWidth: '32px' }}>
+                            <span style={{ fontSize: '11.5px', fontWeight: 800, color: isProfitable ? '#15803D' : '#DC2626', minWidth: '32px' }}>
                               {margin}%
                             </span>
                             <div
                               style={{
                                 flex: 1,
                                 height: '6px',
-                                backgroundColor: '#F1F5F9',
+                                backgroundColor: '#EBF4EC',
                                 borderRadius: '999px',
                                 overflow: 'hidden',
                               }}
@@ -1151,7 +1142,7 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                                 style={{
                                   height: '100%',
                                   width: `${Math.min(100, Math.max(10, margin))}%`,
-                                  backgroundColor: isProfitable ? '#2563EB' : '#EF4444',
+                                  backgroundColor: isProfitable ? '#1F6338' : '#DC2626',
                                   borderRadius: '999px',
                                 }}
                               />
@@ -1185,11 +1176,11 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                           <span
                             style={{
                               fontSize: '11px',
-                              fontWeight: 700,
+                              fontWeight: 800,
                               padding: '3px 8px',
                               borderRadius: '999px',
-                              backgroundColor: isProfitable ? '#ECFDF5' : margin > 30 ? '#FEF3C7' : '#FEF2F2',
-                              color: isProfitable ? '#10B981' : margin > 30 ? '#D97706' : '#EF4444',
+                              backgroundColor: isProfitable ? '#DCFCE7' : margin > 30 ? '#FEF3C7' : '#FEE2E2',
+                              color: isProfitable ? '#15803D' : margin > 30 ? '#B45309' : '#DC2626',
                             }}
                           >
                             {isProfitable ? 'Rentable' : 'À surveiller'}
@@ -1197,7 +1188,7 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                         </td>
 
                         {/* 6. Date */}
-                        <td style={{ padding: '12px 8px', textAlign: 'right', color: '#64748B', fontSize: '11.5px', fontWeight: 600 }}>
+                        <td style={{ padding: '12px 8px', textAlign: 'right', color: '#5F685F', fontSize: '11.5px', fontWeight: 600 }}>
                           {dateFormatted}
                         </td>
 
@@ -1209,10 +1200,10 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                             style={{
                               padding: '5px 10px',
                               borderRadius: '6px',
-                              backgroundColor: '#EFF6FF',
+                              backgroundColor: '#EBF4EC',
                               border: 'none',
-                              color: '#2563EB',
-                              fontWeight: 700,
+                              color: '#1F6338',
+                              fontWeight: 800,
                               cursor: 'pointer',
                               fontSize: '11.5px',
                               display: 'inline-flex',
@@ -1237,23 +1228,25 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
             style={{
               marginTop: '14px',
               paddingTop: '12px',
-              borderTop: '1px solid #F1F5F9',
+              borderTop: '1px solid #E8EDE8',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
               fontSize: '12px',
-              color: '#64748B',
+              color: '#5F685F',
+              flexWrap: 'wrap',
+              gap: '8px',
             }}
           >
-            <span>Affichage de {Math.min(7, filteredSims.length)} sur {filteredSims.length} simulations</span>
+            <span>Affichage de {Math.min(6, filteredSims.length)} sur {filteredSims.length} simulations</span>
             <button
               type="button"
               onClick={() => onNavigateToTab('SIMULATIONS')}
               style={{
                 background: 'none',
                 border: 'none',
-                color: '#2563EB',
-                fontWeight: 700,
+                color: '#1F6338',
+                fontWeight: 800,
                 cursor: 'pointer',
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -1266,14 +1259,14 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
           </div>
         </div>
 
-        {/* Bottom-Right Card: Concentric Radial Rings (Panda "Current Statistic") */}
+        {/* Bottom-Right Card: Concentric Radial Rings (Forest Green, Gold, Leaf Green) */}
         <div
           style={{
             backgroundColor: '#FFFFFF',
             borderRadius: '20px',
-            padding: '24px',
-            border: '1px solid #EEF2F6',
-            boxShadow: '0 4px 20px rgba(15, 23, 42, 0.03)',
+            padding: '22px',
+            border: '1px solid #E8EDE8',
+            boxShadow: '0 4px 20px rgba(18, 36, 24, 0.03)',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
@@ -1281,10 +1274,10 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
             <div>
-              <h2 style={{ margin: 0, fontSize: '17px', fontWeight: 800, color: '#0F172A' }}>
+              <h2 style={{ margin: 0, fontSize: '17px', fontWeight: 800, color: '#122017' }}>
                 Taux de Réalisation par Zone
               </h2>
-              <div style={{ fontSize: '12px', color: '#64748B', marginTop: '2px' }}>
+              <div style={{ fontSize: '12px', color: '#5F685F', marginTop: '2px' }}>
                 Progression des cibles territoriales 2026
               </div>
             </div>
@@ -1295,7 +1288,7 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
-                color: '#94A3B8',
+                color: '#768278',
                 padding: '4px',
               }}
             >
@@ -1303,26 +1296,26 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
             </button>
           </div>
 
-          {/* Concentric Multi-Ring SVG Chart */}
+          {/* Concentric Multi-Ring SVG Chart with Agricultural Colors */}
           <div
             style={{
               position: 'relative',
               width: '180px',
               height: '180px',
-              margin: '10px auto',
+              margin: '8px auto',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
             <svg width="180" height="180" viewBox="0 0 200 200">
-              {/* Outer Ring 1: Kwilu (Blue) - 86% */}
+              {/* Outer Ring 1: Kwilu (Forest Green #1F6338) - 86% */}
               <circle
                 cx="100"
                 cy="100"
                 r="82"
                 fill="none"
-                stroke="#F1F5F9"
+                stroke="#EBF4EC"
                 strokeWidth="10"
               />
               <circle
@@ -1330,20 +1323,20 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                 cy="100"
                 r="82"
                 fill="none"
-                stroke="#2563EB"
+                stroke="#1F6338"
                 strokeWidth="10"
                 strokeLinecap="round"
                 strokeDasharray={`${0.86 * (2 * Math.PI * 82)} ${(2 * Math.PI * 82)}`}
                 transform="rotate(-90 100 100)"
               />
 
-              {/* Middle Ring 2: Kwango (Amber) - 72% */}
+              {/* Middle Ring 2: Kwango (Warm Gold #F2B632) - 72% */}
               <circle
                 cx="100"
                 cy="100"
                 r="64"
                 fill="none"
-                stroke="#F1F5F9"
+                stroke="#FEF3C7"
                 strokeWidth="10"
               />
               <circle
@@ -1351,20 +1344,20 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                 cy="100"
                 r="64"
                 fill="none"
-                stroke="#F59E0B"
+                stroke="#F2B632"
                 strokeWidth="10"
                 strokeLinecap="round"
                 strokeDasharray={`${0.72 * (2 * Math.PI * 64)} ${(2 * Math.PI * 64)}`}
                 transform="rotate(-90 100 100)"
               />
 
-              {/* Inner Ring 3: Coopératives Partenaires (Emerald) - 94% */}
+              {/* Inner Ring 3: Coopératives Partenaires (Leaf Green #16A34A) - 94% */}
               <circle
                 cx="100"
                 cy="100"
                 r="46"
                 fill="none"
-                stroke="#F1F5F9"
+                stroke="#DCFCE7"
                 strokeWidth="10"
               />
               <circle
@@ -1372,7 +1365,7 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
                 cy="100"
                 r="46"
                 fill="none"
-                stroke="#10B981"
+                stroke="#16A34A"
                 strokeWidth="10"
                 strokeLinecap="round"
                 strokeDasharray={`${0.94 * (2 * Math.PI * 46)} ${(2 * Math.PI * 46)}`}
@@ -1382,42 +1375,42 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({ onNavigate
 
             {/* Center Global Text */}
             <div style={{ position: 'absolute', textAlign: 'center' }}>
-              <div style={{ fontSize: '20px', fontWeight: 800, color: '#0F172A', lineHeight: 1 }}>
+              <div style={{ fontSize: '20px', fontWeight: 900, color: '#122017', lineHeight: 1 }}>
                 {stats.progressGoalPercent}%
               </div>
-              <div style={{ fontSize: '10px', color: '#64748B', fontWeight: 600, marginTop: '2px' }}>
+              <div style={{ fontSize: '10px', color: '#5F685F', fontWeight: 600, marginTop: '2px' }}>
                 Global
               </div>
             </div>
           </div>
 
           {/* Zones Legend Breakdown */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '10px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
-                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#2563EB' }} />
-                <span style={{ color: '#0F172A', fontWeight: 700 }}>Province du Kwilu</span>
-                <span style={{ fontSize: '10.5px', color: '#64748B' }}>(Kikwit, Bulungu, Idiofa)</span>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#1F6338' }} />
+                <span style={{ color: '#122017', fontWeight: 700 }}>Province du Kwilu</span>
+                <span style={{ fontSize: '10.5px', color: '#5F685F' }}>(Kikwit, Bulungu, Idiofa)</span>
               </div>
-              <span style={{ fontWeight: 800, color: '#2563EB' }}>86%</span>
+              <span style={{ fontWeight: 800, color: '#1F6338' }}>86%</span>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
-                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#F59E0B' }} />
-                <span style={{ color: '#0F172A', fontWeight: 700 }}>Province du Kwango</span>
-                <span style={{ fontSize: '10.5px', color: '#64748B' }}>(Kenge, Popokabaka)</span>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#F2B632' }} />
+                <span style={{ color: '#122017', fontWeight: 700 }}>Province du Kwango</span>
+                <span style={{ fontSize: '10.5px', color: '#5F685F' }}>(Kenge, Popokabaka)</span>
               </div>
-              <span style={{ fontWeight: 800, color: '#F59E0B' }}>72%</span>
+              <span style={{ fontWeight: 800, color: '#B45309' }}>72%</span>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
-                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10B981' }} />
-                <span style={{ color: '#0F172A', fontWeight: 700 }}>Organisations Paysannes</span>
-                <span style={{ fontSize: '10.5px', color: '#64748B' }}>(CAPSA, Mwinda...)</span>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#16A34A' }} />
+                <span style={{ color: '#122017', fontWeight: 700 }}>Organisations Paysannes</span>
+                <span style={{ fontSize: '10.5px', color: '#5F685F' }}>(CAPSA, Mwinda...)</span>
               </div>
-              <span style={{ fontWeight: 800, color: '#10B981' }}>94%</span>
+              <span style={{ fontWeight: 800, color: '#16A34A' }}>94%</span>
             </div>
           </div>
         </div>

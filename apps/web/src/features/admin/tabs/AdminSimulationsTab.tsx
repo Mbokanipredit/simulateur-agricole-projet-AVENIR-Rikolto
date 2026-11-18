@@ -182,8 +182,8 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
               style={{
                 fontSize: '11px',
                 fontWeight: 800,
-                color: '#2563EB',
-                backgroundColor: '#EFF6FF',
+                color: '#1F6338',
+                backgroundColor: '#EBF4EC',
                 padding: '3px 10px',
                 borderRadius: '999px',
                 textTransform: 'uppercase',
@@ -192,15 +192,15 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
             >
               Données Terrain Kwilu & Kwango
             </span>
-            <span style={{ fontSize: '12px', color: '#64748B' }}>•</span>
-            <span style={{ fontSize: '12px', color: '#64748B', fontWeight: 600 }}>
+            <span style={{ fontSize: '12px', color: '#768278' }}>•</span>
+            <span style={{ fontSize: '12px', color: '#5F685F', fontWeight: 600 }}>
               {simulations.length} exploitations documentées
             </span>
           </div>
-          <h1 style={{ margin: 0, fontSize: '22px', fontWeight: 800, color: '#0F172A' }}>
+          <h1 style={{ margin: 0, fontSize: '22px', fontWeight: 800, color: '#122017' }}>
             Registre Centralisé des Simulations Terrain
           </h1>
-          <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748B' }}>
+          <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#5F685F' }}>
             Consultez, analysez et filtrez périodiquement les comptes d'exploitation chiffrés par les animateurs et ménages.
           </p>
         </div>
@@ -213,7 +213,7 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
             height: '40px',
             padding: '0 18px',
             borderRadius: '10px',
-            backgroundColor: '#2563EB',
+            backgroundColor: '#1F6338',
             color: '#FFFFFF',
             border: 'none',
             fontSize: '13px',
@@ -222,7 +222,7 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)',
+            boxShadow: '0 4px 14px rgba(31, 99, 56, 0.25)',
           }}
         >
           <Download size={15} color="#FFFFFF" />
@@ -243,18 +243,18 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
             backgroundColor: '#FFFFFF',
             borderRadius: '14px',
             padding: '14px 16px',
-            border: '1px solid #EEF2F6',
-            boxShadow: '0 2px 10px rgba(15, 23, 42, 0.02)',
+            border: '1px solid #E8EDE8',
+            boxShadow: '0 2px 10px rgba(18, 36, 24, 0.02)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>
-            <Users size={13} color="#2563EB" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#5F685F', fontWeight: 700, textTransform: 'uppercase' }}>
+            <Users size={13} color="#1F6338" />
             <span>Ménages Période</span>
           </div>
-          <div style={{ fontSize: '20px', fontWeight: 800, color: '#0F172A', marginTop: '4px' }}>
-            {periodStats.totalHouseholds} <span style={{ fontSize: '12px', color: '#64748B' }}>bénéficiaires</span>
+          <div style={{ fontSize: '20px', fontWeight: 800, color: '#122017', marginTop: '4px' }}>
+            {periodStats.totalHouseholds} <span style={{ fontSize: '12px', color: '#768278' }}>bénéficiaires</span>
           </div>
-          <div style={{ fontSize: '11px', color: '#2563EB', marginTop: '2px', fontWeight: 600 }}>
+          <div style={{ fontSize: '11px', color: '#1F6338', marginTop: '2px', fontWeight: 700 }}>
             {periodStats.totalSimulations} simulations actives
           </div>
         </div>
@@ -264,18 +264,18 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
             backgroundColor: '#FFFFFF',
             borderRadius: '14px',
             padding: '14px 16px',
-            border: '1px solid #EEF2F6',
-            boxShadow: '0 2px 10px rgba(15, 23, 42, 0.02)',
+            border: '1px solid #E8EDE8',
+            boxShadow: '0 2px 10px rgba(18, 36, 24, 0.02)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>
-            <Sprout size={13} color="#10B981" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#5F685F', fontWeight: 700, textTransform: 'uppercase' }}>
+            <Sprout size={13} color="#16A34A" />
             <span>Superficie & Récolte</span>
           </div>
-          <div style={{ fontSize: '20px', fontWeight: 800, color: '#0F172A', marginTop: '4px' }}>
-            {periodStats.totalSurfaceAreaHa} <span style={{ fontSize: '12px', color: '#64748B' }}>hectares</span>
+          <div style={{ fontSize: '20px', fontWeight: 800, color: '#122017', marginTop: '4px' }}>
+            {periodStats.totalSurfaceAreaHa} <span style={{ fontSize: '12px', color: '#768278' }}>hectares</span>
           </div>
-          <div style={{ fontSize: '11px', color: '#10B981', marginTop: '2px', fontWeight: 600 }}>
+          <div style={{ fontSize: '11px', color: '#16A34A', marginTop: '2px', fontWeight: 700 }}>
             🌾 {periodStats.totalProductionKg.toLocaleString('fr-FR')} kg attendus
           </div>
         </div>
@@ -285,15 +285,15 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
             backgroundColor: '#FFFFFF',
             borderRadius: '14px',
             padding: '14px 16px',
-            border: '1px solid #EEF2F6',
-            boxShadow: '0 2px 10px rgba(15, 23, 42, 0.02)',
+            border: '1px solid #E8EDE8',
+            boxShadow: '0 2px 10px rgba(18, 36, 24, 0.02)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#5F685F', fontWeight: 700, textTransform: 'uppercase' }}>
             <DollarSign size={13} color="#D97706" />
             <span>Recettes Période</span>
           </div>
-          <div style={{ fontSize: '20px', fontWeight: 800, color: '#0F172A', marginTop: '4px' }}>
+          <div style={{ fontSize: '20px', fontWeight: 800, color: '#122017', marginTop: '4px' }}>
             {formatUsd(periodStats.totalRevenueUsd)}
           </div>
           <div style={{ fontSize: '11px', color: '#D97706', marginTop: '2px', fontWeight: 600 }}>
@@ -306,18 +306,18 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
             backgroundColor: '#FFFFFF',
             borderRadius: '14px',
             padding: '14px 16px',
-            border: '1px solid #EEF2F6',
-            boxShadow: '0 2px 10px rgba(15, 23, 42, 0.02)',
+            border: '1px solid #E8EDE8',
+            boxShadow: '0 2px 10px rgba(18, 36, 24, 0.02)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>
-            <TrendingUp size={13} color="#8B5CF6" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#5F685F', fontWeight: 700, textTransform: 'uppercase' }}>
+            <TrendingUp size={13} color="#15803D" />
             <span>Bénéfice Net Global</span>
           </div>
-          <div style={{ fontSize: '20px', fontWeight: 800, color: '#0F172A', marginTop: '4px' }}>
+          <div style={{ fontSize: '20px', fontWeight: 800, color: '#15803D', marginTop: '4px' }}>
             {formatUsd(periodStats.totalNetProfitUsd)}
           </div>
-          <div style={{ fontSize: '11px', color: '#8B5CF6', marginTop: '2px', fontWeight: 700 }}>
+          <div style={{ fontSize: '11px', color: '#15803D', marginTop: '2px', fontWeight: 700 }}>
             Marge moyenne : {periodStats.averageNetMarginPercent}%
           </div>
         </div>
@@ -329,8 +329,8 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
           backgroundColor: '#FFFFFF',
           borderRadius: '16px',
           padding: '16px 20px',
-          border: '1px solid #EEF2F6',
-          boxShadow: '0 4px 18px rgba(15, 23, 42, 0.02)',
+          border: '1px solid #E8EDE8',
+          boxShadow: '0 4px 18px rgba(18, 36, 24, 0.02)',
           display: 'flex',
           flexWrap: 'wrap',
           gap: '12px',
@@ -340,15 +340,15 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
       >
         {/* Periodic Filter Pills */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '12px', fontWeight: 700, color: '#64748B' }}>Période :</span>
+          <span style={{ fontSize: '12px', fontWeight: 700, color: '#5F685F' }}>Période :</span>
           <div
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              backgroundColor: '#F8FAFC',
+              backgroundColor: '#FAF8F3',
               padding: '3px',
               borderRadius: '10px',
-              border: '1px solid #E2E8F0',
+              border: '1px solid #DCE7DF',
               gap: '2px',
             }}
           >
@@ -364,8 +364,8 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
                     padding: '5px 12px',
                     borderRadius: '7px',
                     border: 'none',
-                    backgroundColor: active ? '#2563EB' : 'transparent',
-                    color: active ? '#FFFFFF' : '#64748B',
+                    backgroundColor: active ? '#1F6338' : 'transparent',
+                    color: active ? '#FFFFFF' : '#5F685F',
                     fontSize: '12px',
                     fontWeight: active ? 800 : 600,
                     cursor: 'pointer',
@@ -683,7 +683,7 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
             >
               <div style={{ backgroundColor: '#FAF8F3', padding: '12px', borderRadius: '10px', textAlign: 'center' }}>
                 <div style={{ fontSize: '11px', color: '#768278' }}>Recette Brute</div>
-                <div style={{ fontSize: '18px', fontWeight: 800, color: '#0369A1', marginTop: '2px' }}>
+                <div style={{ fontSize: '18px', fontWeight: 800, color: '#1F6338', marginTop: '2px' }}>
                   {formatUsd(selectedSimModal.results?.grossRevenueUsd)}
                 </div>
               </div>

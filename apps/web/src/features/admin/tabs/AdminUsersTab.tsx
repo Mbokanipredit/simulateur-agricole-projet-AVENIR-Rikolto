@@ -190,7 +190,7 @@ export const AdminUsersTab: React.FC = () => {
                           fontSize: '11px',
                           fontWeight: 800,
                           backgroundColor: isAdmin ? '#FEF3C7' : isFac ? '#DCFCE7' : '#E0F2FE',
-                          color: isAdmin ? '#8C6218' : isFac ? '#15803D' : '#0369A1',
+                          color: isAdmin ? '#8C6218' : isFac ? '#15803D' : '#475569',
                         }}
                       >
                         {isAdmin ? '👑 Direction ADMIN' : isFac ? '🌱 Animateur Terrain' : '🌾 Responsable OP'}
