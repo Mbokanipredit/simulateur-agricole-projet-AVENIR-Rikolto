@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import {
   FileSpreadsheet,
   Search,
@@ -11,9 +11,13 @@ import {
   CheckCircle,
   MapPin,
   Calendar,
+  Users,
+  Sprout,
+  DollarSign,
+  TrendingUp,
 } from 'lucide-react';
 import { SavedSimulationDto } from '../../../api/generated/avenirApi';
-import { adminSyncService } from '../services/adminSyncService';
+import { adminSyncService, TimePeriodFilter, calculateFilteredStats } from '../services/adminSyncService';
 
 interface AdminSimulationsTabProps {
   onOpenInSimulator: (sim: SavedSimulationDto) => void;
@@ -25,6 +29,7 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProvince, setSelectedProvince] = useState<string>('ALL');
   const [selectedCrop, setSelectedCrop] = useState<string>('ALL');
+  const [selectedPeriod, setSelectedPeriod] = useState<TimePeriodFilter>('ALL');
   const [selectedSimModal, setSelectedSimModal] = useState<SavedSimulationDto | null>(null);
   const settings = adminSyncService.getSettings();
 
@@ -48,6 +53,11 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
       await loadSimulations();
     }
   };
+
+  // Period stats calculated dynamically in one click
+  const periodStats = useMemo(() => {
+    return calculateFilteredStats(simulations, selectedPeriod);
+  }, [simulations, selectedPeriod]);
 
   // CSV Export for Donors and Project Coordination
   const handleExportCSV = () => {
@@ -105,18 +115,32 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
     document.body.removeChild(link);
   };
 
-  // Filtered List
-  const filteredSimulations = simulations.filter((s) => {
-    const matchesSearch =
-      s.shareCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      s.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (s.producerName && s.producerName.toLowerCase().includes(searchTerm.toLowerCase()));
+  // Filtered List with Period, Search, Province, and Crop
+  const filteredSimulations = useMemo(() => {
+    const now = new Date('2026-11-18T20:00:00.000Z').getTime();
+    return simulations.filter((s) => {
+      // Period filter
+      if (selectedPeriod !== 'ALL') {
+        const simTime = new Date(s.createdAt || '2026-10-01').getTime();
+        const diffDays = (now - simTime) / (1000 * 60 * 60 * 24);
+        if (selectedPeriod === '7D' && diffDays > 7) return false;
+        if (selectedPeriod === '30D' && diffDays > 30) return false;
+        if (selectedPeriod === '3M' && diffDays > 90) return false;
+        if (selectedPeriod === '6M' && diffDays > 180) return false;
+        if (selectedPeriod === '1Y' && diffDays > 365) return false;
+      }
 
-    const matchesProvince = selectedProvince === 'ALL' || s.province === selectedProvince;
-    const matchesCrop = selectedCrop === 'ALL' || s.cropCode === selectedCrop;
+      const matchesSearch =
+        s.shareCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        s.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (s.producerName && s.producerName.toLowerCase().includes(searchTerm.toLowerCase()));
 
-    return matchesSearch && matchesProvince && matchesCrop;
-  });
+      const matchesProvince = selectedProvince === 'ALL' || s.province === selectedProvince;
+      const matchesCrop = selectedCrop === 'ALL' || s.cropCode === selectedCrop;
+
+      return matchesSearch && matchesProvince && matchesCrop;
+    });
+  }, [simulations, selectedPeriod, searchTerm, selectedProvince, selectedCrop]);
 
   const formatUsd = (val?: number) => {
     return new Intl.NumberFormat('fr-FR', {
@@ -125,6 +149,15 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
       maximumFractionDigits: 0,
     }).format(val || 0);
   };
+
+  const periodOptions: { id: TimePeriodFilter; label: string; tooltip: string }[] = [
+    { id: '7D', label: '1S', tooltip: 'Derniers 7 jours (1 semaine)' },
+    { id: '30D', label: '1M', tooltip: 'Derniers 30 jours (1 mois)' },
+    { id: '3M', label: '3M', tooltip: 'Saison A (Trimestre récent)' },
+    { id: '6M', label: '6M', tooltip: 'Semestre (Campagne 6 mois)' },
+    { id: '1Y', label: '1A', tooltip: 'Année 2026 complète' },
+    { id: 'ALL', label: 'Tout', tooltip: 'Toutes les simulations enregistrées' },
+  ];
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -137,17 +170,38 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
           flexWrap: 'wrap',
           gap: '14px',
           backgroundColor: '#FFFFFF',
-          padding: '18px 22px',
-          borderRadius: '16px',
-          border: '1px solid #E2E8E2',
+          padding: '20px 24px',
+          borderRadius: '18px',
+          border: '1px solid #EEF2F6',
+          boxShadow: '0 4px 18px rgba(15, 23, 42, 0.03)',
         }}
       >
         <div>
-          <h1 style={{ margin: 0, fontSize: '20px', fontWeight: 800, color: '#122017' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+            <span
+              style={{
+                fontSize: '11px',
+                fontWeight: 800,
+                color: '#2563EB',
+                backgroundColor: '#EFF6FF',
+                padding: '3px 10px',
+                borderRadius: '999px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.6px',
+              }}
+            >
+              Données Terrain Kwilu & Kwango
+            </span>
+            <span style={{ fontSize: '12px', color: '#64748B' }}>•</span>
+            <span style={{ fontSize: '12px', color: '#64748B', fontWeight: 600 }}>
+              {simulations.length} exploitations documentées
+            </span>
+          </div>
+          <h1 style={{ margin: 0, fontSize: '22px', fontWeight: 800, color: '#0F172A' }}>
             Registre Centralisé des Simulations Terrain
           </h1>
-          <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#5F685F' }}>
-            Consultez, analysez et exportez les comptes d'exploitation chiffrés par les animateurs et ménages au Kwilu et Kwango.
+          <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748B' }}>
+            Consultez, analysez et filtrez périodiquement les comptes d'exploitation chiffrés par les animateurs et ménages.
           </p>
         </div>
 
@@ -156,19 +210,19 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
           onClick={handleExportCSV}
           disabled={simulations.length === 0}
           style={{
-            height: '42px',
+            height: '40px',
             padding: '0 18px',
-            borderRadius: '999px',
-            backgroundColor: '#1F6338',
+            borderRadius: '10px',
+            backgroundColor: '#2563EB',
             color: '#FFFFFF',
             border: 'none',
             fontSize: '13px',
-            fontWeight: 800,
+            fontWeight: 700,
             cursor: simulations.length === 0 ? 'not-allowed' : 'pointer',
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            boxShadow: '0 4px 14px rgba(31, 99, 56, 0.25)',
+            boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)',
           }}
         >
           <Download size={15} color="#FFFFFF" />
@@ -176,13 +230,107 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
         </button>
       </div>
 
-      {/* Filter Bar */}
+      {/* Dynamic Period Results Ribbon - Calculates results for the given period in one click */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))',
+          gap: '12px',
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: '#FFFFFF',
+            borderRadius: '14px',
+            padding: '14px 16px',
+            border: '1px solid #EEF2F6',
+            boxShadow: '0 2px 10px rgba(15, 23, 42, 0.02)',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>
+            <Users size={13} color="#2563EB" />
+            <span>Ménages Période</span>
+          </div>
+          <div style={{ fontSize: '20px', fontWeight: 800, color: '#0F172A', marginTop: '4px' }}>
+            {periodStats.totalHouseholds} <span style={{ fontSize: '12px', color: '#64748B' }}>bénéficiaires</span>
+          </div>
+          <div style={{ fontSize: '11px', color: '#2563EB', marginTop: '2px', fontWeight: 600 }}>
+            {periodStats.totalSimulations} simulations actives
+          </div>
+        </div>
+
+        <div
+          style={{
+            backgroundColor: '#FFFFFF',
+            borderRadius: '14px',
+            padding: '14px 16px',
+            border: '1px solid #EEF2F6',
+            boxShadow: '0 2px 10px rgba(15, 23, 42, 0.02)',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>
+            <Sprout size={13} color="#10B981" />
+            <span>Superficie & Récolte</span>
+          </div>
+          <div style={{ fontSize: '20px', fontWeight: 800, color: '#0F172A', marginTop: '4px' }}>
+            {periodStats.totalSurfaceAreaHa} <span style={{ fontSize: '12px', color: '#64748B' }}>hectares</span>
+          </div>
+          <div style={{ fontSize: '11px', color: '#10B981', marginTop: '2px', fontWeight: 600 }}>
+            🌾 {periodStats.totalProductionKg.toLocaleString('fr-FR')} kg attendus
+          </div>
+        </div>
+
+        <div
+          style={{
+            backgroundColor: '#FFFFFF',
+            borderRadius: '14px',
+            padding: '14px 16px',
+            border: '1px solid #EEF2F6',
+            boxShadow: '0 2px 10px rgba(15, 23, 42, 0.02)',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>
+            <DollarSign size={13} color="#D97706" />
+            <span>Recettes Période</span>
+          </div>
+          <div style={{ fontSize: '20px', fontWeight: 800, color: '#0F172A', marginTop: '4px' }}>
+            {formatUsd(periodStats.totalRevenueUsd)}
+          </div>
+          <div style={{ fontSize: '11px', color: '#D97706', marginTop: '2px', fontWeight: 600 }}>
+            Coûts : {formatUsd(periodStats.totalCostUsd)}
+          </div>
+        </div>
+
+        <div
+          style={{
+            backgroundColor: '#FFFFFF',
+            borderRadius: '14px',
+            padding: '14px 16px',
+            border: '1px solid #EEF2F6',
+            boxShadow: '0 2px 10px rgba(15, 23, 42, 0.02)',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>
+            <TrendingUp size={13} color="#8B5CF6" />
+            <span>Bénéfice Net Global</span>
+          </div>
+          <div style={{ fontSize: '20px', fontWeight: 800, color: '#0F172A', marginTop: '4px' }}>
+            {formatUsd(periodStats.totalNetProfitUsd)}
+          </div>
+          <div style={{ fontSize: '11px', color: '#8B5CF6', marginTop: '2px', fontWeight: 700 }}>
+            Marge moyenne : {periodStats.averageNetMarginPercent}%
+          </div>
+        </div>
+      </div>
+
+      {/* Filter Bar with Period Pills + Search + Dropdowns */}
       <div
         style={{
           backgroundColor: '#FFFFFF',
-          borderRadius: '14px',
-          padding: '14px 18px',
-          border: '1px solid #E2E8E2',
+          borderRadius: '16px',
+          padding: '16px 20px',
+          border: '1px solid #EEF2F6',
+          boxShadow: '0 4px 18px rgba(15, 23, 42, 0.02)',
           display: 'flex',
           flexWrap: 'wrap',
           gap: '12px',
@@ -190,41 +338,85 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
           justifyContent: 'space-between',
         }}
       >
-        {/* Search Input */}
-        <div style={{ position: 'relative', flex: '1 1 240px', minWidth: '220px' }}>
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Rechercher par code (ex: AVN-2026), producteur..."
+        {/* Periodic Filter Pills */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+          <span style={{ fontSize: '12px', fontWeight: 700, color: '#64748B' }}>Période :</span>
+          <div
             style={{
-              width: '100%',
-              height: '38px',
-              borderRadius: '8px',
-              border: '1px solid #D5DDD5',
-              padding: '0 12px 0 34px',
-              fontSize: '13px',
-              backgroundColor: '#FAF8F3',
-              boxSizing: 'border-box',
+              display: 'inline-flex',
+              alignItems: 'center',
+              backgroundColor: '#F8FAFC',
+              padding: '3px',
+              borderRadius: '10px',
+              border: '1px solid #E2E8F0',
+              gap: '2px',
             }}
-          />
-          <Search size={15} color="#768278" style={{ position: 'absolute', left: '11px', top: '12px' }} />
+          >
+            {periodOptions.map((opt) => {
+              const active = selectedPeriod === opt.id;
+              return (
+                <button
+                  key={opt.id}
+                  type="button"
+                  title={opt.tooltip}
+                  onClick={() => setSelectedPeriod(opt.id)}
+                  style={{
+                    padding: '5px 12px',
+                    borderRadius: '7px',
+                    border: 'none',
+                    backgroundColor: active ? '#2563EB' : 'transparent',
+                    color: active ? '#FFFFFF' : '#64748B',
+                    fontSize: '12px',
+                    fontWeight: active ? 800 : 600,
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  {opt.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Dropdown Filters */}
-        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', flex: '1 1 auto', justifyContent: 'flex-end' }}>
+          {/* Search Input */}
+          <div style={{ position: 'relative', width: '240px' }}>
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Rechercher par code, nom..."
+              style={{
+                width: '100%',
+                height: '36px',
+                borderRadius: '8px',
+                border: '1px solid #E2E8F0',
+                padding: '0 12px 0 32px',
+                fontSize: '12.5px',
+                backgroundColor: '#F8FAFC',
+                color: '#0F172A',
+                outline: 'none',
+                boxSizing: 'border-box',
+              }}
+            />
+            <Search size={14} color="#94A3B8" style={{ position: 'absolute', left: '10px', top: '11px' }} />
+          </div>
+
+          {/* Dropdown Filters */}
           <select
             value={selectedProvince}
             onChange={(e) => setSelectedProvince(e.target.value)}
             style={{
-              height: '38px',
+              height: '36px',
               borderRadius: '8px',
-              border: '1px solid #D5DDD5',
-              backgroundColor: '#FAF8F3',
-              padding: '0 12px',
-              fontSize: '12.5px',
+              border: '1px solid #E2E8F0',
+              backgroundColor: '#F8FAFC',
+              padding: '0 10px',
+              fontSize: '12px',
               fontWeight: 600,
-              color: '#18241B',
+              color: '#0F172A',
+              outline: 'none',
             }}
           >
             <option value="ALL">Toutes les provinces</option>
@@ -236,14 +428,15 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
             value={selectedCrop}
             onChange={(e) => setSelectedCrop(e.target.value)}
             style={{
-              height: '38px',
+              height: '36px',
               borderRadius: '8px',
-              border: '1px solid #D5DDD5',
-              backgroundColor: '#FAF8F3',
-              padding: '0 12px',
-              fontSize: '12.5px',
+              border: '1px solid #E2E8F0',
+              backgroundColor: '#F8FAFC',
+              padding: '0 10px',
+              fontSize: '12px',
               fontWeight: 600,
-              color: '#18241B',
+              color: '#0F172A',
+              outline: 'none',
             }}
           >
             <option value="ALL">Toutes les filières</option>
@@ -260,25 +453,25 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
       <div
         style={{
           backgroundColor: '#FFFFFF',
-          borderRadius: '16px',
-          border: '1px solid #E2E8E2',
+          borderRadius: '18px',
+          border: '1px solid #EEF2F6',
           overflow: 'hidden',
-          boxShadow: '0 6px 18px rgba(18, 36, 24, 0.04)',
+          boxShadow: '0 4px 20px rgba(15, 23, 42, 0.03)',
         }}
       >
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '12.5px' }}>
             <thead>
-              <tr style={{ backgroundColor: '#FAF8F3', borderBottom: '1px solid #E2E8E2', color: '#5F685F' }}>
-                <th style={{ padding: '12px 14px', fontWeight: 800 }}>Code</th>
-                <th style={{ padding: '12px 14px', fontWeight: 800 }}>Exploitation & Ménage</th>
-                <th style={{ padding: '12px 14px', fontWeight: 800 }}>Province</th>
-                <th style={{ padding: '12px 14px', fontWeight: 800 }}>Filière</th>
-                <th style={{ padding: '12px 14px', fontWeight: 800 }}>Superficie</th>
-                <th style={{ padding: '12px 14px', fontWeight: 800, textAlign: 'right' }}>Recette Brute</th>
-                <th style={{ padding: '12px 14px', fontWeight: 800, textAlign: 'right' }}>Dépenses</th>
-                <th style={{ padding: '12px 14px', fontWeight: 800, textAlign: 'right' }}>Bénéfice Net</th>
-                <th style={{ padding: '12px 14px', fontWeight: 800, textAlign: 'center' }}>Actions</th>
+              <tr style={{ backgroundColor: '#F8FAFC', borderBottom: '1px solid #EEF2F6', color: '#64748B' }}>
+                <th style={{ padding: '12px 14px', fontWeight: 700 }}>Code</th>
+                <th style={{ padding: '12px 14px', fontWeight: 700 }}>Exploitation & Producteur</th>
+                <th style={{ padding: '12px 14px', fontWeight: 700 }}>Province</th>
+                <th style={{ padding: '12px 14px', fontWeight: 700 }}>Filière</th>
+                <th style={{ padding: '12px 14px', fontWeight: 700 }}>Superficie</th>
+                <th style={{ padding: '12px 14px', fontWeight: 700, textAlign: 'right' }}>Recette Brute</th>
+                <th style={{ padding: '12px 14px', fontWeight: 700, textAlign: 'right' }}>Dépenses</th>
+                <th style={{ padding: '12px 14px', fontWeight: 700, textAlign: 'right' }}>Bénéfice Net</th>
+                <th style={{ padding: '12px 14px', fontWeight: 700, textAlign: 'center' }}>Actions</th>
               </tr>
             </thead>
             <tbody>

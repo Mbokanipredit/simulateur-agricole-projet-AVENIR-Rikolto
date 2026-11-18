@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAtom, useSetAtom } from 'jotai';
-import { Menu, X, ArrowLeft, ShieldCheck, Wifi, WifiOff } from 'lucide-react';
+import { Menu, X, ArrowLeft, ShieldCheck, Wifi, WifiOff, Search, Bell } from 'lucide-react';
 import { AuthPortalUserDto, SavedSimulationDto } from '../../api/generated/avenirApi';
 import {
   activeMainSectionAtom,
@@ -128,7 +128,7 @@ export const AdminApp: React.FC<AdminAppProps> = ({ onBackToPublicSite }) => {
       style={{
         display: 'flex',
         minHeight: '100vh',
-        backgroundColor: '#FAF8F3',
+        backgroundColor: '#F4F7FB',
         fontFamily: "'Plus Jakarta Sans', sans-serif",
       }}
     >
@@ -155,19 +155,20 @@ export const AdminApp: React.FC<AdminAppProps> = ({ onBackToPublicSite }) => {
         }}
         className="avenir-admin-main-pane"
       >
-        {/* Top Header Bar */}
+        {/* Top Header Bar - Panda SaaS Style */}
         <header
           style={{
             position: 'sticky',
             top: 0,
             zIndex: 100,
             backgroundColor: '#FFFFFF',
-            borderBottom: '1px solid #E2E8E2',
-            padding: '12px 24px',
+            borderBottom: '1px solid #EEF2F6',
+            padding: '12px 28px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)',
+            boxShadow: '0 2px 10px rgba(15, 23, 42, 0.03)',
+            gap: '16px',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
@@ -182,54 +183,85 @@ export const AdminApp: React.FC<AdminAppProps> = ({ onBackToPublicSite }) => {
                 border: 'none',
                 padding: '6px',
                 cursor: 'pointer',
-                color: '#122017',
+                color: '#0F172A',
               }}
             >
               <Menu size={22} />
             </button>
 
             <div>
-              <div style={{ fontSize: '11px', fontWeight: 800, color: '#1F6338', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
+              <div style={{ fontSize: '11px', fontWeight: 800, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
                 ADMINISTRATION CENTRALE · PROJET AVENIR
               </div>
-              <div style={{ fontSize: '16px', fontWeight: 800, color: '#122017' }}>
+              <div style={{ fontSize: '16px', fontWeight: 800, color: '#0F172A' }}>
                 {tabTitles[activeTab]}
               </div>
             </div>
           </div>
 
-          {/* Right Header Status */}
+          {/* Center Search Bar */}
+          <div
+            style={{
+              position: 'relative',
+              maxWidth: '360px',
+              width: '100%',
+              display: 'none', // Shown on desktop via media query or default flex
+            }}
+            className="avenir-admin-header-search"
+          >
+            <Search size={15} color="#94A3B8" style={{ position: 'absolute', left: '12px', top: '10px' }} />
+            <input
+              type="text"
+              placeholder="Rechercher une exploitation, un ménage, une culture..."
+              style={{
+                width: '100%',
+                height: '36px',
+                padding: '0 14px 0 36px',
+                borderRadius: '999px',
+                backgroundColor: '#F8FAFC',
+                border: '1px solid #E2E8F0',
+                fontSize: '12.5px',
+                color: '#0F172A',
+                outline: 'none',
+                boxSizing: 'border-box',
+              }}
+            />
+          </div>
+
+          {/* Right Header Status & User Profile Chip */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <button
               type="button"
               onClick={handleBackToPublic}
               style={{
-                padding: '6px 14px',
+                padding: '7px 14px',
                 borderRadius: '999px',
-                backgroundColor: '#FAF8F3',
-                border: '1.5px solid #1F6338',
-                color: '#1F6338',
+                backgroundColor: '#F8FAFC',
+                border: '1px solid #E2E8F0',
+                color: '#0F172A',
                 fontSize: '12px',
-                fontWeight: 800,
+                fontWeight: 700,
                 cursor: 'pointer',
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '6px',
+                transition: 'all 0.15s ease',
               }}
             >
-              <ArrowLeft size={13} color="#1F6338" />
+              <ArrowLeft size={13} color="#2563EB" />
               <span>Site public</span>
             </button>
 
+            {/* Online Status Pill */}
             <div
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '8px',
-                backgroundColor: '#FAF8F3',
-                padding: '5px 12px',
+                gap: '6px',
+                backgroundColor: '#F8FAFC',
+                padding: '6px 12px',
                 borderRadius: '999px',
-                border: '1px solid #E2E8E2',
+                border: '1px solid #E2E8F0',
               }}
             >
               <div
@@ -237,12 +269,75 @@ export const AdminApp: React.FC<AdminAppProps> = ({ onBackToPublicSite }) => {
                   width: '8px',
                   height: '8px',
                   borderRadius: '50%',
-                  backgroundColor: isOnline ? '#16A34A' : '#EAB308',
+                  backgroundColor: isOnline ? '#10B981' : '#F59E0B',
                 }}
               />
-              <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#122017' }}>
-                {isOnline ? 'Connecté' : 'Hors-ligne'}
+              <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#334155' }}>
+                {isOnline ? 'En ligne' : 'Hors-ligne'}
               </span>
+            </div>
+
+            {/* Notification Bell */}
+            <div
+              style={{
+                position: 'relative',
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                backgroundColor: '#F8FAFC',
+                border: '1px solid #E2E8F0',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#64748B',
+                cursor: 'pointer',
+              }}
+            >
+              <Bell size={16} />
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '7px',
+                  right: '7px',
+                  width: '7px',
+                  height: '7px',
+                  borderRadius: '50%',
+                  backgroundColor: '#2563EB',
+                }}
+              />
+            </div>
+
+            {/* User Profile Header Chip */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '4px 6px 4px 10px',
+                borderRadius: '999px',
+                backgroundColor: '#F8FAFC',
+                border: '1px solid #E2E8F0',
+              }}
+            >
+              <div style={{ textAlign: 'right', display: 'none' }} className="avenir-admin-user-info">
+                <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F172A', lineHeight: 1.1 }}>
+                  {authUser.name}
+                </div>
+                <div style={{ fontSize: '10.5px', color: '#64748B' }}>
+                  {authUser.role === 'ADMIN' ? 'Coordonnateur' : 'Animateur'}
+                </div>
+              </div>
+              <img
+                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80"
+                alt={authUser.name}
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  border: '1.5px solid #2563EB',
+                }}
+              />
             </div>
           </div>
         </header>
@@ -281,3 +376,4 @@ export const AdminApp: React.FC<AdminAppProps> = ({ onBackToPublicSite }) => {
     </div>
   );
 };
+
