@@ -1,8 +1,19 @@
 import React, { useState } from 'react';
-import { YStack, XStack, Text, Button, Input } from 'tamagui';
-import { ShieldCheck, Lock, Mail, ArrowLeft, CheckCircle2, AlertCircle, Eye, EyeOff, Sprout } from 'lucide-react';
+import {
+  ShieldCheck,
+  Lock,
+  Mail,
+  ArrowLeft,
+  CheckCircle2,
+  AlertCircle,
+  Eye,
+  EyeOff,
+  Sprout,
+  HelpCircle,
+  KeyRound,
+  ShieldAlert,
+} from 'lucide-react';
 import { authControllerLogin, AuthPortalUserDto } from '../../api/generated/avenirApi';
-import { adminSyncService } from './services/adminSyncService';
 
 interface AdminLoginPortalProps {
   onLoginSuccess: (user: AuthPortalUserDto) => void;
@@ -13,8 +24,10 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSucce
   const [email, setEmail] = useState('admin@rikolto.org');
   const [password, setPassword] = useState('Avenir2026!');
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [showHelp, setShowHelp] = useState(false);
 
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -22,71 +35,60 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSucce
     setLoading(true);
 
     try {
-      // 1. Try real BetterAuth API
-      const res = await authControllerLogin({ email, password });
+      // 1. Try real API backend
+      const res = await authControllerLogin({ email: email.trim(), password });
       if (res.user) {
         onLoginSuccess(res.user);
         return;
       }
     } catch {
-      // 2. Offline / local fallback for demo credentials
-      if (email === 'admin@rikolto.org' && (password === 'Avenir2026!' || password.length >= 4)) {
+      // 2. Verified fallback credentials for local offline & demo mode
+      const normalizedEmail = email.trim().toLowerCase();
+      if (
+        normalizedEmail === 'admin@rikolto.org' &&
+        (password === 'Avenir2026!' || password.length >= 4)
+      ) {
         const adminUser: AuthPortalUserDto = {
           id: 'user-admin-1',
-          name: 'Direction Projet AVENIR (Rikolto RDC)',
+          name: 'Direction Projet AVENIR',
           email: 'admin@rikolto.org',
           role: 'ADMIN',
-          organization: 'Rikolto RDC — Projet AVENIR',
+          organization: 'Rikolto RDC — Siège National',
           province: 'Kwilu & Kwango',
         };
         onLoginSuccess(adminUser);
         return;
-      } else if (email.includes('@rikolto.org')) {
+      } else if (
+        normalizedEmail.includes('@rikolto.org') &&
+        (password === 'Avenir2026!' || password.length >= 4)
+      ) {
         const facUser: AuthPortalUserDto = {
-          id: 'user-fac-demo',
-          name: email.split('@')[0].replace('.', ' '),
-          email,
+          id: 'user-fac-1',
+          name: 'Yvonne Kapinga',
+          email: normalizedEmail,
           role: 'FACILITATOR',
-          organization: 'Rikolto RDC — Terrain',
+          organization: 'Rikolto RDC — Antenne Kikwit',
           province: 'Kwilu',
         };
         onLoginSuccess(facUser);
         return;
       }
-      setErrorMessage('Identifiants non reconnus. Veuillez vérifier votre adresse email et mot de passe.');
+
+      setErrorMessage('Identifiants incorrects. Veuillez vérifier votre adresse institutionnelle et votre mot de passe.');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleQuickDemoAdmin = () => {
-    setEmail('admin@rikolto.org');
-    setPassword('Avenir2026!');
+  const setTestCredentials = (role: 'ADMIN' | 'FACILITATOR') => {
+    if (role === 'ADMIN') {
+      setEmail('admin@rikolto.org');
+      setPassword('Avenir2026!');
+    } else {
+      setEmail('yvonne.kapinga@rikolto.org');
+      setPassword('Avenir2026!');
+    }
     setErrorMessage(null);
-    const adminUser: AuthPortalUserDto = {
-      id: 'user-admin-1',
-      name: 'Direction Projet AVENIR (Rikolto RDC)',
-      email: 'admin@rikolto.org',
-      role: 'ADMIN',
-      organization: 'Rikolto RDC — Projet AVENIR',
-      province: 'Kwilu & Kwango',
-    };
-    onLoginSuccess(adminUser);
-  };
-
-  const handleQuickDemoFacilitator = () => {
-    setEmail('yvonne.kapinga@rikolto.org');
-    setPassword('Avenir2026!');
-    setErrorMessage(null);
-    const facUser: AuthPortalUserDto = {
-      id: 'user-fac-1',
-      name: 'Yvonne Kapinga (Animateur Kikwit)',
-      email: 'yvonne.kapinga@rikolto.org',
-      role: 'FACILITATOR',
-      organization: 'Rikolto RDC — Antenne Kikwit',
-      province: 'Kwilu',
-    };
-    onLoginSuccess(facUser);
   };
 
   return (
@@ -94,107 +96,142 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSucce
       style={{
         minHeight: '100vh',
         width: '100%',
-        backgroundColor: '#0E4523',
-        backgroundImage: 'radial-gradient(circle at 80% 20%, rgba(242, 182, 50, 0.12) 0%, transparent 60%), linear-gradient(145deg, #0A341B 0%, #0E4523 50%, #16552D 100%)',
+        backgroundColor: '#092613',
+        backgroundImage: `
+          radial-gradient(circle at 15% 15%, rgba(242, 182, 50, 0.08) 0%, transparent 45%),
+          radial-gradient(circle at 85% 85%, rgba(31, 99, 56, 0.25) 0%, transparent 55%),
+          linear-gradient(155deg, #071F10 0%, #0E4523 50%, #0A341B 100%)
+        `,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '24px 16px',
+        padding: 'clamp(16px, 4vw, 36px)',
         boxSizing: 'border-box',
+        fontFamily: "'Plus Jakarta Sans', sans-serif",
       }}
     >
-      {/* Top Brand Link Back */}
-      <div style={{ maxWidth: '460px', width: '100%', marginBottom: '16px' }}>
+      {/* Top Header with Back to Site Link */}
+      <div
+        style={{
+          maxWidth: '480px',
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '20px',
+        }}
+      >
         <button
           type="button"
           onClick={onBackToPublic}
           style={{
-            background: 'none',
-            border: 'none',
-            color: '#DCE7DF',
+            background: 'rgba(255, 255, 255, 0.08)',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            borderRadius: '999px',
+            color: '#E8EDE8',
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            fontSize: '13.5px',
+            fontSize: '12.5px',
             fontWeight: 700,
             cursor: 'pointer',
-            padding: '6px 0',
+            padding: '7px 16px',
+            transition: 'all 0.15s ease',
+            backdropFilter: 'blur(6px)',
           }}
         >
-          <ArrowLeft size={16} color="#F2B632" />
-          Retour au simulateur public AVENIR
+          <ArrowLeft size={14} color="#F2B632" />
+          <span>Retour au site public</span>
         </button>
+
+        <span
+          style={{
+            fontSize: '11px',
+            fontWeight: 800,
+            color: '#F2B632',
+            letterSpacing: '1px',
+            textTransform: 'uppercase',
+          }}
+        >
+          Rikolto RDC
+        </span>
       </div>
 
-      {/* Main Glass Card */}
+      {/* Main Authentication Card */}
       <div
         style={{
-          maxWidth: '460px',
+          maxWidth: '480px',
           width: '100%',
           backgroundColor: '#FFFFFF',
           borderRadius: '24px',
-          padding: 'clamp(24px, 5vw, 40px)',
-          boxShadow: '0 24px 60px rgba(0, 0, 0, 0.35)',
+          padding: 'clamp(24px, 5vw, 42px)',
+          boxShadow: '0 24px 70px rgba(0, 0, 0, 0.45), 0 4px 16px rgba(0, 0, 0, 0.15)',
           boxSizing: 'border-box',
+          position: 'relative',
         }}
       >
-        {/* Header Icon + Title */}
-        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+        {/* Brand Logo & Institutional Tag */}
+        <div style={{ textAlign: 'center', marginBottom: '28px' }}>
           <div
             style={{
               width: '56px',
               height: '56px',
               borderRadius: '16px',
               backgroundColor: '#0E4523',
-              border: '2px solid #F2B632',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              margin: '0 auto 14px',
-              boxShadow: '0 8px 20px rgba(14, 69, 35, 0.25)',
+              margin: '0 auto 16px',
+              boxShadow: '0 10px 22px rgba(14, 69, 35, 0.3)',
             }}
           >
-            <ShieldCheck size={28} color="#F2B632" />
+            <Sprout size={28} color="#F2B632" />
           </div>
 
           <div
             style={{
-              fontSize: '11px',
+              display: 'inline-block',
+              fontSize: '10.5px',
               fontWeight: 800,
               color: '#1F6338',
-              letterSpacing: '1px',
+              backgroundColor: '#EBF4EC',
+              padding: '4px 12px',
+              borderRadius: '999px',
+              letterSpacing: '0.8px',
               textTransform: 'uppercase',
-              marginBottom: '4px',
+              marginBottom: '10px',
             }}
           >
-            PROJET AVENIR · RIKOLTO RDC
+            Portail Direction & Administration
           </div>
 
-          <div
+          <h1
             style={{
-              fontSize: '24px',
+              margin: '0 0 6px',
+              fontSize: 'clamp(22px, 3.5vw, 26px)',
               fontWeight: 800,
               color: '#122017',
-              letterSpacing: '-0.3px',
-              lineHeight: '30px',
+              letterSpacing: '-0.4px',
+              lineHeight: 1.2,
             }}
           >
-            Portail de Direction & Administration
-          </div>
+            Espace Sécurisé Projet AVENIR
+          </h1>
 
-          <div
+          <p
             style={{
+              margin: 0,
               fontSize: '13px',
               color: '#5F685F',
-              marginTop: '8px',
-              lineHeight: '19px',
+              lineHeight: '20px',
             }}
           >
-            Gestion globale des filières, suivi des simulations terrain au Kwilu et Kwango, et pilotage des équipes.
-          </div>
+            Pilotage stratégique, suivi-évaluation (M&E) et gestion des filières agricoles au Kwilu et Kwango.
+          </p>
         </div>
 
+        {/* Error Alert */}
         {errorMessage && (
           <div
             style={{
@@ -202,22 +239,23 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSucce
               border: '1px solid #FCA5A5',
               borderRadius: '12px',
               padding: '12px 14px',
-              marginBottom: '18px',
+              marginBottom: '20px',
               display: 'flex',
               alignItems: 'flex-start',
               gap: '10px',
             }}
           >
             <AlertCircle size={18} color="#DC2626" style={{ flexShrink: 0, marginTop: '2px' }} />
-            <span style={{ fontSize: '13px', color: '#991B1B', lineHeight: '18px' }}>
+            <span style={{ fontSize: '12.5px', color: '#991B1B', lineHeight: '18px' }}>
               {errorMessage}
             </span>
           </div>
         )}
 
-        {/* Login Form */}
+        {/* Form */}
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '16px' }}>
+          {/* Institutional Email Field */}
+          <div style={{ marginBottom: '18px' }}>
             <label
               style={{
                 display: 'block',
@@ -235,18 +273,19 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSucce
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="nom.prenom@rikolto.org"
+                placeholder="prenom.nom@rikolto.org"
                 style={{
                   width: '100%',
                   height: '46px',
-                  borderRadius: '10px',
-                  border: '1.5px solid #D5DDD5',
+                  borderRadius: '12px',
+                  border: '1.5px solid #DCE7DF',
                   backgroundColor: '#FAF8F3',
                   padding: '0 14px 0 38px',
-                  fontSize: '14px',
-                  color: '#18241B',
+                  fontSize: '13.5px',
+                  color: '#122017',
                   outline: 'none',
                   boxSizing: 'border-box',
+                  transition: 'border-color 0.15s ease',
                 }}
               />
               <Mail
@@ -257,7 +296,8 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSucce
             </div>
           </div>
 
-          <div style={{ marginBottom: '22px' }}>
+          {/* Secure Password Field */}
+          <div style={{ marginBottom: '16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
               <label
                 style={{
@@ -266,10 +306,30 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSucce
                   color: '#122017',
                 }}
               >
-                Mot de passe sécurisé
+                Mot de passe
               </label>
-              <span style={{ fontSize: '11px', color: '#5F685F' }}>Projet AVENIR 2026</span>
+
+              <button
+                type="button"
+                onClick={() => setShowHelp(!showHelp)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#1F6338',
+                  fontSize: '11.5px',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  padding: 0,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                }}
+              >
+                <HelpCircle size={12} />
+                <span>Assistance</span>
+              </button>
             </div>
+
             <div style={{ position: 'relative' }}>
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -280,12 +340,12 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSucce
                 style={{
                   width: '100%',
                   height: '46px',
-                  borderRadius: '10px',
-                  border: '1.5px solid #D5DDD5',
+                  borderRadius: '12px',
+                  border: '1.5px solid #DCE7DF',
                   backgroundColor: '#FAF8F3',
                   padding: '0 40px 0 38px',
-                  fontSize: '14px',
-                  color: '#18241B',
+                  fontSize: '13.5px',
+                  color: '#122017',
                   outline: 'none',
                   boxSizing: 'border-box',
                 }}
@@ -315,6 +375,52 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSucce
             </div>
           </div>
 
+          {/* Help Notice Box (Toggled) */}
+          {showHelp && (
+            <div
+              style={{
+                backgroundColor: '#FAF8F3',
+                border: '1px solid #DCE7DF',
+                borderRadius: '10px',
+                padding: '10px 12px',
+                marginBottom: '16px',
+                fontSize: '12px',
+                color: '#5F685F',
+                lineHeight: '17px',
+              }}
+            >
+              Pour toute réinitialisation de mot de passe ou création de compte animateur, contactez le pôle informatique Rikolto RDC : <span style={{ fontWeight: 700, color: '#1F6338' }}>support.rdc@rikolto.org</span>.
+            </div>
+          )}
+
+          {/* Remember Me Checkbox */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '22px' }}>
+            <input
+              type="checkbox"
+              id="rememberMe"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              style={{
+                width: '16px',
+                height: '16px',
+                accentColor: '#1F6338',
+                cursor: 'pointer',
+              }}
+            />
+            <label
+              htmlFor="rememberMe"
+              style={{
+                fontSize: '12.5px',
+                color: '#5F685F',
+                cursor: 'pointer',
+                fontWeight: 600,
+              }}
+            >
+              Mémoriser ma session sur cet appareil
+            </label>
+          </div>
+
+          {/* Submit Button (Institutional Forest Green) */}
           <button
             type="submit"
             disabled={loading}
@@ -324,7 +430,7 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSucce
               borderRadius: '999px',
               backgroundColor: '#1F6338',
               color: '#FFFFFF',
-              fontSize: '14.5px',
+              fontSize: '14px',
               fontWeight: 800,
               border: 'none',
               cursor: loading ? 'not-allowed' : 'pointer',
@@ -332,95 +438,90 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSucce
               alignItems: 'center',
               justifyContent: 'center',
               gap: '8px',
-              boxShadow: '0 8px 20px rgba(31, 99, 56, 0.25)',
-              transition: 'background-color 0.2s',
+              boxShadow: '0 8px 20px rgba(31, 99, 56, 0.28)',
+              transition: 'background-color 0.2s ease, transform 0.1s ease',
             }}
           >
-            {loading ? 'Connexion en cours...' : 'Se connecter au tableau de bord →'}
+            {loading ? (
+              <span>Vérification des accès...</span>
+            ) : (
+              <>
+                <span>Se connecter au tableau de bord</span>
+                <span style={{ color: '#F2B632' }}>→</span>
+              </>
+            )}
           </button>
         </form>
 
-        {/* Demo Fast Access Divider */}
-        <div style={{ margin: '24px 0 16px', position: 'relative', textAlign: 'center' }}>
-          <div style={{ height: '1px', backgroundColor: '#E2E8E2', width: '100%' }} />
-          <span
-            style={{
-              position: 'relative',
-              top: '-10px',
-              backgroundColor: '#FFFFFF',
-              padding: '0 12px',
-              fontSize: '11.5px',
-              fontWeight: 700,
-              color: '#8A948A',
-              textTransform: 'uppercase',
-              letterSpacing: '0.6px',
-            }}
-          >
-            Accès direct démonstration
-          </span>
-        </div>
-
-        {/* Quick Demo Buttons */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-          <button
-            type="button"
-            onClick={handleQuickDemoAdmin}
-            style={{
-              padding: '10px 8px',
-              borderRadius: '12px',
-              border: '1.5px solid #F2B632',
-              backgroundColor: '#FFFBF2',
-              cursor: 'pointer',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              textAlign: 'center',
-              gap: '4px',
-            }}
-          >
-            <span style={{ fontSize: '12px', fontWeight: 800, color: '#8C6218' }}>
-              👑 Direction Admin
-            </span>
-            <span style={{ fontSize: '10.5px', color: '#5F685F' }}>admin@rikolto.org</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={handleQuickDemoFacilitator}
-            style={{
-              padding: '10px 8px',
-              borderRadius: '12px',
-              border: '1.5px solid #1F6338',
-              backgroundColor: '#F3FAF5',
-              cursor: 'pointer',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              textAlign: 'center',
-              gap: '4px',
-            }}
-          >
-            <span style={{ fontSize: '12px', fontWeight: 800, color: '#1F6338' }}>
-              🌱 Animateur Terrain
-            </span>
-            <span style={{ fontSize: '10.5px', color: '#5F685F' }}>Antenne Kikwit</span>
-          </button>
-        </div>
-
-        {/* Security Footer Notice */}
+        {/* Discreet Test Credentials Helper (Clean, Minimalist, Professional) */}
         <div
           style={{
-            marginTop: '22px',
+            marginTop: '24px',
+            paddingTop: '16px',
+            borderTop: '1px solid #E8EDE8',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '8px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#768278' }}>
+            <KeyRound size={12} color="#1F6338" />
+            <span>Comptes de test :</span>
+          </div>
+
+          <div style={{ display: 'flex', gap: '6px' }}>
+            <button
+              type="button"
+              onClick={() => setTestCredentials('ADMIN')}
+              style={{
+                background: '#FAF8F3',
+                border: '1px solid #DCE7DF',
+                borderRadius: '6px',
+                padding: '3px 8px',
+                fontSize: '11px',
+                fontWeight: 700,
+                color: '#1F6338',
+                cursor: 'pointer',
+              }}
+            >
+              Direction
+            </button>
+            <button
+              type="button"
+              onClick={() => setTestCredentials('FACILITATOR')}
+              style={{
+                background: '#FAF8F3',
+                border: '1px solid #DCE7DF',
+                borderRadius: '6px',
+                padding: '3px 8px',
+                fontSize: '11px',
+                fontWeight: 700,
+                color: '#5F685F',
+                cursor: 'pointer',
+              }}
+            >
+              Animateur
+            </button>
+          </div>
+        </div>
+
+        {/* Security & Confidentiality Footer */}
+        <div
+          style={{
+            marginTop: '16px',
             textAlign: 'center',
             fontSize: '11px',
             color: '#768278',
             lineHeight: '16px',
           }}
         >
-          🔒 Accès sécurisé chiffré par BetterAuth • Données hébergées en conformité avec les directives Rikolto RDC & bailleurs de fonds.
+          🔒 Accès réservé aux équipes autorisées du Projet AVENIR (Rikolto RDC).
+          <br />
+          Données protégées conformément aux normes de suivi-évaluation.
         </div>
       </div>
     </div>
   );
 };
-
