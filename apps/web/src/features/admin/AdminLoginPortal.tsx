@@ -306,65 +306,6 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSucce
               </p>
             </div>
 
-            {/* Quick Credentials Info Box */}
-            <div
-              style={{
-                backgroundColor: '#FAF8F3',
-                border: '1px solid #E8EDE8',
-                borderRadius: '12px',
-                padding: '12px 14px',
-                marginBottom: '18px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '8px',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#1F6338', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
-                  🔑 Identifiants d'accès
-                </span>
-                <span style={{ fontSize: '11px', color: '#768278' }}>Mot de passe : <strong>Avenir2026!</strong></span>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '8px' }}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setEmail('admin@rikolto.org');
-                    setPassword('Avenir2026!');
-                  }}
-                  style={{
-                    backgroundColor: email === 'admin@rikolto.org' ? '#EBF5EE' : '#FFFFFF',
-                    border: email === 'admin@rikolto.org' ? '1.5px solid #1F6338' : '1px solid #DCE7DF',
-                    borderRadius: '8px',
-                    padding: '7px 10px',
-                    textAlign: 'left',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <div style={{ fontSize: '11px', fontWeight: 800, color: '#1F6338' }}>👑 Direction Admin</div>
-                  <div style={{ fontSize: '10.5px', color: '#5F685F' }}>admin@rikolto.org</div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setEmail('animateur.kikwit@rikolto.org');
-                    setPassword('Avenir2026!');
-                  }}
-                  style={{
-                    backgroundColor: email.includes('animateur') ? '#EBF5EE' : '#FFFFFF',
-                    border: email.includes('animateur') ? '1.5px solid #1F6338' : '1px solid #DCE7DF',
-                    borderRadius: '8px',
-                    padding: '7px 10px',
-                    textAlign: 'left',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <div style={{ fontSize: '11px', fontWeight: 800, color: '#1F6338' }}>🌱 Animateur Terrain</div>
-                  <div style={{ fontSize: '10.5px', color: '#5F685F' }}>animateur.kikwit@rikolto.org</div>
-                </button>
-              </div>
-            </div>
-
             {/* Error Message */}
             {errorMessage && (
               <div
@@ -522,7 +463,7 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSucce
                     lineHeight: '17px',
                   }}
                 >
-                  Identifiants configurés par défaut pour tester immédiatement : <strong style={{ color: '#1F6338' }}>admin@rikolto.org</strong> / <strong style={{ color: '#1F6338' }}>Avenir2026!</strong>. En cas de blocage, contactez l'équipe Rikolto RDC.
+                  En cas d'oubli ou de difficulté de connexion, veuillez contacter la coordination nationale Rikolto RDC ou l'administrateur système du Projet AVENIR.
                 </div>
               )}
 
