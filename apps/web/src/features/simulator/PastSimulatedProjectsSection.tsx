@@ -356,7 +356,7 @@ export const PastSimulatedProjectsSection: React.FC<PastSimulatedProjectsSection
           maxWidth: '1380px',
           width: '100%',
           margin: '0 auto',
-          padding: '64px 28px 0',
+          padding: 'clamp(36px, 5vw, 64px) clamp(16px, 4vw, 28px) 0',
           boxSizing: 'border-box',
         }}
       >
@@ -367,7 +367,7 @@ export const PastSimulatedProjectsSection: React.FC<PastSimulatedProjectsSection
             flexDirection: 'column',
             alignItems: 'center',
             textAlign: 'center',
-            marginBottom: '42px',
+            marginBottom: '32px',
           }}
         >
           <span
@@ -375,7 +375,7 @@ export const PastSimulatedProjectsSection: React.FC<PastSimulatedProjectsSection
               color: '#F2B632',
               fontFamily: 'Georgia, "Times New Roman", serif',
               fontStyle: 'italic',
-              fontSize: '17px',
+              fontSize: 'clamp(15px, 2.5vw, 17px)',
               fontWeight: 600,
               letterSpacing: '0.4px',
               marginBottom: '8px',
@@ -387,11 +387,12 @@ export const PastSimulatedProjectsSection: React.FC<PastSimulatedProjectsSection
           <h2
             style={{
               margin: '0 0 12px 0',
-              fontSize: '38px',
+              fontSize: 'clamp(24px, 4vw, 36px)',
               fontWeight: 900,
               color: '#FFFFFF',
               letterSpacing: '-0.6px',
-              lineHeight: '44px',
+              lineHeight: 1.18,
+              maxWidth: '820px',
             }}
           >
             {title}
@@ -400,7 +401,7 @@ export const PastSimulatedProjectsSection: React.FC<PastSimulatedProjectsSection
           <p
             style={{
               margin: '0 0 18px 0',
-              fontSize: '14.5px',
+              fontSize: '14px',
               color: 'rgba(255, 255, 255, 0.84)',
               maxWidth: '680px',
               lineHeight: '22px',
@@ -416,8 +417,8 @@ export const PastSimulatedProjectsSection: React.FC<PastSimulatedProjectsSection
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(295px, 1fr))',
-            gap: '26px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+            gap: '24px',
             width: '100%',
             margin: '0 auto',
           }}

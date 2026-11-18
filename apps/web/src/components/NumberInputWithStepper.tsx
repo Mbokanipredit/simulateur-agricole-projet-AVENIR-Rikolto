@@ -70,50 +70,68 @@ export const NumberInputWithStepper: React.FC<NumberInputWithStepperProps> = ({
   return (
     <XStack
       height={height}
+      width="100%"
+      maxWidth="100%"
       backgroundColor="#FFFFFF"
       borderRadius={10}
       borderWidth={1.5}
       borderColor={isFocused ? '#1F6338' : '#D5DDD5'}
       alignItems="center"
       overflow="hidden"
+      style={{ boxSizing: 'border-box' }}
     >
       <Button
         width={btnWidth}
+        minWidth={btnWidth}
         height={height}
         borderRadius={0}
         backgroundColor="#F3F7F3"
         borderRightWidth={1}
         borderRightColor="#E2E9E2"
         padding={0}
+        flexShrink={0}
         onPress={() => handleStep(-step)}
       >
-        <Minus size={compact ? 14 : 16} color="#1F6338" />
+        <Minus size={compact ? 13 : 15} color="#1F6338" />
       </Button>
 
-      <XStack flex={1} alignItems="center" paddingHorizontal="$2.5">
+      <XStack
+        flex={1}
+        minWidth={0}
+        alignItems="center"
+        justifyContent="center"
+        paddingHorizontal="$1.5"
+        style={{ overflow: 'hidden' }}
+      >
         <Input
           flex={1}
+          minWidth={0}
+          width="100%"
           height={height - 4}
           borderWidth={0}
           backgroundColor="transparent"
-          fontSize={compact ? 14 : 15}
+          fontSize={compact ? 13.5 : 15}
           fontWeight="800"
           color="#18241B"
           textAlign="center"
+          padding={0}
           value={textVal}
           placeholder={placeholder}
           onFocus={() => setIsFocused(true)}
           onBlur={handleBlur}
           onChangeText={handleTextChange}
+          style={{ minWidth: 0, outline: 'none' }}
         />
         {unitLabel && (
           <YStack
             backgroundColor="#E7F3E7"
-            paddingHorizontal="$2"
+            paddingHorizontal={6}
             paddingVertical={2}
             borderRadius={6}
+            flexShrink={0}
+            marginLeft={4}
           >
-            <Text fontSize={11} fontWeight="700" color="#1F6338">
+            <Text fontSize={10.5} fontWeight="700" color="#1F6338" whiteSpace="nowrap">
               {unitLabel}
             </Text>
           </YStack>
@@ -122,13 +140,15 @@ export const NumberInputWithStepper: React.FC<NumberInputWithStepperProps> = ({
 
       <Button
         width={btnWidth}
+        minWidth={btnWidth}
         height={height}
         borderRadius={0}
         backgroundColor="#1F6338"
         padding={0}
+        flexShrink={0}
         onPress={() => handleStep(step)}
       >
-        <Plus size={compact ? 14 : 16} color="#FFFFFF" />
+        <Plus size={compact ? 13 : 15} color="#FFFFFF" />
       </Button>
     </XStack>
   );

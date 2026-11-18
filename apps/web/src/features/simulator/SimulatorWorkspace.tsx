@@ -943,16 +943,17 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
         </div>
 
         {/* 3 Numeric Inputs (Direct Input + -/+) */}
-        <XStack gap="$4" flexWrap="wrap" paddingTop="$2">
+        <XStack gap="$3" flexWrap="wrap" paddingTop="$2">
           <YStack
             flex={1}
-            minWidth={240}
+            minWidth={200}
             backgroundColor="#FAF8F3"
-            padding="$4"
+            padding="$3.5"
             borderRadius={12}
             borderWidth={1}
             borderColor="#EAE8E1"
             gap="$2"
+            style={{ boxSizing: 'border-box' }}
           >
             <Text fontSize={13} fontWeight="700" color="#18241B">
               Superficie (hectares)
@@ -969,13 +970,14 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
 
           <YStack
             flex={1}
-            minWidth={240}
+            minWidth={200}
             backgroundColor="#FAF8F3"
-            padding="$4"
+            padding="$3.5"
             borderRadius={12}
             borderWidth={1}
             borderColor="#EAE8E1"
             gap="$2"
+            style={{ boxSizing: 'border-box' }}
           >
             <Text fontSize={13} fontWeight="700" color="#18241B">
               Quantité commercialisée (kg)
@@ -992,13 +994,14 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
 
           <YStack
             flex={1}
-            minWidth={240}
+            minWidth={200}
             backgroundColor="#FAF8F3"
-            padding="$4"
+            padding="$3.5"
             borderRadius={12}
             borderWidth={1}
             borderColor="#EAE8E1"
             gap="$2"
+            style={{ boxSizing: 'border-box' }}
           >
             <Text fontSize={13} fontWeight="700" color="#18241B">
               Prix de vente (USD/kg)
@@ -1024,8 +1027,8 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
         borderColor="#EAE8E1"
         gap="$4"
       >
-        <XStack justifyContent="space-between" alignItems="center" flexWrap="wrap" gap="$2">
-          <YStack gap="$1">
+        <XStack justifyContent="space-between" alignItems="center" flexWrap="wrap" gap="$2.5">
+          <YStack gap="$1" flex={1} minWidth={220}>
             <Text fontSize={18} fontWeight="800" color="#18241B">
               2. Notez vos dépenses par étape culturale
             </Text>
@@ -1039,6 +1042,7 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
             paddingHorizontal="$3.5"
             paddingVertical="$2"
             borderRadius={999}
+            alignSelf="flex-start"
           >
             <Text fontSize={13} fontWeight="800" color="#1F6338">
               Coût total : {fmt(results.totalCostUsd)}
@@ -1101,30 +1105,33 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
             const renderIcon = STAGE_ICONS[item.stage] || ((c: string) => <Sprout size={16} color={c} />);
             const lineTotal = item.quantity * item.unitCostUsd;
             return (
-              <XStack
+              <div
                 key={item.id}
-                backgroundColor="#FAF8F3"
-                padding="$3.5"
-                borderRadius={12}
-                borderWidth={1}
-                borderColor="#EAE8E1"
-                alignItems="center"
-                justifyContent="space-between"
-                flexWrap="wrap"
-                gap="$3"
+                className="avenir-expense-row"
+                style={{
+                  backgroundColor: '#FAF8F3',
+                  padding: '12px 14px',
+                  borderRadius: '12px',
+                  border: '1px solid #EAE8E1',
+                }}
               >
-                <XStack alignItems="center" gap="$2.5" flex={1.5} minWidth={230}>
-                  <YStack
-                    width={36}
-                    height={36}
-                    borderRadius={8}
-                    backgroundColor="#E7F3E7"
-                    alignItems="center"
-                    justifyContent="center"
+                {/* Title & Stage */}
+                <div className="avenir-expense-title">
+                  <div
+                    style={{
+                      width: '36px',
+                      height: '36px',
+                      borderRadius: '8px',
+                      backgroundColor: '#E7F3E7',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                    }}
                   >
                     {renderIcon('#1F6338')}
-                  </YStack>
-                  <YStack flex={1} gap="$1">
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '3px' }}>
                     <Input
                       height={34}
                       fontSize={13.5}
@@ -1134,18 +1141,19 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
                       borderColor="#E2E8E2"
                       value={item.label}
                       onChangeText={(txt) => handleUpdateExpense(item.id, { label: txt })}
+                      style={{ width: '100%', minWidth: 0 }}
                     />
-                    <Text fontSize={11} color="#687068">
+                    <span style={{ fontSize: '11px', color: '#687068', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {stMeta?.shortLabelFr} · Unité : {item.unit}
-                    </Text>
-                  </YStack>
-                </XStack>
+                    </span>
+                  </div>
+                </div>
 
                 {/* Quantity */}
-                <YStack minWidth={170} gap="$1">
-                  <Text fontSize={11} fontWeight="600" color="#5F685F">
+                <div className="avenir-expense-stepper">
+                  <span style={{ fontSize: '11px', fontWeight: 600, color: '#5F685F' }}>
                     Quantité ({item.unit})
-                  </Text>
+                  </span>
                   <NumberInputWithStepper
                     compact
                     value={item.quantity}
@@ -1154,13 +1162,13 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
                     min={0}
                     max={100000}
                   />
-                </YStack>
+                </div>
 
                 {/* Unit Cost */}
-                <YStack minWidth={180} gap="$1">
-                  <Text fontSize={11} fontWeight="600" color="#5F685F">
+                <div className="avenir-expense-stepper">
+                  <span style={{ fontSize: '11px', fontWeight: 600, color: '#5F685F' }}>
                     Coût unitaire (USD)
-                  </Text>
+                  </span>
                   <NumberInputWithStepper
                     compact
                     value={item.unitCostUsd}
@@ -1170,18 +1178,18 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
                     max={100000}
                     unitLabel="USD"
                   />
-                </YStack>
+                </div>
 
                 {/* Subtotal & Delete */}
-                <XStack alignItems="center" gap="$2.5" minWidth={125} justifyContent="flex-end">
-                  <YStack alignItems="flex-end">
-                    <Text fontSize={11} color="#687068">
+                <div className="avenir-expense-total">
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: '11px', color: '#687068' }}>
                       Montant
-                    </Text>
-                    <Text fontSize={14} fontWeight="800" color="#1F6338">
+                    </div>
+                    <div style={{ fontSize: '14px', fontWeight: 800, color: '#1F6338' }}>
                       {fmt(lineTotal)}
-                    </Text>
-                  </YStack>
+                    </div>
+                  </div>
                   <Button
                     size="$2.5"
                     circular
@@ -1190,12 +1198,22 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
                   >
                     <Trash2 size={14} color="#B91C1C" />
                   </Button>
-                </XStack>
-              </XStack>
+                </div>
+              </div>
             );
           })}
 
-          <XStack justifyContent="space-between" alignItems="center" flexWrap="wrap" gap="$2" paddingTop="$1">
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              gap: '12px',
+              paddingTop: '6px',
+              width: '100%',
+            }}
+          >
             <Button
               size="$3"
               borderRadius={8}
@@ -1217,9 +1235,17 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
             </Button>
 
             {/* Load existing simulation by code */}
-            <XStack gap="$2" alignItems="center" flexWrap="wrap">
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                flexWrap: 'wrap',
+                flex: '1 1 260px',
+                justifyContent: 'flex-end',
+              }}
+            >
               <Input
-                width={175}
                 height={36}
                 fontSize={12.5}
                 backgroundColor="#FAF8F3"
@@ -1227,6 +1253,7 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
                 placeholder="Code ex: AVN-2026"
                 value={shareCodeQuery}
                 onChangeText={setShareCodeQuery}
+                style={{ flex: '1 1 140px', minWidth: '120px' }}
               />
               <Button
                 size="$3"
@@ -1245,12 +1272,12 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
                 </XStack>
               </Button>
               {loadStatusMessage && (
-                <Text fontSize={12} fontWeight="700" color="#1F6338">
+                <Text fontSize={12} fontWeight="700" color="#1F6338" width="100%">
                   {loadStatusMessage}
                 </Text>
               )}
-            </XStack>
-          </XStack>
+            </div>
+          </div>
         </YStack>
       </YStack>
 
@@ -1258,40 +1285,62 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
       <YStack
         backgroundColor="#216139"
         borderRadius={16}
-        padding="$5"
+        padding="clamp(16px, 4vw, 24px)"
+        gap="$3.5"
       >
-        <XStack justifyContent="space-between" alignItems="center" flexWrap="wrap" gap="$4">
-          <YStack flex={1} minWidth={260} gap="$1">
-            <Text fontSize={13} fontWeight="700" color="#F2B632">
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '16px',
+            width: '100%',
+          }}
+        >
+          <div style={{ flex: '1 1 240px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <span style={{ fontSize: '13px', fontWeight: 700, color: '#F2B632' }}>
               Récapitulatif de votre simulation
-            </Text>
-            <Text fontSize={22} fontWeight="800" color="#FFFFFF">
+            </span>
+            <div style={{ fontSize: 'clamp(18px, 4.5vw, 22px)', fontWeight: 800, color: '#FFFFFF' }}>
               Bénéfice prévisionnel : {fmt(results.netProfitUsd)}
-            </Text>
-            <Text fontSize={13} color="#DCE8DE">
+            </div>
+            <span style={{ fontSize: '13px', color: '#DCE8DE' }}>
               Coûts : {fmt(results.totalCostUsd)} · Recettes : {fmt(results.totalCashRevenueUsd)}
-            </Text>
-          </YStack>
+            </span>
+          </div>
 
-          <Button
-            size="$4"
-            height={46}
-            borderRadius={999}
-            paddingHorizontal="$5"
-            backgroundColor="#F2B632"
-            color="#18241B"
-            fontWeight="800"
-            onPress={goToResultsPage}
-          >
-            <XStack alignItems="center" gap="$2">
-              <BarChart3 size={18} color="#18241B" />
-              <Text fontSize={14.5} fontWeight="800" color="#18241B">
+          <div style={{ flex: '1 1 240px', maxWidth: '100%' }}>
+            <button
+              type="button"
+              onClick={goToResultsPage}
+              style={{
+                width: '100%',
+                minHeight: '48px',
+                padding: '10px 18px',
+                borderRadius: '999px',
+                border: 'none',
+                backgroundColor: '#F2B632',
+                color: '#18241B',
+                fontWeight: 800,
+                fontSize: 'clamp(13px, 3.2vw, 14.5px)',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                boxShadow: '0 8px 20px rgba(0,0,0,0.22)',
+                boxSizing: 'border-box',
+              }}
+            >
+              <BarChart3 size={17} color="#18241B" style={{ flexShrink: 0 }} />
+              <span style={{ textAlign: 'center' }}>
                 Calculer et voir la page des résultats
-              </Text>
-              <ArrowRight size={16} color="#18241B" />
-            </XStack>
-          </Button>
-        </XStack>
+              </span>
+              <ArrowRight size={16} color="#18241B" style={{ flexShrink: 0 }} />
+            </button>
+          </div>
+        </div>
       </YStack>
       </div>
 

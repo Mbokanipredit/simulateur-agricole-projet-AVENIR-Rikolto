@@ -804,27 +804,31 @@ export const ResultsPage: React.FC = () => {
       </XStack>
 
       {/* Bottom Navigation Card */}
-      <XStack
-        backgroundColor="#FFFFFF"
-        borderRadius={14}
-        padding="$5"
-        borderWidth={1}
-        borderColor="#EAE8E1"
-        justifyContent="space-between"
-        alignItems="center"
-        flexWrap="wrap"
-        gap="$3"
+      <div
+        style={{
+          backgroundColor: '#FFFFFF',
+          borderRadius: '14px',
+          padding: '20px clamp(16px, 4vw, 24px)',
+          border: '1px solid #EAE8E1',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '16px',
+          width: '100%',
+          boxSizing: 'border-box',
+        }}
       >
-        <YStack gap="$1">
-          <Text fontSize={16} fontWeight="800" color="#18241B">
+        <div style={{ flex: '1 1 240px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <div style={{ fontSize: '16px', fontWeight: 800, color: '#18241B' }}>
             Ajuster vos paramètres ou consulter les fiches pratiques
-          </Text>
-          <Text fontSize={13} color="#5F685F">
+          </div>
+          <div style={{ fontSize: '13px', color: '#5F685F' }}>
             Testez d’autres hypothèses de prix et de surface dans le simulateur.
-          </Text>
-        </YStack>
+          </div>
+        </div>
 
-        <XStack gap="$3" flexWrap="wrap">
+        <div className="avenir-results-bottom-actions">
           <Button
             size="$3.5"
             height={42}
@@ -838,7 +842,7 @@ export const ResultsPage: React.FC = () => {
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
           >
-            <XStack alignItems="center" gap="$2">
+            <XStack alignItems="center" gap="$2" justifyContent="center">
               <Calculator size={15} color="#18241B" />
               <Text fontSize={13.5} fontWeight="700" color="#18241B">
                 Retour au simulateur
@@ -859,15 +863,15 @@ export const ResultsPage: React.FC = () => {
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
           >
-            <XStack alignItems="center" gap="$2">
+            <XStack alignItems="center" gap="$2" justifyContent="center">
               <BookOpen size={15} color="#FFFFFF" />
               <Text fontSize={13.5} fontWeight="700" color="#FFFFFF">
                 Boîte à outils pédagogique
               </Text>
             </XStack>
           </Button>
-        </XStack>
-      </XStack>
+        </div>
+      </div>
       </div>
 
       {/* Full-Width Past Simulated Projects Section (Exact match to Image 3) */}

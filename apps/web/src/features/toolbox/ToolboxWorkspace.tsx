@@ -1083,14 +1083,15 @@ export const ToolboxWorkspace: React.FC = () => {
               width: '100%',
               paddingTop: '12px',
               paddingBottom: '12px',
+              overflow: 'hidden',
             }}
           >
             {/* Lush Green Field Panorama Strip across the middle-back with Rich Forest Green Overlay */}
             <div
               style={{
                 position: 'absolute',
-                left: '-24px',
-                right: '-24px',
+                left: 0,
+                right: 0,
                 top: '190px',
                 height: '190px',
                 zIndex: 0,
@@ -1116,8 +1117,8 @@ export const ToolboxWorkspace: React.FC = () => {
                 position: 'relative',
                 zIndex: 1,
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-                gap: '26px',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))',
+                gap: '24px',
                 width: '100%',
                 margin: '0 auto',
               }}

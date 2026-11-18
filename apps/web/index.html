@@ -122,6 +122,50 @@
         gap: 16px;
       }
 
+      /* Expense Row Styles */
+      .avenir-expense-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .avenir-expense-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1.6 1 230px;
+        min-width: 0;
+        max-width: 100%;
+      }
+      .avenir-expense-stepper {
+        flex: 1 1 155px;
+        min-width: 0;
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .avenir-expense-total {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+        flex: 0 0 auto;
+        min-width: 120px;
+      }
+
+      /* Results Page Responsive Actions */
+      .avenir-results-bottom-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
       @media (max-width: 1080px) {
         .avenir-steps-grid {
           grid-template-columns: repeat(2, 1fr);
@@ -165,6 +209,34 @@
         .avenir-sim-umber-item:last-child {
           border-bottom: none !important;
           padding-bottom: 0 !important;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .avenir-expense-title {
+          flex: 1 1 100% !important;
+          width: 100% !important;
+        }
+        .avenir-expense-stepper {
+          flex: 1 1 calc(50% - 6px) !important;
+          min-width: 0 !important;
+        }
+        .avenir-expense-total {
+          flex: 1 1 100% !important;
+          width: 100% !important;
+          justify-content: space-between !important;
+          padding-top: 8px;
+          margin-top: 2px;
+          border-top: 1px dashed #e2e8e2;
+        }
+        .avenir-results-bottom-actions {
+          flex-direction: column !important;
+          width: 100% !important;
+        }
+        .avenir-results-bottom-actions button,
+        .avenir-results-bottom-actions .tamagui-button,
+        .avenir-results-bottom-actions > * {
+          width: 100% !important;
         }
       }
 
