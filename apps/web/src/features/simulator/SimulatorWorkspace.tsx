@@ -685,7 +685,7 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
                 Calculez facilement si votre champ est rentable
               </Text>
               <Text fontSize={15} color="rgba(255, 255, 255, 0.86)" lineHeight={23}>
-                Remplissez les 3 étapes ci-dessous : votre culture, votre récolte et vos dépenses. Le simulateur calcule directement ce qui reste dans votre poche.
+                Remplissez les étapes ci-dessous : votre culture, votre récolte et vos dépenses, puis découvrez vos résultats.
               </Text>
             </YStack>
 
@@ -1226,58 +1226,57 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
         </YStack>
       </YStack>
 
-      {/* SECTION 4: Bouton pour voir les résultats complets */}
-      <div
-        style={{
-          backgroundColor: '#164E2E',
-          borderRadius: '18px',
-          padding: 'clamp(20px, 4vw, 28px)',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '20px',
-          boxShadow: '0 12px 32px rgba(22, 78, 46, 0.18)',
-        }}
+      {/* ÉTAPE 4 : Découvrir vos résultats */}
+      <YStack
+        backgroundColor="#FFFFFF"
+        borderRadius={18}
+        padding="clamp(20px, 4vw, 26px)"
+        borderWidth={1}
+        borderColor="#E4EAE4"
+        gap="$4"
+        style={{ boxShadow: '0 8px 24px rgba(14, 42, 22, 0.05)' }}
       >
-        <div style={{ flex: '1 1 280px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-          <span style={{ fontSize: '13px', fontWeight: 800, color: '#F2B632', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
-            Prêt à découvrir votre bénéfice ?
-          </span>
-          <div style={{ fontSize: 'clamp(20px, 4vw, 26px)', fontWeight: 800, color: '#FFFFFF', lineHeight: 1.2 }}>
-            Voir le calcul détaillé de votre rentabilité
-          </div>
-          <span style={{ fontSize: '13px', color: '#DCE8DE' }}>
-            Découvrez si votre récolte est rentable et le bénéfice net qui restera dans votre poche.
-          </span>
-        </div>
-
-        <button
-          type="button"
-          onClick={goToResultsPage}
-          style={{
-            minHeight: '52px',
-            padding: '12px 28px',
-            borderRadius: '999px',
-            border: 'none',
-            backgroundColor: '#F2B632',
-            color: '#18241B',
-            fontWeight: 800,
-            fontSize: '15px',
-            cursor: 'pointer',
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '10px',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
-            transition: 'transform 0.15s ease, background-color 0.15s ease',
-          }}
+        <XStack
+          justifyContent="space-between"
+          alignItems="center"
+          flexWrap="wrap"
+          gap="$3"
         >
-          <BarChart3 size={18} color="#18241B" />
-          <span>Voir mes résultats complets</span>
-          <ArrowRight size={17} color="#18241B" />
-        </button>
-      </div>
+          <YStack gap="$1" flex={1} minWidth={240}>
+            <Text fontSize={18} fontWeight="800" color="#18241B">
+              Étape 4
+            </Text>
+            <Text fontSize={13.5} color="#687068">
+              Cliquez pour découvrir vos résultats.
+            </Text>
+          </YStack>
+
+          <button
+            type="button"
+            onClick={goToResultsPage}
+            style={{
+              minHeight: '46px',
+              padding: '12px 28px',
+              borderRadius: '999px',
+              border: 'none',
+              backgroundColor: '#1F6338',
+              color: '#FFFFFF',
+              fontWeight: 700,
+              fontSize: '14.5px',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px',
+              boxShadow: '0 4px 14px rgba(31, 99, 56, 0.22)',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            <span>Découvrir les résultats</span>
+            <ArrowRight size={17} color="#FFFFFF" />
+          </button>
+        </XStack>
+      </YStack>
       </div>
 
       {/* Full-Width Past Simulated Projects Section (Exact match to Image 3) */}
