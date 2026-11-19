@@ -6,9 +6,7 @@ import {
   AlertCircle,
   Eye,
   EyeOff,
-  Sprout,
   HelpCircle,
-  ShieldCheck,
 } from 'lucide-react';
 import { authControllerLogin, AuthPortalUserDto } from '../../api/generated/avenirApi';
 
@@ -101,6 +99,8 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '12px',
           borderBottom: '1px solid #EAE6DD',
           backgroundColor: '#FAF8F3',
         }}
@@ -136,22 +136,17 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({
           <span>Retour au site public</span>
         </button>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-          <div
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <span
             style={{
-              width: '30px',
-              height: '30px',
-              borderRadius: '8px',
-              backgroundColor: '#1F6338',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              fontSize: '15px',
+              fontWeight: 700,
+              color: '#1F6338',
+              letterSpacing: '0.8px',
+              textTransform: 'uppercase',
             }}
           >
-            <Sprout size={17} color="#FFFFFF" />
-          </div>
-          <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#18241B', letterSpacing: '0.2px' }}>
-            AVENIR <span style={{ fontWeight: 500, color: '#687068', fontSize: '12px' }}>· Rikolto en RDC</span>
+            PROJET AVENIR
           </span>
         </div>
       </header>
@@ -180,21 +175,6 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({
         >
           {/* Card Header */}
           <div style={{ marginBottom: '24px', textAlign: 'center' }}>
-            <div
-              style={{
-                width: '44px',
-                height: '44px',
-                borderRadius: '12px',
-                backgroundColor: '#EBF4EC',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '14px',
-              }}
-            >
-              <ShieldCheck size={22} color="#1F6338" />
-            </div>
-
             <h1
               style={{
                 margin: 0,

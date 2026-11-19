@@ -117,7 +117,7 @@ export const AdminToolboxTab: React.FC = () => {
         }}
       >
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
+          <table style={{ width: '100%', minWidth: '680px', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
             <thead>
               <tr style={{ backgroundColor: '#FAF8F3', borderBottom: '1px solid #E2E8E2', color: '#5F685F' }}>
                 <th style={{ padding: '12px 14px', fontWeight: 800 }}>N°</th>

@@ -605,8 +605,9 @@ export const AdminCropsTab: React.FC = () => {
                 </button>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {(editingCrop.defaultExpenses || []).map((exp, idx) => (
+              <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: '6px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '560px' }}>
+                  {(editingCrop.defaultExpenses || []).map((exp, idx) => (
                   <div
                     key={exp.id || idx}
                     style={{
@@ -699,6 +700,7 @@ export const AdminCropsTab: React.FC = () => {
                     </button>
                   </div>
                 ))}
+                </div>
               </div>
             </div>
 

@@ -177,26 +177,6 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
         }}
       >
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-            <span
-              style={{
-                fontSize: '11px',
-                fontWeight: 800,
-                color: '#1F6338',
-                backgroundColor: '#EBF4EC',
-                padding: '3px 10px',
-                borderRadius: '999px',
-                textTransform: 'uppercase',
-                letterSpacing: '0.6px',
-              }}
-            >
-              Données Terrain Kwilu & Kwango
-            </span>
-            <span style={{ fontSize: '12px', color: '#768278' }}>•</span>
-            <span style={{ fontSize: '12px', color: '#5F685F', fontWeight: 600 }}>
-              {simulations.length} exploitations documentées
-            </span>
-          </div>
           <h1 style={{ margin: 0, fontSize: '22px', fontWeight: 800, color: '#122017' }}>
             Registre Centralisé des Simulations Terrain
           </h1>
@@ -460,7 +440,7 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
         }}
       >
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '12.5px' }}>
+          <table style={{ width: '100%', minWidth: '820px', borderCollapse: 'collapse', textAlign: 'left', fontSize: '12.5px' }}>
             <thead>
               <tr style={{ backgroundColor: '#F8FAFC', borderBottom: '1px solid #EEF2F6', color: '#64748B' }}>
                 <th style={{ padding: '12px 14px', fontWeight: 700 }}>Code</th>
@@ -676,7 +656,7 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 130px), 1fr))',
                 gap: '10px',
                 marginBottom: '16px',
               }}
@@ -713,16 +693,16 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
                 marginBottom: '16px',
                 fontSize: '12.5px',
                 display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))',
                 gap: '8px',
               }}
             >
-              <div>🌾 Superficie : <strong>{selectedSimModal.surfaceArea} {selectedSimModal.surfaceUnit}</strong></div>
-              <div>⚖️ Récolte totale : <strong>{selectedSimModal.expectedYieldTotal} {selectedSimModal.productionUnit}</strong></div>
-              <div>📦 Quantité commercialisée : <strong>{selectedSimModal.commercializedQty} {selectedSimModal.productionUnit}</strong></div>
-              <div>💲 Prix unitaire : <strong>${selectedSimModal.unitSalePriceUsd} / {selectedSimModal.productionUnit}</strong></div>
-              <div>🎯 Seuil de rentabilité : <strong>{selectedSimModal.results?.breakevenProductionQty} {selectedSimModal.productionUnit}</strong></div>
-              <div>📉 Coût de revient unitaire : <strong>${selectedSimModal.results?.costPerProductionUnitUsd} / {selectedSimModal.productionUnit}</strong></div>
+              <div>Superficie : <strong>{selectedSimModal.surfaceArea} {selectedSimModal.surfaceUnit}</strong></div>
+              <div>Récolte totale : <strong>{selectedSimModal.expectedYieldTotal} {selectedSimModal.productionUnit}</strong></div>
+              <div>Quantité commercialisée : <strong>{selectedSimModal.commercializedQty} {selectedSimModal.productionUnit}</strong></div>
+              <div>Prix unitaire : <strong>${selectedSimModal.unitSalePriceUsd} / {selectedSimModal.productionUnit}</strong></div>
+              <div>Seuil de rentabilité : <strong>{selectedSimModal.results?.breakevenProductionQty} {selectedSimModal.productionUnit}</strong></div>
+              <div>Coût de revient : <strong>${selectedSimModal.results?.costPerProductionUnitUsd} / {selectedSimModal.productionUnit}</strong></div>
             </div>
 
             {/* Expenses List */}

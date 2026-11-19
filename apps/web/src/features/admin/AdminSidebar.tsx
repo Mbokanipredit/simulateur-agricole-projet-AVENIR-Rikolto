@@ -158,66 +158,8 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
             </span>
           </div>
 
-          {/* Current User Card */}
-          <div style={{ padding: '14px 16px 8px' }}>
-            <div
-              style={{
-                backgroundColor: '#FAF8F3',
-                borderRadius: '12px',
-                padding: '10px 12px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                border: '1px solid #EAE6DD',
-              }}
-            >
-              <div
-                style={{
-                  width: '34px',
-                  height: '34px',
-                  borderRadius: '50%',
-                  backgroundColor: '#1F6338',
-                  color: '#FFFFFF',
-                  fontWeight: 800,
-                  fontSize: '13px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                }}
-              >
-                {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : 'A'}
-              </div>
-              <div style={{ minWidth: 0, flex: 1 }}>
-                <div
-                  style={{
-                    fontSize: '12.5px',
-                    fontWeight: 700,
-                    color: '#18241B',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                  }}
-                >
-                  {currentUser?.name || 'Direction Projet'}
-                </div>
-                <div
-                  style={{
-                    fontSize: '11px',
-                    color: '#687068',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                  }}
-                >
-                  {currentUser?.organization || 'Rikolto RDC'}
-                </div>
-              </div>
-            </div>
-          </div>
-
           {/* Navigation Groups */}
-          <nav style={{ padding: '8px 12px' }}>
+          <nav style={{ padding: '14px 12px 8px' }}>
             {menuSections.map((section, sIdx) => (
               <div key={sIdx} style={{ marginBottom: '14px' }}>
                 <div

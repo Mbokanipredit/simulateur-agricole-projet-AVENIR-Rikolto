@@ -150,7 +150,7 @@ export const AdminUsersTab: React.FC = () => {
         }}
       >
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
+          <table style={{ width: '100%', minWidth: '680px', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
             <thead>
               <tr style={{ backgroundColor: '#FAF8F3', borderBottom: '1px solid #E2E8E2', color: '#5F685F' }}>
                 <th style={{ padding: '12px 14px', fontWeight: 800 }}>Nom & Prénom</th>
@@ -193,12 +193,12 @@ export const AdminUsersTab: React.FC = () => {
                           color: isAdmin ? '#8C6218' : isFac ? '#15803D' : '#475569',
                         }}
                       >
-                        {isAdmin ? '👑 Direction ADMIN' : isFac ? '🌱 Animateur Terrain' : '🌾 Responsable OP'}
+                        {isAdmin ? 'Direction ADMIN' : isFac ? 'Animateur Terrain' : 'Responsable OP'}
                       </span>
                     </td>
 
                     <td style={{ padding: '12px 14px', color: '#122017' }}>
-                      📍 {u.province}
+                      {u.province}
                     </td>
 
                     <td style={{ padding: '12px 14px', color: '#5F685F' }}>
@@ -346,9 +346,9 @@ export const AdminUsersTab: React.FC = () => {
                   onChange={(e) => setEditingUser({ ...editingUser, role: e.target.value })}
                   style={{ width: '100%', height: '38px', borderRadius: '8px', border: '1px solid #D5DDD5', padding: '0 10px', fontSize: '13px' }}
                 >
-                  <option value="FACILITATOR">🌱 Animateur Terrain (Facilitateur)</option>
-                  <option value="ADMIN">👑 Direction & Administrateur Rikolto</option>
-                  <option value="PRODUCER">🌾 Responsable d'Organisation Paysanne (OP)</option>
+                  <option value="FACILITATOR">Animateur Terrain (Facilitateur)</option>
+                  <option value="ADMIN">Direction & Administrateur Rikolto</option>
+                  <option value="PRODUCER">Responsable d'Organisation Paysanne (OP)</option>
                 </select>
               </div>
 
