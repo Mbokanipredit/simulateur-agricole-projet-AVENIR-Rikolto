@@ -1,28 +1,17 @@
 import React, { useState } from 'react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { YStack, XStack, Text, Button } from 'tamagui';
 import {
   ArrowLeft,
   CheckCircle2,
-  AlertTriangle,
+  AlertCircle,
   Share2,
   Printer,
-  TrendingUp,
-  Calculator,
-  Scale,
-  Coins,
-  Sprout,
+  Calendar,
+  ChevronRight,
   BookOpen,
-  Shovel,
-  Leaf,
-  Scissors,
-  Package,
-  Users,
-  ShoppingBasket,
-  Truck,
-  Target,
+  TrendingUp,
 } from 'lucide-react';
-import { EXPENSE_STAGES, ExpenseStageCode } from '@avenir/shared';
+import { EXPENSE_STAGES } from '@avenir/shared';
 import {
   activeMainSectionAtom,
   displayCurrencyAtom,
@@ -47,17 +36,6 @@ const CROP_LABELS: Record<string, string> = {
   ARACHIDE_NIEBE: 'Arachide / Niébé',
 };
 
-const STAGE_ICONS: Record<ExpenseStageCode, (color: string) => React.ReactNode> = {
-  LAND_PREP: (color) => <Shovel size={15} color={color} />,
-  SEEDS: (color) => <Sprout size={15} color={color} />,
-  PLANTING: (color) => <Leaf size={15} color={color} />,
-  MAINTENANCE: (color) => <Scissors size={15} color={color} />,
-  INPUTS: (color) => <Package size={15} color={color} />,
-  LABOR: (color) => <Users size={15} color={color} />,
-  HARVEST: (color) => <ShoppingBasket size={15} color={color} />,
-  LOGISTICS: (color) => <Truck size={15} color={color} />,
-};
-
 export const ResultsPage: React.FC = () => {
   const simInput = useAtomValue(simulationInputAtom);
   const results = useAtomValue(economicResultsAtom);
@@ -71,17 +49,31 @@ export const ResultsPage: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [saveBannerMsg, setSaveBannerMsg] = useState<string | null>(null);
 
+  const rate = simInput.exchangeRateCdfPerUsd || 2850;
+
+  const fmtUsd = (valUsd: number) => {
+    return new Intl.NumberFormat('fr-FR', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 0,
+    }).format(valUsd);
+  };
+
+  const fmtCdf = (valUsd: number) => {
+    const cdf = Math.round(valUsd * rate);
+    return new Intl.NumberFormat('fr-FR').format(cdf) + ' CDF';
+  };
+
   const fmt = (val: number) =>
-    formatMoney(val, currency, simInput.exchangeRateCdfPerUsd || 2850);
+    formatMoney(val, currency, rate);
 
   const safeCost = Number(results.totalCostUsd) || 0;
   const safeRev = Number(results.totalCashRevenueUsd) || 0;
-  const maxBar = Math.max(safeCost, safeRev, 1);
-  const costRatio = Math.min(100, Math.max(10, Math.round((safeCost / maxBar) * 100)));
-  const revRatio = Math.min(100, Math.max(10, Math.round((safeRev / maxBar) * 100)));
   const isProfitable = results.netProfitUsd >= 0;
   const profitPerHa =
     results.netProfitUsd / Math.max(0.1, Number(results.surfaceInHectares) || 1);
+
+  const returnPerDollar = safeCost > 0 ? (safeRev / safeCost).toFixed(2) : '—';
 
   const handleSaveSimulation = async () => {
     setIsSaving(true);
@@ -122,12 +114,12 @@ export const ResultsPage: React.FC = () => {
         ...savedScenarios.slice(0, 9),
       ]);
       setSaveBannerMsg(
-        `Simulation enregistrée. Code de partage sans compte : ${saved.shareCode}`
+        `Simulation enregistrée avec succès. Code de consultation : ${saved.shareCode}`
       );
     } catch {
       const offlineCode = `LOCAL-${Math.floor(1000 + Math.random() * 9000)}`;
       setLastShareCode(offlineCode);
-      setSaveBannerMsg(`Simulation enregistrée hors connexion (Code : ${offlineCode})`);
+      setSaveBannerMsg(`Simulation enregistrée hors ligne (Code : ${offlineCode})`);
     } finally {
       setIsSaving(false);
     }
@@ -137,711 +129,36 @@ export const ResultsPage: React.FC = () => {
     <div
       style={{
         width: '100%',
-        background: 'linear-gradient(180deg, #E8F2EA 0%, #F3EFE6 45%, #FAF8F3 100%)',
+        backgroundColor: '#FAF8F3',
+        minHeight: '100vh',
+        paddingBottom: '60px',
+        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+        color: '#122017',
       }}
     >
-      {/* Full-Width Executive Results Hero Banner with Field Photo & Deep Forest Overlay */}
-      <div
-        style={{
-          position: 'relative',
-          width: '100%',
-          backgroundImage: 'url(/images/agri-2.jpeg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center 30%',
-          paddingTop: '48px',
-          paddingBottom: '94px',
-          overflow: 'hidden',
-        }}
-      >
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background:
-              'linear-gradient(105deg, rgba(14, 69, 35, 0.95) 0%, rgba(18, 78, 41, 0.88) 55%, rgba(14, 52, 27, 0.78) 100%)',
-          }}
-        />
-
-        {/* Organic Bottom Wave */}
-        <svg
-          viewBox="0 0 1440 34"
-          preserveAspectRatio="none"
-          style={{
-            position: 'absolute',
-            bottom: -1,
-            left: 0,
-            width: '100%',
-            height: '26px',
-            display: 'block',
-          }}
-        >
-          <path
-            d="M0,18 Q120,30 240,16 T480,22 T720,14 T960,24 T1200,15 T1440,20 L1440,34 L0,34 Z"
-            fill="#EBF3EC"
-          />
-        </svg>
-
-        <div
-          style={{
-            position: 'relative',
-            zIndex: 1,
-            maxWidth: '1240px',
-            width: '100%',
-            margin: '0 auto',
-            padding: '0 24px',
-            boxSizing: 'border-box',
-          }}
-        >
-          {/* Top Action Bar Inside Hero */}
-          <XStack justifyContent="space-between" alignItems="center" flexWrap="wrap" gap="$3" marginBottom="$5">
-            <Button
-              size="$3.5"
-              height={40}
-              borderRadius={999}
-              paddingHorizontal="$4"
-              backgroundColor="rgba(255,255,255,0.14)"
-              borderWidth={1}
-              borderColor="rgba(255,255,255,0.35)"
-              color="#FFFFFF"
-              fontWeight="700"
-              onPress={() => {
-                if (window.history.length > 1 && window.history.state?.section === 'RESULTS') {
-                  window.history.back();
-                } else {
-                  setMainSection('SIMULATOR');
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-              }}
-            >
-              <XStack alignItems="center" gap="$2">
-                <ArrowLeft size={15} color="#FFFFFF" />
-                <Text fontSize={13} fontWeight="700" color="#FFFFFF">
-                  Modifier mes données dans le simulateur
-                </Text>
-              </XStack>
-            </Button>
-
-            <XStack gap="$2.5" flexWrap="wrap">
-              <Button
-                size="$3.5"
-                height={40}
-                borderRadius={999}
-                paddingHorizontal="$4"
-                backgroundColor="#F2B632"
-                color="#18241B"
-                fontWeight="800"
-                onPress={handleSaveSimulation}
-                disabled={isSaving}
-              >
-                <XStack alignItems="center" gap="$2">
-                  <Share2 size={14} color="#18241B" />
-                  <Text fontSize={13} fontWeight="800" color="#18241B">
-                    {isSaving ? 'Enregistrement...' : 'Obtenir un code de partage'}
-                  </Text>
-                </XStack>
-              </Button>
-
-              <Button
-                size="$3.5"
-                height={40}
-                borderRadius={999}
-                paddingHorizontal="$4"
-                backgroundColor="#FFFFFF"
-                color="#1F6338"
-                fontWeight="700"
-                onPress={() => window.print()}
-              >
-                <XStack alignItems="center" gap="$2">
-                  <Printer size={14} color="#1F6338" />
-                  <Text fontSize={13} fontWeight="700" color="#1F6338">
-                    Imprimer
-                  </Text>
-                </XStack>
-              </Button>
-            </XStack>
-          </XStack>
-
-          <YStack gap="$2" maxWidth={780}>
-            <span
-              style={{
-                color: '#F2B632',
-                fontFamily: 'Georgia, "Times New Roman", serif',
-                fontStyle: 'italic',
-                fontSize: '16px',
-                fontWeight: 700,
-              }}
-            >
-              Diagnostic & Résultats Financiers · Province du {simInput.province}
-            </span>
-            <Text fontSize={36} fontWeight="900" color="#FFFFFF" lineHeight={42} letterSpacing={-0.6}>
-              {CROP_LABELS[simInput.cropCode] || simInput.cropName} · {simInput.surfaceArea} ha
-            </Text>
-            <Text fontSize={15} color="rgba(255,255,255,0.85)" lineHeight={23}>
-              Production commercialisée : {simInput.commercializedQty.toLocaleString('fr-FR')} kg au prix de vente de {simInput.unitSalePriceUsd} USD/kg.
-            </Text>
-          </YStack>
-        </div>
-      </div>
-
-      {/* Main Centered Results Content Container Overlapping the Hero Banner */}
-      <div
-        style={{
-          position: 'relative',
-          zIndex: 2,
-          maxWidth: '1240px',
-          width: '100%',
-          margin: '-54px auto 0',
-          padding: '0 clamp(14px, 3vw, 24px) 48px',
-          boxSizing: 'border-box',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '26px',
-        }}
-      >
-        {/* 4 Overlapping Executive KPI Cards */}
-        <div
-          className="avenir-kpi-strip"
-          style={{
-            backgroundColor: '#FFFFFF',
-            borderRadius: '18px',
-            padding: '20px 24px',
-            boxShadow: '0 16px 38px rgba(14, 42, 22, 0.12)',
-            border: '1px solid #E4EAE4',
-          }}
-        >
-          <div>
-            <div style={{ fontSize: '11.5px', fontWeight: 700, color: '#5F685F', textTransform: 'uppercase' }}>
-              Coût Total de Production
-            </div>
-            <div style={{ fontSize: '20px', fontWeight: 900, color: '#C86D28', marginTop: '4px' }}>
-              {fmt(results.totalCostUsd)}
-            </div>
-          </div>
-
-          <div>
-            <div style={{ fontSize: '11.5px', fontWeight: 700, color: '#5F685F', textTransform: 'uppercase' }}>
-              Recettes Totales Prévues
-            </div>
-            <div style={{ fontSize: '20px', fontWeight: 900, color: '#1F6338', marginTop: '4px' }}>
-              {fmt(results.totalCashRevenueUsd)}
-            </div>
-          </div>
-
-          <div>
-            <div style={{ fontSize: '11.5px', fontWeight: 700, color: '#5F685F', textTransform: 'uppercase' }}>
-              Seuil de Rentabilité
-            </div>
-            <div style={{ fontSize: '20px', fontWeight: 900, color: '#0E4523', marginTop: '4px' }}>
-              {Math.round(results.breakEvenQuantity).toLocaleString('fr-FR')} kg
-            </div>
-          </div>
-
-          <div
-            style={{
-              backgroundColor: isProfitable ? '#F2B632' : '#FEE2E2',
-              borderRadius: '12px',
-              padding: '10px 16px',
-            }}
-          >
-            <div
-              style={{
-                fontSize: '11px',
-                fontWeight: 800,
-                color: isProfitable ? '#4A2E0B' : '#991B1B',
-                textTransform: 'uppercase',
-              }}
-            >
-              {isProfitable ? 'Bénéfice Net Prévisionnel' : 'Déficit Prévisionnel'}
-            </div>
-            <div
-              style={{
-                fontSize: '21px',
-                fontWeight: 900,
-                color: isProfitable ? '#18241B' : '#991B1B',
-                marginTop: '2px',
-              }}
-            >
-              {fmt(results.netProfitUsd)}
-            </div>
-          </div>
-        </div>
-
-      {saveBannerMsg && (
-        <XStack
-          backgroundColor="#E7F3E7"
-          borderWidth={1}
-          borderColor="#1F6338"
-          borderRadius={12}
-          padding="$3.5"
-          alignItems="center"
-          justifyContent="space-between"
-          flexWrap="wrap"
-          gap="$2"
-        >
-          <XStack alignItems="center" gap="$2">
-            <CheckCircle2 size={17} color="#1F6338" />
-            <Text fontSize={13.5} fontWeight="700" color="#1F6338">
-              {saveBannerMsg}
-            </Text>
-          </XStack>
-          {lastShareCode && (
-            <YStack
-              backgroundColor="#1F6338"
-              paddingHorizontal="$3"
-              paddingVertical={4}
-              borderRadius={999}
-            >
-              <Text fontSize={12} fontWeight="800" color="#FFFFFF">
-                Code : {lastShareCode}
-              </Text>
-            </YStack>
-          )}
-        </XStack>
-      )}
-
-      {/* Main Results Banner with Real Field Photo (agri-2.jpeg) */}
-      <YStack
-        backgroundColor="#216139"
-        borderRadius={16}
-        padding="$5"
-      >
-        <XStack gap="$5" flexWrap="wrap" alignItems="center">
-          {/* Left: Real Field Photo & Campaign Details */}
-          <YStack flex={1.05} minWidth={290} gap="$3.5">
-            <XStack alignItems="center" gap="$2" flexWrap="wrap">
-              <YStack
-                backgroundColor="#E7F3E7"
-                paddingHorizontal="$3"
-                paddingVertical={4}
-                borderRadius={999}
-              >
-                <Text fontSize={11.5} fontWeight="700" color="#1F6338">
-                  Résultats de la simulation · {simInput.province}
-                </Text>
-              </YStack>
-            </XStack>
-
-            <Text fontSize={28} fontWeight="800" color="#FFFFFF" lineHeight={34}>
-              {CROP_LABELS[simInput.cropCode] || simInput.cropName} · {simInput.surfaceArea} ha
-            </Text>
-
-            <Text fontSize={14} color="#DCE8DE" lineHeight={21}>
-              Production commercialisée : {simInput.commercializedQty.toLocaleString('fr-FR')} kg au prix de {simInput.unitSalePriceUsd} USD/kg.
-            </Text>
-
-            <YStack
-              height={195}
-              borderRadius={12}
-              overflow="hidden"
-              position="relative"
-              backgroundColor="#18492A"
-            >
-              <img
-                src="/images/agri-2.jpeg"
-                alt="Producteur agricole dans son champ"
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-              <XStack
-                style={{
-                  position: 'absolute',
-                  bottom: 12,
-                  left: 12,
-                }}
-              >
-                <XStack
-                  backgroundColor="#FFFFFF"
-                  paddingHorizontal="$3"
-                  paddingVertical="$2"
-                  borderRadius={8}
-                  alignItems="center"
-                  gap="$1.5"
-                >
-                  {isProfitable ? (
-                    <CheckCircle2 size={15} color="#1F6338" />
-                  ) : (
-                    <AlertTriangle size={15} color="#B91C1C" />
-                  )}
-                  <Text
-                    fontSize={12.5}
-                    fontWeight="800"
-                    color={isProfitable ? '#1F6338' : '#B91C1C'}
-                  >
-                    {isProfitable ? 'Exploitation rentable' : 'Attention : Déficit prévisionnel'}
-                  </Text>
-                </XStack>
-              </XStack>
-            </YStack>
-          </YStack>
-
-          {/* Right: White Results Card */}
-          <YStack
-            flex={1.1}
-            minWidth={300}
-            backgroundColor="#FFFFFF"
-            borderRadius={14}
-            padding="$5"
-            gap="$3.5"
-          >
-            <Text fontSize={16} fontWeight="800" color="#18241B">
-              Synthèse économique
-            </Text>
-
-            {/* Coûts Bar */}
-            <YStack backgroundColor="#E6EFE6" borderRadius={10} padding="$3.5" gap="$2">
-              <XStack justifyContent="space-between" alignItems="center">
-                <Text fontSize={13} fontWeight="600" color="#4A554C">
-                  Coûts totaux
-                </Text>
-                <Text fontSize={14.5} fontWeight="800" color="#C86D28">
-                  {fmt(results.totalCostUsd)}
-                </Text>
-              </XStack>
-              <YStack height={10} backgroundColor="#D3E2D3" borderRadius={999} overflow="hidden">
-                <YStack
-                  width={`${costRatio}%`}
-                  height="100%"
-                  backgroundColor="#C86D28"
-                  borderRadius={999}
-                />
-              </YStack>
-            </YStack>
-
-            {/* Recettes Bar */}
-            <YStack backgroundColor="#E6EFE6" borderRadius={10} padding="$3.5" gap="$2">
-              <XStack justifyContent="space-between" alignItems="center">
-                <Text fontSize={13} fontWeight="600" color="#4A554C">
-                  Recettes totales
-                </Text>
-                <Text fontSize={14.5} fontWeight="800" color="#216139">
-                  {fmt(results.totalCashRevenueUsd)}
-                </Text>
-              </XStack>
-              <YStack height={10} backgroundColor="#D3E2D3" borderRadius={999} overflow="hidden">
-                <YStack
-                  width={`${revRatio}%`}
-                  height="100%"
-                  backgroundColor="#216139"
-                  borderRadius={999}
-                />
-              </YStack>
-            </YStack>
-
-            {/* Golden Bénéfice Prévisionnel Card */}
-            <YStack
-              backgroundColor="#F2B632"
-              borderRadius={12}
-              padding="$4"
-              gap="$1"
-            >
-              <XStack justifyContent="space-between" alignItems="center">
-                <Text fontSize={12.5} fontWeight="700" color="#4E3808">
-                  Bénéfice prévisionnel
-                </Text>
-                <Text fontSize={11.5} fontWeight="800" color="#18241B">
-                  Rentabilité : {(Number(results.roiPercent) || 0).toFixed(1)} %
-                </Text>
-              </XStack>
-              <Text fontSize={28} fontWeight="900" color="#18241B" letterSpacing={-0.5}>
-                {fmt(results.netProfitUsd)}
-              </Text>
-              <Text fontSize={12} fontWeight="600" color="#4E3808">
-                Soit {fmt(profitPerHa)} par hectare
-              </Text>
-            </YStack>
-          </YStack>
-        </XStack>
-      </YStack>
-
-      {/* 4 Key Indicators Grid */}
-      <XStack gap="$3.5" flexWrap="wrap">
-        {[
-          {
-            icon: <Coins size={18} color="#1F6338" />,
-            title: 'Marge brute',
-            value: fmt(results.grossMarginUsd),
-            subtitle: 'Recettes moins les coûts variables directs',
-          },
-          {
-            icon: <Scale size={18} color="#1F6338" />,
-            title: 'Coût de revient par kg',
-            value: `${fmt(results.unitProductionCostUsd)} / kg`,
-            subtitle: `Prix de vente prévu : ${fmt(simInput.unitSalePriceUsd)} / kg`,
-          },
-          {
-            icon: <TrendingUp size={18} color="#1F6338" />,
-            title: 'Seuil de rentabilité (volume)',
-            value: `${Math.ceil(Number(results.breakEvenQuantity) || 0).toLocaleString('fr-FR')} kg`,
-            subtitle: 'Quantité minimale à vendre pour couvrir vos charges',
-          },
-          {
-            icon: <Calculator size={18} color="#1F6338" />,
-            title: 'Prix minimum sans perte',
-            value: `${fmt(results.breakEvenMinPriceUsd)} / kg`,
-            subtitle: 'Prix plancher pour rembourser vos dépenses',
-          },
-        ].map((kpi, idx) => (
-          <YStack
-            key={idx}
-            flex={1}
-            minWidth={240}
-            backgroundColor="#FFFFFF"
-            borderRadius={14}
-            padding="$4"
-            borderWidth={1}
-            borderColor="#EAE8E1"
-            gap="$2"
-          >
-            <XStack alignItems="center" gap="$2.5">
-              <YStack
-                width={36}
-                height={36}
-                borderRadius={9}
-                backgroundColor="#E7F3E7"
-                alignItems="center"
-                justifyContent="center"
-              >
-                {kpi.icon}
-              </YStack>
-              <Text fontSize={13} fontWeight="600" color="#5F685F" flex={1}>
-                {kpi.title}
-              </Text>
-            </XStack>
-            <Text fontSize={20} fontWeight="800" color="#18241B">
-              {kpi.value}
-            </Text>
-            <Text fontSize={12} color="#687068" lineHeight={17}>
-              {kpi.subtitle}
-            </Text>
-          </YStack>
-        ))}
-      </XStack>
-
-      {/* Breakdown by Stage + Scenarios & Goal-Seek */}
-      <XStack gap="$4" flexWrap="wrap">
-        {/* Left: Breakdown of Expenses by Stage */}
-        <YStack
-          flex={1.1}
-          minWidth={310}
-          backgroundColor="#FFFFFF"
-          borderRadius={14}
-          padding="$5"
-          borderWidth={1}
-          borderColor="#EAE8E1"
-          gap="$3.5"
-        >
-          <YStack gap="$1">
-            <Text fontSize={17} fontWeight="800" color="#18241B">
-              Répartition des coûts par étape
-            </Text>
-            <Text fontSize={12.5} color="#687068">
-              Poids de chaque poste de dépense dans votre campagne
-            </Text>
-          </YStack>
-
-          <YStack gap="$3">
-            {EXPENSE_STAGES.map((stage) => {
-              const stageItems = simInput.expenses.filter((e) => e.stage === stage.code);
-              const stageCost = stageItems.reduce(
-                (acc, item) => acc + item.quantity * item.unitCostUsd,
-                0
-              );
-              const pct =
-                results.totalCostUsd > 0
-                  ? Math.round((stageCost / results.totalCostUsd) * 100)
-                  : 0;
-              const renderIcon = STAGE_ICONS[stage.code];
-
-              return (
-                <YStack key={stage.code} gap="$1.5">
-                  <XStack justifyContent="space-between" alignItems="center">
-                    <XStack alignItems="center" gap="$2">
-                      <YStack
-                        width={26}
-                        height={26}
-                        borderRadius={6}
-                        backgroundColor="#E7F3E7"
-                        alignItems="center"
-                        justifyContent="center"
-                      >
-                        {renderIcon('#1F6338')}
-                      </YStack>
-                      <Text fontSize={13} fontWeight="600" color="#18241B">
-                        {stage.shortLabelFr}
-                      </Text>
-                    </XStack>
-                    <Text fontSize={13} fontWeight="700" color="#1F6338">
-                      {fmt(stageCost)} ({pct}%)
-                    </Text>
-                  </XStack>
-                  <YStack height={7} backgroundColor="#E6EFE6" borderRadius={999} overflow="hidden">
-                    <YStack
-                      width={`${Math.max(pct, stageCost > 0 ? 4 : 0)}%`}
-                      height="100%"
-                      backgroundColor="#C86D28"
-                      borderRadius={999}
-                    />
-                  </YStack>
-                </YStack>
-              );
-            })}
-          </YStack>
-        </YStack>
-
-        {/* Right: 3 Scenarios + Goal Seek */}
-        <YStack flex={1} minWidth={310} gap="$4">
-          <YStack
-            backgroundColor="#FFFFFF"
-            borderRadius={14}
-            padding="$5"
-            borderWidth={1}
-            borderColor="#EAE8E1"
-            gap="$3"
-          >
-            <Text fontSize={17} fontWeight="800" color="#18241B">
-              3. Comparez les scénarios
-            </Text>
-            <YStack gap="$2.5">
-              {[
-                {
-                  label: 'Scénario prudent (prix -15 %, coûts +10 %)',
-                  data: scenarios.pessimistic.results,
-                  bg: '#FAF8F3',
-                  border: '#EAE8E1',
-                },
-                {
-                  label: 'Votre scénario actuel',
-                  data: scenarios.base.results,
-                  bg: '#E7F3E7',
-                  border: '#1F6338',
-                },
-                {
-                  label: 'Scénario optimiste / vente groupée (prix +15 %)',
-                  data: scenarios.optimistic.results,
-                  bg: '#FEF6E0',
-                  border: '#F2B632',
-                },
-              ].map((sc, idx) => (
-                <XStack
-                  key={idx}
-                  backgroundColor={sc.bg}
-                  borderWidth={1}
-                  borderColor={sc.border}
-                  borderRadius={10}
-                  padding="$3"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <YStack flex={1} paddingRight="$2">
-                    <Text fontSize={13} fontWeight="700" color="#18241B">
-                      {sc.label}
-                    </Text>
-                    <Text fontSize={11.5} color="#5F685F">
-                      Recettes : {fmt(sc.data.totalCashRevenueUsd)} · Coûts : {fmt(sc.data.totalCostUsd)}
-                    </Text>
-                  </YStack>
-                  <Text
-                    fontSize={14.5}
-                    fontWeight="800"
-                    color={sc.data.netProfitUsd >= 0 ? '#1F6338' : '#B91C1C'}
-                  >
-                    {fmt(sc.data.netProfitUsd)}
-                  </Text>
-                </XStack>
-              ))}
-            </YStack>
-          </YStack>
-
-          {/* 4. Décidez (Objectif de gain) */}
-          <YStack
-            backgroundColor="#FFFFFF"
-            borderRadius={14}
-            padding="$5"
-            borderWidth={1}
-            borderColor="#EAE8E1"
-            gap="$3"
-          >
-            <XStack alignItems="center" gap="$2">
-              <YStack
-                width={32}
-                height={32}
-                borderRadius={8}
-                backgroundColor="#E7F3E7"
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Target size={16} color="#1F6338" />
-              </YStack>
-              <Text fontSize={16} fontWeight="800" color="#18241B">
-                4. Décidez selon votre objectif de gain
-              </Text>
-            </XStack>
-
-            <NumberInputWithStepper
-              value={targetProfitUsd}
-              onChange={setTargetProfitUsd}
-              step={100}
-              min={50}
-              max={100000}
-              unitLabel="USD"
-            />
-
-            <XStack gap="$2.5" flexWrap="wrap">
-              <YStack flex={1} backgroundColor="#E7F3E7" padding="$3" borderRadius={10} gap="$1">
-                <Text fontSize={11.5} fontWeight="600" color="#1F6338">
-                  Production à vendre
-                </Text>
-                <Text fontSize={16.5} fontWeight="800" color="#18241B">
-                  {Math.ceil(Number(goalSeek.requiredTotalProduction) || 0).toLocaleString('fr-FR')} kg
-                </Text>
-              </YStack>
-              <YStack flex={1} backgroundColor="#FEF6E0" padding="$3" borderRadius={10} gap="$1">
-                <Text fontSize={11.5} fontWeight="600" color="#4E3808">
-                  Superficie nécessaire
-                </Text>
-                <Text fontSize={16.5} fontWeight="800" color="#18241B">
-                  {(Number(goalSeek.requiredSurfaceInHectares) || 0).toFixed(2)} ha
-                </Text>
-              </YStack>
-            </XStack>
-          </YStack>
-        </YStack>
-      </XStack>
-
-      {/* Bottom Navigation Card */}
+      {/* Top Breadcrumb & Control Bar */}
       <div
         style={{
           backgroundColor: '#FFFFFF',
-          borderRadius: '14px',
-          padding: '20px clamp(16px, 4vw, 24px)',
-          border: '1px solid #EAE8E1',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '16px',
-          width: '100%',
-          boxSizing: 'border-box',
+          borderBottom: '1px solid #EAE6DD',
+          padding: '14px clamp(16px, 4vw, 36px)',
+          boxShadow: '0 1px 4px rgba(18, 36, 24, 0.03)',
         }}
       >
-        <div style={{ flex: '1 1 240px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <div style={{ fontSize: '16px', fontWeight: 800, color: '#18241B' }}>
-            Ajuster vos paramètres ou consulter les fiches pratiques
-          </div>
-          <div style={{ fontSize: '13px', color: '#5F685F' }}>
-            Testez d’autres hypothèses de prix et de surface dans le simulateur.
-          </div>
-        </div>
-
-        <div className="avenir-results-bottom-actions">
-          <Button
-            size="$3.5"
-            height={42}
-            borderRadius={999}
-            paddingHorizontal="$4.5"
-            backgroundColor="#F2B632"
-            color="#18241B"
-            fontWeight="700"
-            onPress={() => {
+        <div
+          style={{
+            maxWidth: '1080px',
+            margin: '0 auto',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '12px',
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => {
               if (window.history.length > 1 && window.history.state?.section === 'RESULTS') {
                 window.history.back();
               } else {
@@ -849,47 +166,738 @@ export const ResultsPage: React.FC = () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }
             }}
+            style={{
+              background: '#FAF8F3',
+              border: '1px solid #D5DDD5',
+              borderRadius: '999px',
+              padding: '8px 16px',
+              fontSize: '13px',
+              fontWeight: 700,
+              color: '#1F6338',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              transition: 'all 0.15s ease',
+            }}
           >
-            <XStack alignItems="center" gap="$2" justifyContent="center">
-              <Calculator size={15} color="#18241B" />
-              <Text fontSize={13.5} fontWeight="700" color="#18241B">
-                Retour au simulateur
-              </Text>
-            </XStack>
-          </Button>
+            <ArrowLeft size={14} color="#1F6338" />
+            <span>Modifier mes chiffres</span>
+          </button>
 
-          <Button
-            size="$3.5"
-            height={42}
-            borderRadius={999}
-            paddingHorizontal="$4.5"
-            backgroundColor="#1F6338"
-            color="#FFFFFF"
-            fontWeight="700"
-            onPress={() => {
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              onClick={handleSaveSimulation}
+              disabled={isSaving}
+              style={{
+                backgroundColor: '#F2B632',
+                color: '#122017',
+                border: 'none',
+                borderRadius: '999px',
+                padding: '8px 18px',
+                fontSize: '13px',
+                fontWeight: 800,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                boxShadow: '0 2px 8px rgba(242, 182, 50, 0.3)',
+              }}
+            >
+              <Share2 size={14} color="#122017" />
+              <span>{isSaving ? 'Enregistrement...' : 'Garder le code de ma fiche'}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => window.print()}
+              style={{
+                backgroundColor: '#FFFFFF',
+                color: '#1F6338',
+                border: '1px solid #D5DDD5',
+                borderRadius: '999px',
+                padding: '8px 16px',
+                fontSize: '13px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}
+            >
+              <Printer size={14} color="#1F6338" />
+              <span>Imprimer ma fiche</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content Sheet Container */}
+      <div
+        style={{
+          maxWidth: '1080px',
+          margin: '28px auto 0',
+          padding: '0 clamp(14px, 3vw, 24px)',
+          boxSizing: 'border-box',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '24px',
+        }}
+      >
+        {/* Save confirmation banner */}
+        {saveBannerMsg && (
+          <div
+            style={{
+              backgroundColor: '#ECFDF5',
+              border: '1px solid #A7F3D0',
+              borderRadius: '12px',
+              padding: '12px 18px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '10px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13.5px', color: '#065F46', fontWeight: 600 }}>
+              <CheckCircle2 size={16} color="#059669" />
+              <span>{saveBannerMsg}</span>
+            </div>
+            {lastShareCode && (
+              <span
+                style={{
+                  backgroundColor: '#059669',
+                  color: '#FFFFFF',
+                  fontWeight: 800,
+                  fontSize: '12.5px',
+                  padding: '3px 12px',
+                  borderRadius: '999px',
+                  letterSpacing: '0.6px',
+                }}
+              >
+                CODE : {lastShareCode}
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* 1. Header Information of the Sheet */}
+        <div
+          style={{
+            backgroundColor: '#FFFFFF',
+            borderRadius: '20px',
+            border: '1px solid #E2E8E2',
+            padding: '24px clamp(18px, 4vw, 32px)',
+            boxShadow: '0 4px 16px rgba(18, 36, 24, 0.04)',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              flexWrap: 'wrap',
+              gap: '12px',
+              borderBottom: '1px solid #F0F4F0',
+              paddingBottom: '16px',
+              marginBottom: '20px',
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  fontSize: '11px',
+                  fontWeight: 800,
+                  color: '#1F6338',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.8px',
+                  marginBottom: '4px',
+                }}
+              >
+                Fiche Officielle de Calcul Agricole · Projet AVENIR
+              </div>
+              <h1
+                style={{
+                  margin: 0,
+                  fontSize: 'clamp(22px, 3.5vw, 30px)',
+                  fontWeight: 800,
+                  color: '#122017',
+                  letterSpacing: '-0.4px',
+                }}
+              >
+                {CROP_LABELS[simInput.cropCode] || simInput.cropName} — {simInput.surfaceArea} {simInput.surfaceUnit}
+              </h1>
+              <div style={{ marginTop: '6px', fontSize: '13.5px', color: '#5F685F' }}>
+                Province du <strong>{simInput.province}</strong> · Campagne agricole 2026
+              </div>
+            </div>
+
+            <div
+              style={{
+                backgroundColor: '#FAF8F3',
+                border: '1px solid #EAE6DD',
+                borderRadius: '12px',
+                padding: '8px 14px',
+                textAlign: 'right',
+              }}
+            >
+              <div style={{ fontSize: '11px', color: '#768278', fontWeight: 600 }}>Taux de change appliqué</div>
+              <div style={{ fontSize: '14px', fontWeight: 800, color: '#1F6338', marginTop: '2px' }}>
+                1 USD = {rate.toLocaleString('fr-FR')} CDF
+              </div>
+            </div>
+          </div>
+
+          {/* 2. THE BIG VERDICT (Clear, direct, understandable by anyone) */}
+          <div
+            style={{
+              backgroundColor: isProfitable ? '#ECFDF5' : '#FEF2F2',
+              border: `1.5px solid ${isProfitable ? '#10B981' : '#EF4444'}`,
+              borderRadius: '16px',
+              padding: '24px clamp(16px, 4vw, 28px)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '14px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {isProfitable ? (
+                <CheckCircle2 size={20} color="#059669" />
+              ) : (
+                <AlertCircle size={20} color="#DC2626" />
+              )}
+              <span
+                style={{
+                  fontSize: '13px',
+                  fontWeight: 800,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.8px',
+                  color: isProfitable ? '#065F46' : '#991B1B',
+                }}
+              >
+                {isProfitable ? 'Résultat positif : Votre champ est rentable' : 'Attention : Risque de perte financière'}
+              </span>
+            </div>
+
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-end',
+                flexWrap: 'wrap',
+                gap: '16px',
+              }}
+            >
+              <div>
+                <div style={{ fontSize: '13px', color: '#4B5563', fontWeight: 500 }}>
+                  {isProfitable
+                    ? 'Bénéfice net réel restant dans votre poche après toutes les dépenses :'
+                    : 'Montant du déficit prévisionnel à combler :'}
+                </div>
+                <div
+                  style={{
+                    fontSize: 'clamp(32px, 5vw, 44px)',
+                    fontWeight: 900,
+                    color: isProfitable ? '#047857' : '#DC2626',
+                    letterSpacing: '-1px',
+                    lineHeight: 1.1,
+                    marginTop: '4px',
+                  }}
+                >
+                  {isProfitable ? '+ ' : ''}{fmtUsd(results.netProfitUsd)}
+                </div>
+                <div
+                  style={{
+                    fontSize: '16px',
+                    fontWeight: 700,
+                    color: isProfitable ? '#065F46' : '#991B1B',
+                    marginTop: '4px',
+                  }}
+                >
+                  Soit environ {fmtCdf(Math.abs(results.netProfitUsd))}
+                </div>
+              </div>
+
+              <div
+                style={{
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: '12px',
+                  padding: '10px 16px',
+                  border: '1px solid #E5E7EB',
+                  textAlign: 'right',
+                }}
+              >
+                <div style={{ fontSize: '11px', color: '#6B7280', textTransform: 'uppercase', fontWeight: 700 }}>
+                  Gain par hectare
+                </div>
+                <div style={{ fontSize: '18px', fontWeight: 800, color: '#1F6338', marginTop: '2px' }}>
+                  {fmtUsd(profitPerHa)} / ha
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 3. The 2 Pillars: Money Coming In vs Money Going Out */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
+              gap: '16px',
+              marginTop: '20px',
+            }}
+          >
+            {/* Sales / Cash In */}
+            <div
+              style={{
+                backgroundColor: '#FAF8F3',
+                border: '1px solid #EAE6DD',
+                borderRadius: '14px',
+                padding: '18px',
+              }}
+            >
+              <div style={{ fontSize: '12px', fontWeight: 800, color: '#1F6338', textTransform: 'uppercase' }}>
+                1. Ce que vous gagnez (Total des Ventes)
+              </div>
+              <div style={{ fontSize: '24px', fontWeight: 900, color: '#122017', marginTop: '6px' }}>
+                {fmtUsd(safeRev)}
+              </div>
+              <div style={{ fontSize: '12.5px', color: '#5F685F', marginTop: '2px' }}>
+                {fmtCdf(safeRev)}
+              </div>
+              <div style={{ fontSize: '12px', color: '#687068', marginTop: '10px', lineHeight: '18px' }}>
+                Calcul basé sur <strong>{simInput.commercializedQty.toLocaleString('fr-FR')} {simInput.productionUnit}</strong> vendus à <strong>{simInput.unitSalePriceUsd} USD / {simInput.productionUnit}</strong>.
+              </div>
+            </div>
+
+            {/* Expenses / Cash Out */}
+            <div
+              style={{
+                backgroundColor: '#FAF8F3',
+                border: '1px solid #EAE6DD',
+                borderRadius: '14px',
+                padding: '18px',
+              }}
+            >
+              <div style={{ fontSize: '12px', fontWeight: 800, color: '#8C6218', textTransform: 'uppercase' }}>
+                2. Ce que vous dépensez (Total des Coûts)
+              </div>
+              <div style={{ fontSize: '24px', fontWeight: 900, color: '#122017', marginTop: '6px' }}>
+                {fmtUsd(safeCost)}
+              </div>
+              <div style={{ fontSize: '12.5px', color: '#5F685F', marginTop: '2px' }}>
+                {fmtCdf(safeCost)}
+              </div>
+              <div style={{ fontSize: '12px', color: '#687068', marginTop: '10px', lineHeight: '18px' }}>
+                Comprend la préparation du sol, les semences, l’entretien, la main-d’œuvre et la récolte.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 4. Three Essential Decision Benchmarks (No confusing icons, plain human language) */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 290px), 1fr))',
+            gap: '16px',
+          }}
+        >
+          {/* Benchmark 1 */}
+          <div
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '16px',
+              border: '1px solid #E2E8E2',
+              padding: '20px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+            }}
+          >
+            <div>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: '#5F685F', textTransform: 'uppercase' }}>
+                Récolte minimum sans perte
+              </div>
+              <div style={{ fontSize: '24px', fontWeight: 900, color: '#1F6338', marginTop: '4px' }}>
+                {Math.ceil(results.breakEvenQuantity).toLocaleString('fr-FR')} {simInput.productionUnit}
+              </div>
+            </div>
+            <div style={{ fontSize: '12px', color: '#687068', marginTop: '10px', lineHeight: '17px' }}>
+              En dessous de cette quantité vendue, vous perdez de l’argent. Au-dessus, chaque kilo rapporte un vrai bénéfice.
+            </div>
+          </div>
+
+          {/* Benchmark 2 */}
+          <div
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '16px',
+              border: '1px solid #E2E8E2',
+              padding: '20px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+            }}
+          >
+            <div>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: '#5F685F', textTransform: 'uppercase' }}>
+                Coût de revient pour 1 {simInput.productionUnit}
+              </div>
+              <div style={{ fontSize: '24px', fontWeight: 900, color: '#122017', marginTop: '4px' }}>
+                {fmtUsd(results.unitProductionCostUsd)} / {simInput.productionUnit}
+              </div>
+            </div>
+            <div style={{ fontSize: '12px', color: '#687068', marginTop: '10px', lineHeight: '17px' }}>
+              Produire 1 {simInput.productionUnit} vous coûte {fmtUsd(results.unitProductionCostUsd)}. Vous le vendez à {fmtUsd(simInput.unitSalePriceUsd)}.
+            </div>
+          </div>
+
+          {/* Benchmark 3 */}
+          <div
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '16px',
+              border: '1px solid #E2E8E2',
+              padding: '20px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+            }}
+          >
+            <div>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: '#5F685F', textTransform: 'uppercase' }}>
+                Rendement de votre argent
+              </div>
+              <div style={{ fontSize: '24px', fontWeight: 900, color: '#047857', marginTop: '4px' }}>
+                {returnPerDollar} $ récupéré
+              </div>
+            </div>
+            <div style={{ fontSize: '12px', color: '#687068', marginTop: '10px', lineHeight: '17px' }}>
+              Pour chaque 1 USD dépensé dans cette campagne, vous récupérez <strong>{returnPerDollar} USD</strong> au moment de la récolte.
+            </div>
+          </div>
+        </div>
+
+        {/* 5. Clean Expenses Breakdown by Stage (No noisy icons) */}
+        <div
+          style={{
+            backgroundColor: '#FFFFFF',
+            borderRadius: '18px',
+            border: '1px solid #E2E8E2',
+            padding: '24px clamp(18px, 4vw, 30px)',
+          }}
+        >
+          <div style={{ marginBottom: '16px' }}>
+            <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: '#122017' }}>
+              Où part votre argent ? (Détail des dépenses)
+            </h2>
+            <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#5F685F' }}>
+              Répartition des coûts par étape de travail tout au long de la saison agricole.
+            </p>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            {EXPENSE_STAGES.map((stage, sIdx) => {
+              const stageItems = simInput.expenses.filter((e) => e.stage === stage.code);
+              const stageCost = stageItems.reduce(
+                (acc, item) => acc + item.quantity * item.unitCostUsd,
+                0
+              );
+              const pct = safeCost > 0 ? Math.round((stageCost / safeCost) * 100) : 0;
+
+              return (
+                <div key={stage.code} style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '13px' }}>
+                    <span style={{ fontWeight: 700, color: '#122017' }}>
+                      {sIdx + 1}. {stage.shortLabelFr}
+                    </span>
+                    <span style={{ fontWeight: 800, color: '#1F6338' }}>
+                      {fmtUsd(stageCost)} <span style={{ color: '#768278', fontWeight: 500, fontSize: '12px' }}>({pct}%)</span>
+                    </span>
+                  </div>
+
+                  <div
+                    style={{
+                      width: '100%',
+                      height: '8px',
+                      backgroundColor: '#F0F4F0',
+                      borderRadius: '999px',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: `${Math.max(pct, stageCost > 0 ? 3 : 0)}%`,
+                        height: '100%',
+                        backgroundColor: '#1F6338',
+                        borderRadius: '999px',
+                        transition: 'width 0.3s ease',
+                      }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 6. Realistic Market Scenarios + Goal Calculator */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))',
+            gap: '20px',
+          }}
+        >
+          {/* Market Scenarios */}
+          <div
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '18px',
+              border: '1px solid #E2E8E2',
+              padding: '22px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '14px',
+            }}
+          >
+            <div>
+              <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 800, color: '#122017' }}>
+                Que se passe-t-il si les prix changent au marché ?
+              </h3>
+              <p style={{ margin: '4px 0 0', fontSize: '12.5px', color: '#5F685F' }}>
+                Anticipez les variations de prix avant de vendre votre récolte.
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {/* Prudent */}
+              <div
+                style={{
+                  backgroundColor: '#FAF8F3',
+                  border: '1px solid #EAE6DD',
+                  borderRadius: '12px',
+                  padding: '12px 14px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <div>
+                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#122017' }}>
+                    Si les prix baissent de 15%
+                  </div>
+                  <div style={{ fontSize: '11.5px', color: '#687068', marginTop: '2px' }}>
+                    Mauvaise saison de vente locale
+                  </div>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <div
+                    style={{
+                      fontSize: '15px',
+                      fontWeight: 800,
+                      color: scenarios.pessimistic.results.netProfitUsd >= 0 ? '#1F6338' : '#DC2626',
+                    }}
+                  >
+                    {fmtUsd(scenarios.pessimistic.results.netProfitUsd)}
+                  </div>
+                  <div style={{ fontSize: '11px', color: '#768278' }}>Bénéfice restant</div>
+                </div>
+              </div>
+
+              {/* Base */}
+              <div
+                style={{
+                  backgroundColor: '#ECFDF5',
+                  border: '1.5px solid #10B981',
+                  borderRadius: '12px',
+                  padding: '12px 14px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <div>
+                  <div style={{ fontSize: '13px', fontWeight: 800, color: '#065F46' }}>
+                    Votre estimation actuelle
+                  </div>
+                  <div style={{ fontSize: '11.5px', color: '#047857', marginTop: '2px' }}>
+                    Hypothèse normale de la campagne
+                  </div>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontSize: '16px', fontWeight: 900, color: '#047857' }}>
+                    {fmtUsd(results.netProfitUsd)}
+                  </div>
+                  <div style={{ fontSize: '11px', color: '#065F46' }}>Bénéfice prévu</div>
+                </div>
+              </div>
+
+              {/* Optimistic */}
+              <div
+                style={{
+                  backgroundColor: '#FEF9EE',
+                  border: '1px solid #F2B632',
+                  borderRadius: '12px',
+                  padding: '12px 14px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <div>
+                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#78350F' }}>
+                    Vente groupée en coopérative (+15%)
+                  </div>
+                  <div style={{ fontSize: '11.5px', color: '#92400E', marginTop: '2px' }}>
+                    En vendant ensemble avec d'autres producteurs
+                  </div>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontSize: '15px', fontWeight: 800, color: '#047857' }}>
+                    {fmtUsd(scenarios.optimistic.results.netProfitUsd)}
+                  </div>
+                  <div style={{ fontSize: '11px', color: '#78350F' }}>Gain supérieur</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Goal Seek Calculator */}
+          <div
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '18px',
+              border: '1px solid #E2E8E2',
+              padding: '22px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: '14px',
+            }}
+          >
+            <div>
+              <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 800, color: '#122017' }}>
+                Combien voulez-vous gagner au total ?
+              </h3>
+              <p style={{ margin: '4px 0 14px', fontSize: '12.5px', color: '#5F685F' }}>
+                Indiquez votre objectif de bénéfice, nous calculons ce qu'il vous faut.
+              </p>
+
+              <NumberInputWithStepper
+                value={targetProfitUsd}
+                onChange={setTargetProfitUsd}
+                step={100}
+                min={50}
+                max={100000}
+                unitLabel="USD"
+              />
+            </div>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '10px',
+                marginTop: '10px',
+              }}
+            >
+              <div
+                style={{
+                  backgroundColor: '#FAF8F3',
+                  borderRadius: '12px',
+                  padding: '12px',
+                  border: '1px solid #EAE6DD',
+                  textAlign: 'center',
+                }}
+              >
+                <div style={{ fontSize: '11px', fontWeight: 700, color: '#5F685F', textTransform: 'uppercase' }}>
+                  Récolte à vendre
+                </div>
+                <div style={{ fontSize: '17px', fontWeight: 800, color: '#1F6338', marginTop: '4px' }}>
+                  {Math.ceil(Number(goalSeek.requiredTotalProduction) || 0).toLocaleString('fr-FR')} {simInput.productionUnit}
+                </div>
+              </div>
+
+              <div
+                style={{
+                  backgroundColor: '#FAF8F3',
+                  borderRadius: '12px',
+                  padding: '12px',
+                  border: '1px solid #EAE6DD',
+                  textAlign: 'center',
+                }}
+              >
+                <div style={{ fontSize: '11px', fontWeight: 700, color: '#5F685F', textTransform: 'uppercase' }}>
+                  Surface nécessaire
+                </div>
+                <div style={{ fontSize: '17px', fontWeight: 800, color: '#8C6218', marginTop: '4px' }}>
+                  {(Number(goalSeek.requiredSurfaceInHectares) || 0).toFixed(2)} ha
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 7. Next Steps & Practical Toolbox Gateway */}
+        <div
+          style={{
+            backgroundColor: '#1F6338',
+            borderRadius: '18px',
+            padding: '24px clamp(18px, 4vw, 32px)',
+            color: '#FFFFFF',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '18px',
+          }}
+        >
+          <div style={{ flex: '1 1 320px' }}>
+            <h3 style={{ margin: 0, fontSize: '19px', fontWeight: 800, color: '#FFFFFF' }}>
+              Comment augmenter votre récolte et réduire vos dépenses ?
+            </h3>
+            <p style={{ margin: '6px 0 0', fontSize: '13.5px', color: '#DCE7DF', lineHeight: '20px' }}>
+              Consultez les 12 images illustrées de la boîte à outils AVENIR pour apprendre à gérer votre champ comme un vrai business rentable.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
               setMainSection('TOOLBOX');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
+            style={{
+              backgroundColor: '#F2B632',
+              color: '#122017',
+              border: 'none',
+              borderRadius: '999px',
+              padding: '12px 24px',
+              fontSize: '13.5px',
+              fontWeight: 800,
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              boxShadow: '0 4px 14px rgba(0, 0, 0, 0.15)',
+            }}
           >
-            <XStack alignItems="center" gap="$2" justifyContent="center">
-              <BookOpen size={15} color="#FFFFFF" />
-              <Text fontSize={13.5} fontWeight="700" color="#FFFFFF">
-                Boîte à outils pédagogique
-              </Text>
-            </XStack>
-          </Button>
+            <span>Explorer la boîte à outils pédagogique</span>
+            <span>→</span>
+          </button>
         </div>
       </div>
-      </div>
 
-      {/* Full-Width Past Simulated Projects Section (Exact match to Image 3) */}
-      <YStack width="100%" paddingBottom="$4">
+      {/* 8. Other Simulated Projects Section */}
+      <div style={{ width: '100%', marginTop: '36px' }}>
         <PastSimulatedProjectsSection
           title="Autres projets simulés au Kwilu et au Kwango"
           subtitle="Comparez vos résultats avec d’autres campagnes agricoles déjà simulées ou ouvrez un autre projet."
           openTarget="RESULTS"
         />
-      </YStack>
+      </div>
     </div>
   );
 };

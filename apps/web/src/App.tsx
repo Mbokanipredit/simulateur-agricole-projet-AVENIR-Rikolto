@@ -666,63 +666,6 @@ export const App: React.FC = () => {
                         <span>Explorer la boîte à images</span>
                       </button>
                     </div>
-
-                    {/* Quick Filière Selector Strip (Interactive Crop Shortcuts) */}
-                    <div
-                      style={{
-                        marginTop: '8px',
-                        paddingTop: '18px',
-                        borderTop: '1px solid rgba(255, 255, 255, 0.14)',
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        alignItems: 'center',
-                        gap: '8px',
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontSize: '12px',
-                          fontWeight: 700,
-                          color: '#B6CDBE',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.6px',
-                          marginRight: '4px',
-                        }}
-                      >
-                        Simuler une filière :
-                      </span>
-                      {[
-                        { label: 'Café Robusta', icon: '☕' },
-                        { label: 'Cacao', icon: '🍫' },
-                        { label: 'Manioc', icon: '🌿' },
-                        { label: 'Maïs & Arachide', icon: '🌽' },
-                      ].map((crop) => (
-                        <button
-                          key={crop.label}
-                          type="button"
-                          onClick={() => {
-                            setMainSection('SIMULATOR');
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                          }}
-                          style={{
-                            padding: '6px 13px',
-                            borderRadius: '999px',
-                            border: '1px solid rgba(255, 255, 255, 0.22)',
-                            backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                            color: '#FFFFFF',
-                            fontSize: '12.5px',
-                            fontWeight: 600,
-                            cursor: 'pointer',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '6px',
-                          }}
-                        >
-                          <span>{crop.icon}</span>
-                          <span>{crop.label}</span>
-                        </button>
-                      ))}
-                    </div>
                   </div>
 
                   {/* RIGHT COLUMN: Layered Dual-Photo Agricultural Composition + Live Financial Card */}
@@ -1452,37 +1395,12 @@ export const App: React.FC = () => {
               style={{
                 position: 'relative',
                 width: '100%',
-                backgroundColor: '#FAF8F3',
+                backgroundColor: '#FFFFFF',
                 paddingTop: '68px',
                 paddingBottom: '76px',
                 overflow: 'hidden',
               }}
             >
-              {/* Lush Green Agricultural Field Panorama Strip with Rich Deep Forest Overlay across the middle-back */}
-              <div
-                style={{
-                  position: 'absolute',
-                  left: 0,
-                  right: 0,
-                  top: '50%',
-                  height: '210px',
-                  zIndex: 0,
-                  backgroundImage: 'url(/images/agri-4.jpg)',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center 58%',
-                }}
-              >
-                {/* Rich Forest Green & Warm Gold Overlay */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background:
-                      'linear-gradient(180deg, #FAF8F3 0%, rgba(14, 69, 35, 0.72) 24%, rgba(14, 69, 35, 0.78) 76%, #FAF8F3 100%)',
-                  }}
-                />
-              </div>
-
               {/* Centered Container (margin: 0 auto guarantees true horizontal centering!) */}
               <div
                 style={{
@@ -1531,7 +1449,7 @@ export const App: React.FC = () => {
                   </p>
                 </div>
 
-                {/* Balanced Unified Scenic Cards Grid */}
+                {/* Balanced Unified Scenic Cards Grid with Image First & Dark Hover Overlay */}
                 <div className="avenir-cards-grid-4">
                   {[
                     {
@@ -1540,8 +1458,6 @@ export const App: React.FC = () => {
                       desc: 'Voir le champ comme une activité économique, choisir son marché et planifier avant de semer.',
                       slug: 'image-1',
                       photo: '/boite-a-images/card-1.png',
-                      skyGradient:
-                        'linear-gradient(180deg, #BBD9F6 0%, #CEE5F6 55%, #D5EBF2 100%)',
                     },
                     {
                       badge: 'Images 5 à 7 · Produire & Suivre',
@@ -1549,8 +1465,6 @@ export const App: React.FC = () => {
                       desc: 'Noter chaque dépense dans un cahier, calculer le coût de revient et connaître son vrai bénéfice.',
                       slug: 'image-7',
                       photo: '/boite-a-images/card-7.png',
-                      skyGradient:
-                        'linear-gradient(180deg, #A9D3F8 0%, #C6E2F6 55%, #D5EBF2 100%)',
                     },
                     {
                       badge: 'Images 8 à 11 · Qualité & Vente',
@@ -1558,8 +1472,6 @@ export const App: React.FC = () => {
                       desc: 'Sécher sur bâche propre, comparer les acheteurs et vendre groupé avec la coopérative.',
                       slug: 'image-10',
                       photo: '/boite-a-images/card-10.png',
-                      skyGradient:
-                        'linear-gradient(180deg, #9ECAF3 0%, #C0DFF5 55%, #D5EBF2 100%)',
                     },
                     {
                       badge: 'Image 12 · Réinvestir',
@@ -1567,125 +1479,83 @@ export const App: React.FC = () => {
                       desc: 'Séparer les dépenses du ménage, l’épargne de sécurité et le capital de la prochaine saison.',
                       slug: 'image-12',
                       photo: '/boite-a-images/card-12.png',
-                      skyGradient:
-                        'linear-gradient(180deg, #B2D4F5 0%, #CBE4F5 55%, #D5EBF2 100%)',
                     },
                   ].map((card, i) => (
                     <div
                       key={i}
+                      className="avenir-hover-comic-card"
                       onClick={() => openToolboxCard(card.slug)}
-                      style={{
-                        borderRadius: '20px',
-                        overflow: 'hidden',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        background: card.skyGradient,
-                        boxShadow: '0 14px 34px rgba(18, 36, 24, 0.12)',
-                        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                      }}
                     >
-                      {/* Top Sky Content Area (Compact height so card is balanced & wide, not tall/skinny) */}
-                      <div
-                        style={{
-                          padding: '22px 22px 10px',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                          textAlign: 'center',
-                        }}
-                      >
-                        <GoldenWheatOrnament width={50} />
+                      {/* Initially full image */}
+                      <img
+                        src={card.photo}
+                        alt={card.title}
+                        className="card-base-img"
+                      />
 
-                        <div
-                          style={{
-                            marginTop: '10px',
-                            fontSize: '20px',
-                            fontWeight: 800,
-                            color: '#0E1711',
-                            lineHeight: '25px',
-                            letterSpacing: '-0.3px',
-                          }}
-                        >
-                          {card.title}
-                        </div>
-
-                        <div
-                          style={{
-                            marginTop: '6px',
-                            fontSize: '13px',
-                            color: '#465663',
-                            lineHeight: '19px',
-                            maxWidth: '280px',
-                          }}
-                        >
-                          {card.desc}
-                        </div>
-
-                        {/* "Lire la fiche" with Golden Underline Bar */}
-                        <div
-                          style={{
-                            marginTop: '12px',
-                            display: 'inline-flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <span
-                            style={{
-                              fontSize: '12.5px',
-                              fontWeight: 800,
-                              color: '#121C15',
-                              letterSpacing: '0.2px',
-                            }}
-                          >
-                            Lire la fiche
-                          </span>
-                          <div
-                            style={{
-                              width: '68px',
-                              height: '2.5px',
-                              backgroundColor: '#F2B632',
-                              marginTop: '4px',
-                              borderRadius: '2px',
-                            }}
-                          />
-                        </div>
+                      {/* Mobile hint visible on touch screens */}
+                      <div className="card-mobile-hint">
+                        <div style={{ fontSize: '14px', fontWeight: 800 }}>{card.title}</div>
                       </div>
 
-                      {/* Bottom Borderless Scene seamlessly blending with #D5EBF2 sky */}
-                      <div
-                        style={{
-                          position: 'relative',
-                          width: '100%',
-                          aspectRatio: '16 / 9.5',
-                          overflow: 'hidden',
-                        }}
-                      >
-                        <img
-                          src={card.photo}
-                          alt={card.title}
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                            objectPosition: 'center bottom',
-                            display: 'block',
-                          }}
-                        />
-                        <div
-                          style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            height: '24px',
-                            background:
-                              'linear-gradient(180deg, #D5EBF2 0%, rgba(213, 235, 242, 0) 100%)',
-                            pointerEvents: 'none',
-                          }}
-                        />
+                      {/* Dark Transparent Hover Overlay */}
+                      <div className="card-hover-overlay">
+                        <div className="card-hover-content">
+                          <span
+                            style={{
+                              fontSize: '11px',
+                              fontWeight: 800,
+                              color: '#F2B632',
+                              letterSpacing: '0.8px',
+                              textTransform: 'uppercase',
+                              marginBottom: '6px',
+                            }}
+                          >
+                            {card.badge}
+                          </span>
+
+                          <div
+                            style={{
+                              fontSize: '18px',
+                              fontWeight: 800,
+                              color: '#FFFFFF',
+                              lineHeight: '23px',
+                              marginBottom: '8px',
+                            }}
+                          >
+                            {card.title}
+                          </div>
+
+                          <div
+                            style={{
+                              fontSize: '12.5px',
+                              color: '#DCE7DF',
+                              lineHeight: '18px',
+                              maxWidth: '260px',
+                              marginBottom: '16px',
+                            }}
+                          >
+                            {card.desc}
+                          </div>
+
+                          <div
+                            style={{
+                              padding: '8px 20px',
+                              borderRadius: '999px',
+                              backgroundColor: '#F2B632',
+                              color: '#122017',
+                              fontSize: '12.5px',
+                              fontWeight: 800,
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '6px',
+                              boxShadow: '0 4px 14px rgba(242, 182, 50, 0.35)',
+                            }}
+                          >
+                            <span>Lire la fiche</span>
+                            <span>→</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   ))}

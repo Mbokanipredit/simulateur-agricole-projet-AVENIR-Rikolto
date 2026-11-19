@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSetAtom } from 'jotai';
 import { YStack, XStack, Text, Separator } from 'tamagui';
-import { Sprout } from 'lucide-react';
 import { activeMainSectionAtom, MainSection } from '../atoms/appAtoms';
 
 export const Footer: React.FC = () => {
@@ -22,19 +21,9 @@ export const Footer: React.FC = () => {
         <XStack justifyContent="space-between" alignItems="flex-start" flexWrap="wrap" gap="$6">
           {/* Left Column: AVENIR / Rikolto en RDC */}
           <YStack flex={1.2} minWidth={240} gap="$2.5">
-            <XStack alignItems="center" gap="$2.5">
-              <YStack
-                width={32}
-                height={32}
-                borderRadius={8}
-                backgroundColor="#216139"
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Sprout size={17} color="#FFFFFF" />
-              </YStack>
-              <Text fontSize={16} fontWeight="800" color="#FFFFFF" letterSpacing={0.3}>
-                AVENIR
+            <XStack alignItems="center">
+              <Text fontSize={15} fontWeight="800" color="#FFFFFF" letterSpacing={0.8} textTransform="uppercase">
+                PROJET AVENIR
               </Text>
             </XStack>
             <Text fontSize={13} color="#A3B5A7" lineHeight={20}>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAtom } from 'jotai';
 import { YStack, XStack, Text, Button } from 'tamagui';
-import { Sprout, ArrowRight, Menu, X } from 'lucide-react';
+import { ArrowRight, Menu, X } from 'lucide-react';
 import {
   activeMainSectionAtom,
   displayCurrencyAtom,
@@ -76,22 +76,17 @@ export const Header: React.FC = () => {
           {/* Brand Logo */}
           <XStack
             alignItems="center"
-            gap="$2.5"
             cursor="pointer"
             onPress={() => navigateTo('HOME')}
           >
-            <YStack
-              width={34}
-              height={34}
-              borderRadius={9}
-              backgroundColor="#1F6338"
-              alignItems="center"
-              justifyContent="center"
+            <Text
+              fontSize={16}
+              fontWeight="800"
+              color="#1F6338"
+              letterSpacing={0.8}
+              textTransform="uppercase"
             >
-              <Sprout size={18} color="#FFFFFF" />
-            </YStack>
-            <Text fontSize={17} fontWeight="800" color="#18241B" letterSpacing={0.3}>
-              AVENIR
+              PROJET AVENIR
             </Text>
           </XStack>
 

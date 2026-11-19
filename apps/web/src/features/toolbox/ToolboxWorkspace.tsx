@@ -1185,136 +1185,84 @@ export const ToolboxWorkspace: React.FC = () => {
                 return (
                   <div
                     key={item.number}
+                    className="avenir-hover-comic-card"
                     onClick={() => {
                       setSelectedSlug(item.slug);
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
-                    style={{
-                      borderRadius: '20px',
-                      overflow: 'hidden',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      background: skyBg,
-                      boxShadow: '0 14px 34px rgba(18, 36, 24, 0.12)',
-                      transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                    }}
                   >
-                    {/* Top Sky-Tinted Content Area (Compact height so card is wide & balanced) */}
-                    <div
-                      style={{
-                        padding: '22px 24px 10px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        textAlign: 'center',
-                      }}
-                    >
-                      <GoldenWheatOrnament width={50} />
+                    {/* Initially full image */}
+                    <img
+                      src={`/boite-a-images/card-${item.number}.png`}
+                      alt={item.title}
+                      className="card-base-img"
+                    />
 
-                      <span
-                        style={{
-                          marginTop: '8px',
-                          fontSize: '11px',
-                          fontWeight: 800,
-                          color: item.phaseColor,
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.8px',
-                        }}
-                      >
-                        Image {item.number} / 12 · {item.phaseLabel}
-                      </span>
-
-                      <div
-                        style={{
-                          marginTop: '6px',
-                          fontSize: '20px',
-                          fontWeight: 800,
-                          color: '#0E1711',
-                          lineHeight: '25px',
-                          letterSpacing: '-0.3px',
-                        }}
-                      >
-                        {item.title}
-                      </div>
-
-                      <div
-                        style={{
-                          marginTop: '6px',
-                          fontSize: '13px',
-                          color: '#465663',
-                          lineHeight: '19px',
-                          maxWidth: '295px',
-                        }}
-                      >
-                        {item.mainMessage}
-                      </div>
-
-                      {/* Centered Action Link with Golden Underline Bar (Exact Image 2) */}
-                      <div
-                        style={{
-                          marginTop: '12px',
-                          display: 'inline-flex',
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <span
-                          style={{
-                            fontSize: '12.5px',
-                            fontWeight: 800,
-                            color: '#121C15',
-                            letterSpacing: '0.2px',
-                          }}
-                        >
-                          Lire la fiche
-                        </span>
-                        <div
-                          style={{
-                            width: '68px',
-                            height: '2.5px',
-                            backgroundColor: '#F2B632',
-                            marginTop: '4px',
-                            borderRadius: '2px',
-                          }}
-                        />
+                    {/* Mobile hint visible on touch screens */}
+                    <div className="card-mobile-hint">
+                      <div style={{ fontSize: '13.5px', fontWeight: 800 }}>
+                        {item.number}. {item.title}
                       </div>
                     </div>
 
-                    {/* Bottom Borderless Scene seamlessly blending with #D5EBF2 sky */}
-                    <div
-                      style={{
-                        position: 'relative',
-                        width: '100%',
-                        aspectRatio: '16 / 9.5',
-                        overflow: 'hidden',
-                      }}
-                    >
-                      <img
-                        src={`/boite-a-images/card-${item.number}.png`}
-                        alt={item.title}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                          objectPosition: 'center bottom',
-                          display: 'block',
-                        }}
-                      />
-                      {/* Soft top sky fade so the upper text area blends into the illustration */}
-                      <div
-                        style={{
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          height: '24px',
-                          background:
-                            'linear-gradient(180deg, #D5EBF2 0%, rgba(213, 235, 242, 0) 100%)',
-                          pointerEvents: 'none',
-                        }}
-                      />
+                    {/* Dark Transparent Hover Overlay */}
+                    <div className="card-hover-overlay">
+                      <div className="card-hover-content">
+                        <span
+                          style={{
+                            fontSize: '11px',
+                            fontWeight: 800,
+                            color: '#F2B632',
+                            letterSpacing: '0.8px',
+                            textTransform: 'uppercase',
+                            marginBottom: '6px',
+                          }}
+                        >
+                          Image {item.number} / 12 · {item.phaseLabel}
+                        </span>
+
+                        <div
+                          style={{
+                            fontSize: '18px',
+                            fontWeight: 800,
+                            color: '#FFFFFF',
+                            lineHeight: '23px',
+                            marginBottom: '8px',
+                          }}
+                        >
+                          {item.title}
+                        </div>
+
+                        <div
+                          style={{
+                            fontSize: '12px',
+                            color: '#DCE7DF',
+                            lineHeight: '17px',
+                            maxWidth: '280px',
+                            marginBottom: '14px',
+                          }}
+                        >
+                          {item.mainMessage}
+                        </div>
+
+                        <div
+                          style={{
+                            padding: '7px 18px',
+                            borderRadius: '999px',
+                            backgroundColor: '#F2B632',
+                            color: '#122017',
+                            fontSize: '12.5px',
+                            fontWeight: 800,
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            boxShadow: '0 4px 14px rgba(242, 182, 50, 0.35)',
+                          }}
+                        >
+                          <span>Lire la fiche</span>
+                          <span>→</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 );
