@@ -3,17 +3,12 @@ import {
   LayoutDashboard,
   Sprout,
   FileSpreadsheet,
-  Layers,
+  BookOpen,
   Users,
   Settings,
   LogOut,
-  ExternalLink,
-  Wifi,
-  WifiOff,
-  ShieldCheck,
+  ArrowLeft,
   ChevronRight,
-  TrendingUp,
-  MapPin,
 } from 'lucide-react';
 import { AuthPortalUserDto } from '../../api/generated/avenirApi';
 
@@ -42,55 +37,59 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
 }) => {
   const menuSections = [
     {
-      title: 'MENU',
+      title: 'Pilotage',
       items: [
         {
           id: 'DASHBOARD' as AdminTabId,
-          label: 'Dashboard M&E',
-          icon: <LayoutDashboard size={18} />,
+          label: 'Tableau de bord M&E',
+          icon: <LayoutDashboard size={17} />,
         },
       ],
     },
     {
-      title: 'COMPOSANTS TERRAIN',
+      title: 'Données de terrain',
       items: [
         {
           id: 'CROPS' as AdminTabId,
-          label: 'Filières & Coûts',
-          icon: <Sprout size={18} />,
-          badge: '5',
-          badgeColor: '#10B981',
+          label: 'Filières & Référentiels',
+          icon: <Sprout size={17} />,
+          badge: '5 filières',
+          badgeBg: '#EBF4EC',
+          badgeColor: '#1F6338',
         },
         {
           id: 'SIMULATIONS' as AdminTabId,
-          label: 'Simulations Récentes',
-          icon: <FileSpreadsheet size={18} />,
+          label: 'Registre des Simulations',
+          icon: <FileSpreadsheet size={17} />,
           badge: '16',
-          badgeColor: '#EC4899',
+          badgeBg: '#F4EFE6',
+          badgeColor: '#8C6218',
         },
         {
           id: 'TOOLBOX' as AdminTabId,
-          label: 'Boîte à Images (BD)',
-          icon: <Layers size={18} />,
-          badge: '12',
-          badgeColor: '#D97706',
+          label: 'Boîte à images terrain',
+          icon: <BookOpen size={17} />,
+          badge: '12 planches',
+          badgeBg: '#F1F5F9',
+          badgeColor: '#475569',
         },
       ],
     },
     {
-      title: 'GESTION & ACCÈS',
+      title: 'Administration',
       items: [
         {
           id: 'USERS' as AdminTabId,
-          label: 'Animateurs & Équipe',
-          icon: <Users size={18} />,
-          badge: '5',
-          badgeColor: '#8B5CF6',
+          label: 'Équipe & Animateurs',
+          icon: <Users size={17} />,
+          badge: '5 actifs',
+          badgeBg: '#EBF4EC',
+          badgeColor: '#1F6338',
         },
         {
           id: 'SETTINGS' as AdminTabId,
-          label: 'Paramètres & Devises',
-          icon: <Settings size={18} />,
+          label: 'Paramètres du projet',
+          icon: <Settings size={17} />,
         },
       ],
     },
@@ -105,23 +104,23 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(15, 23, 42, 0.45)',
+            backgroundColor: 'rgba(18, 36, 24, 0.45)',
             backdropFilter: 'blur(3px)',
             zIndex: 1000,
           }}
         />
       )}
 
-      {/* Humanized Clean Light Sidebar (Inspired by modern Panda dashboard design) */}
+      {/* Humanized Clean Light Sidebar */}
       <aside
         style={{
-          width: '260px',
+          width: '270px',
           backgroundColor: '#FFFFFF',
-          color: '#1E293B',
+          color: '#122017',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          borderRight: '1px solid #E8EEF5',
+          borderRight: '1px solid #E8EDE8',
           boxSizing: 'border-box',
           position: 'fixed',
           top: 0,
@@ -130,42 +129,40 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           zIndex: 1010,
           transform: mobileMenuOpen ? 'translateX(0)' : 'translateX(-100%)',
           transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-          boxShadow: '2px 0 12px rgba(0, 0, 0, 0.02)',
+          boxShadow: '1px 0 10px rgba(18, 36, 24, 0.03)',
         }}
         className="avenir-admin-sidebar-responsive"
       >
-        {/* Top Header & User Card */}
         <div>
-          {/* Brand Logo Header */}
+          {/* Brand Header */}
           <div
             style={{
-              padding: '22px 20px 18px',
+              padding: '20px 20px 16px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              borderBottom: '1px solid #F1F5F9',
+              borderBottom: '1px solid #F0F4F0',
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div
                 style={{
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '10px',
-                  backgroundColor: '#0E4523',
+                  width: '34px',
+                  height: '34px',
+                  borderRadius: '9px',
+                  backgroundColor: '#1F6338',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 4px 10px rgba(14, 69, 35, 0.2)',
                 }}
               >
-                <Sprout size={20} color="#F2B632" />
+                <Sprout size={18} color="#FFFFFF" />
               </div>
               <div>
-                <div style={{ fontSize: '18px', fontWeight: 900, color: '#0E4523', letterSpacing: '-0.3px', lineHeight: '1.1' }}>
+                <div style={{ fontSize: '16px', fontWeight: 800, color: '#18241B', letterSpacing: '0.2px', lineHeight: 1.15 }}>
                   AVENIR
                 </div>
-                <div style={{ fontSize: '10.5px', color: '#64748B', fontWeight: 600 }}>
+                <div style={{ fontSize: '11px', color: '#687068', fontWeight: 500 }}>
                   Rikolto · Kwilu & Kwango
                 </div>
               </div>
@@ -173,86 +170,107 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
 
             {/* Online Status Pill */}
             <div
-              title={isOnline ? 'Connecté à PostgreSQL' : 'Mode Hors-Ligne'}
+              title={isOnline ? 'Connecté (Base de données active)' : 'Mode Hors-Ligne'}
               style={{
-                width: '8px',
-                height: '8px',
-                borderRadius: '50%',
-                backgroundColor: isOnline ? '#10B981' : '#F59E0B',
-                boxShadow: isOnline ? '0 0 0 3px rgba(16, 185, 129, 0.2)' : '0 0 0 3px rgba(245, 158, 11, 0.2)',
-              }}
-            />
-          </div>
-
-          {/* User Profile Mini Card (Exact humanized style from example image) */}
-          <div style={{ padding: '16px 16px 12px' }}>
-            <div
-              style={{
-                backgroundColor: '#F8FAFC',
-                borderRadius: '14px',
-                padding: '12px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '10px',
-                border: '1px solid #EDF2F7',
+                gap: '5px',
+                padding: '3px 8px',
+                borderRadius: '999px',
+                backgroundColor: isOnline ? '#EBF4EC' : '#FEF3C7',
+                fontSize: '11px',
+                fontWeight: 700,
+                color: isOnline ? '#1F6338' : '#8C6218',
               }}
             >
               <div
                 style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '10px',
-                  backgroundColor: '#0E4523',
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: '50%',
+                  backgroundColor: isOnline ? '#16A34A' : '#D97706',
+                }}
+              />
+              <span>{isOnline ? 'En ligne' : 'Hors-ligne'}</span>
+            </div>
+          </div>
+
+          {/* Current User Card */}
+          <div style={{ padding: '14px 16px 8px' }}>
+            <div
+              style={{
+                backgroundColor: '#FAF8F3',
+                borderRadius: '12px',
+                padding: '10px 12px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                border: '1px solid #EAE6DD',
+              }}
+            >
+              <div
+                style={{
+                  width: '34px',
+                  height: '34px',
+                  borderRadius: '50%',
+                  backgroundColor: '#1F6338',
                   color: '#FFFFFF',
                   fontWeight: 800,
-                  fontSize: '15px',
+                  fontSize: '13px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 4px 10px rgba(14, 69, 35, 0.15)',
                   flexShrink: 0,
                 }}
               >
-                {currentUser.name.charAt(0).toUpperCase()}
+                {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : 'A'}
               </div>
               <div style={{ minWidth: 0, flex: 1 }}>
                 <div
                   style={{
-                    fontSize: '13px',
-                    fontWeight: 800,
-                    color: '#0F172A',
+                    fontSize: '12.5px',
+                    fontWeight: 700,
+                    color: '#18241B',
                     whiteSpace: 'nowrap',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                   }}
                 >
-                  {currentUser.name}
+                  {currentUser?.name || 'Direction Projet'}
                 </div>
-                <div style={{ fontSize: '11px', color: '#64748B', fontWeight: 600 }}>
-                  {currentUser.role === 'ADMIN' ? 'Direction Rikolto' : 'Animateur Terrain'}
+                <div
+                  style={{
+                    fontSize: '11px',
+                    color: '#687068',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
+                  {currentUser?.organization || 'Rikolto RDC'}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Navigation Menu Groups */}
-          <nav style={{ padding: '4px 12px' }}>
+          {/* Navigation Groups */}
+          <nav style={{ padding: '8px 12px' }}>
             {menuSections.map((section, sIdx) => (
-              <div key={sIdx} style={{ marginBottom: '16px' }}>
+              <div key={sIdx} style={{ marginBottom: '14px' }}>
                 <div
                   style={{
-                    fontSize: '10px',
-                    fontWeight: 800,
-                    color: '#94A3B8',
-                    letterSpacing: '0.8px',
-                    padding: '0 10px 6px',
+                    fontSize: '10.5px',
+                    fontWeight: 700,
+                    color: '#8A968C',
+                    letterSpacing: '0.5px',
+                    padding: '0 10px 5px',
                     textTransform: 'uppercase',
                   }}
                 >
                   {section.title}
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                   {section.items.map((item) => {
                     const active = activeTab === item.id;
                     return (
@@ -268,20 +286,21 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
                           alignItems: 'center',
                           justifyContent: 'space-between',
                           width: '100%',
-                          padding: '9px 12px',
-                          borderRadius: '10px',
-                          backgroundColor: active ? '#F1F7F3' : 'transparent',
-                          color: active ? '#0E4523' : '#475569',
+                          padding: '8px 11px',
+                          borderRadius: '9px',
+                          backgroundColor: active ? '#EBF4EC' : 'transparent',
+                          color: active ? '#1F6338' : '#3B453D',
                           border: 'none',
+                          borderLeft: active ? '3px solid #1F6338' : '3px solid transparent',
                           cursor: 'pointer',
                           fontSize: '13px',
-                          fontWeight: active ? 800 : 600,
+                          fontWeight: active ? 700 : 500,
                           textAlign: 'left',
                           transition: 'all 0.15s ease',
                         }}
                       >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <span style={{ color: active ? '#0E4523' : '#64748B' }}>{item.icon}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
+                          <span style={{ color: active ? '#1F6338' : '#68746A' }}>{item.icon}</span>
                           <span>{item.label}</span>
                         </div>
 
@@ -289,11 +308,12 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
                           <span
                             style={{
                               fontSize: '10.5px',
-                              fontWeight: 800,
+                              fontWeight: 700,
                               padding: '2px 7px',
                               borderRadius: '999px',
-                              backgroundColor: item.badgeColor || '#E2E8F0',
-                              color: '#FFFFFF',
+                              backgroundColor: active ? '#FFFFFF' : item.badgeBg || '#F0F4F0',
+                              color: item.badgeColor || '#1F6338',
+                              border: active ? '1px solid #D5DDD5' : 'none',
                             }}
                           >
                             {item.badge}
@@ -308,15 +328,15 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           </nav>
         </div>
 
-        {/* Bottom Actions Area */}
+        {/* Bottom Actions */}
         <div
           style={{
-            padding: '14px 16px',
-            borderTop: '1px solid #F1F5F9',
-            backgroundColor: '#F8FAFC',
+            padding: '12px 14px',
+            borderTop: '1px solid #F0F4F0',
+            backgroundColor: '#FAF8F3',
           }}
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
             <button
               type="button"
               onClick={onBackToPublic}
@@ -325,19 +345,19 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
                 alignItems: 'center',
                 gap: '8px',
                 width: '100%',
-                padding: '8px 10px',
+                padding: '7px 10px',
                 borderRadius: '8px',
                 backgroundColor: '#FFFFFF',
-                color: '#0E4523',
-                border: '1px solid #E2E8F0',
+                color: '#1F6338',
+                border: '1px solid #D5DDD5',
                 cursor: 'pointer',
                 fontSize: '12px',
                 fontWeight: 700,
                 textAlign: 'left',
               }}
             >
-              <ExternalLink size={14} color="#0E4523" />
-              <span>Simulateur Public</span>
+              <ArrowLeft size={13} color="#1F6338" />
+              <span>Simulateur public</span>
             </button>
 
             <button
@@ -348,18 +368,18 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
                 alignItems: 'center',
                 gap: '8px',
                 width: '100%',
-                padding: '8px 10px',
+                padding: '7px 10px',
                 borderRadius: '8px',
                 backgroundColor: 'transparent',
-                color: '#EF4444',
+                color: '#B91C1C',
                 border: 'none',
                 cursor: 'pointer',
                 fontSize: '12px',
-                fontWeight: 700,
+                fontWeight: 600,
                 textAlign: 'left',
               }}
             >
-              <LogOut size={14} color="#EF4444" />
+              <LogOut size={13} color="#B91C1C" />
               <span>Déconnexion</span>
             </button>
           </div>

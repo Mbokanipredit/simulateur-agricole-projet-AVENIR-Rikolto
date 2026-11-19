@@ -195,10 +195,12 @@ export const AdminApp: React.FC<AdminAppProps> = ({ onBackToPublicSite }) => {
             </button>
 
             <div style={{ minWidth: 0 }}>
-              <div style={{ fontSize: '10.5px', fontWeight: 800, color: '#1F6338', textTransform: 'uppercase', letterSpacing: '0.6px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                ADMINISTRATION CENTRALE · PROJET AVENIR
+              <div style={{ fontSize: '11px', fontWeight: 600, color: '#687068', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span>Projet AVENIR</span>
+                <span>/</span>
+                <span>Kwilu & Kwango</span>
               </div>
-              <div style={{ fontSize: 'clamp(13px, 2vw, 16px)', fontWeight: 800, color: '#122017', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <div style={{ fontSize: 'clamp(14px, 2vw, 17px)', fontWeight: 800, color: '#18241B', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {tabTitles[activeTab]}
               </div>
             </div>
@@ -318,31 +320,36 @@ export const AdminApp: React.FC<AdminAppProps> = ({ onBackToPublicSite }) => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                padding: '3px 4px 3px 8px',
+                padding: '4px 8px 4px 10px',
                 borderRadius: '999px',
                 backgroundColor: '#FAF8F3',
                 border: '1px solid #DCE7DF',
               }}
             >
               <div style={{ textAlign: 'right', display: 'none' }} className="avenir-admin-user-info">
-                <div style={{ fontSize: '11.5px', fontWeight: 800, color: '#122017', lineHeight: 1.1 }}>
+                <div style={{ fontSize: '12px', fontWeight: 700, color: '#18241B', lineHeight: 1.1 }}>
                   {authUser.name}
                 </div>
-                <div style={{ fontSize: '10px', color: '#5F685F' }}>
-                  {authUser.role === 'ADMIN' ? 'Direction' : 'Animateur'}
+                <div style={{ fontSize: '10.5px', color: '#687068' }}>
+                  {authUser.role === 'ADMIN' ? 'Direction' : 'Animateur terrain'}
                 </div>
               </div>
-              <img
-                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80"
-                alt={authUser.name}
+              <div
                 style={{
-                  width: '30px',
-                  height: '30px',
+                  width: '28px',
+                  height: '28px',
                   borderRadius: '50%',
-                  objectFit: 'cover',
-                  border: '1.5px solid #1F6338',
+                  backgroundColor: '#1F6338',
+                  color: '#FFFFFF',
+                  fontWeight: 800,
+                  fontSize: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
-              />
+              >
+                {authUser.name ? authUser.name.charAt(0).toUpperCase() : 'A'}
+              </div>
             </div>
           </div>
         </header>

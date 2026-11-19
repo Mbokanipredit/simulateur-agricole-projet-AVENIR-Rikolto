@@ -8,10 +8,7 @@ import {
   EyeOff,
   Sprout,
   HelpCircle,
-  CheckCircle2,
-  Users,
-  MapPin,
-  TrendingUp,
+  ShieldCheck,
 } from 'lucide-react';
 import { authControllerLogin, AuthPortalUserDto } from '../../api/generated/avenirApi';
 
@@ -20,7 +17,10 @@ interface AdminLoginPortalProps {
   onBackToPublic: () => void;
 }
 
-export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSuccess, onBackToPublic }) => {
+export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({
+  onLoginSuccess,
+  onBackToPublic,
+}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -42,7 +42,7 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSucce
         return;
       }
     } catch {
-      // 2. Verified seamless authentication fallback
+      // 2. Seamless fallback authentication for offline / field demos
       const normalizedEmail = email.trim().toLowerCase();
       if (
         normalizedEmail === 'admin@rikolto.org' &&
@@ -67,7 +67,7 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSucce
           name: normalizedEmail.split('@')[0].replace('.', ' '),
           email: normalizedEmail,
           role: normalizedEmail.includes('admin') ? 'ADMIN' : 'FACILITATOR',
-          organization: 'Rikolto RDC — Terrain',
+          organization: 'Rikolto RDC — Antenne Terrain',
           province: 'Kwilu & Kwango',
         };
         onLoginSuccess(facUser);
@@ -85,23 +85,24 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSucce
       style={{
         minHeight: '100vh',
         width: '100%',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#FAF8F3',
         display: 'flex',
         flexDirection: 'column',
+        justifyContent: 'space-between',
         fontFamily: "'Plus Jakarta Sans', sans-serif",
         color: '#122017',
         boxSizing: 'border-box',
       }}
     >
-      {/* Top Navigation Bar */}
+      {/* Top Header Bar */}
       <header
         style={{
           padding: '16px clamp(16px, 4vw, 36px)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          borderBottom: '1px solid #EEF2F6',
-          backgroundColor: '#FFFFFF',
+          borderBottom: '1px solid #EAE6DD',
+          backgroundColor: '#FAF8F3',
         }}
       >
         <button
@@ -116,425 +117,370 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({ onLoginSucce
             }
           }}
           style={{
-            background: '#FAF8F3',
-            border: '1px solid #DCE7DF',
+            background: '#FFFFFF',
+            border: '1px solid #D5DDD5',
             borderRadius: '999px',
             color: '#1F6338',
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            fontSize: '12.5px',
-            fontWeight: 800,
+            fontSize: '13px',
+            fontWeight: 700,
             cursor: 'pointer',
             padding: '7px 16px',
             transition: 'all 0.15s ease',
+            boxShadow: '0 1px 4px rgba(18, 36, 24, 0.04)',
           }}
         >
           <ArrowLeft size={14} color="#1F6338" />
-          <span>Retour au simulateur public</span>
+          <span>Retour au site public</span>
         </button>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
           <div
             style={{
-              width: '28px',
-              height: '28px',
+              width: '30px',
+              height: '30px',
               borderRadius: '8px',
-              backgroundColor: '#0E4523',
+              backgroundColor: '#1F6338',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Sprout size={16} color="#F2B632" />
+            <Sprout size={17} color="#FFFFFF" />
           </div>
-          <span style={{ fontSize: '13px', fontWeight: 900, color: '#0E4523', letterSpacing: '-0.3px' }}>
-            AVENIR <span style={{ fontWeight: 600, color: '#768278', fontSize: '11.5px' }}>· Rikolto RDC</span>
+          <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#18241B', letterSpacing: '0.2px' }}>
+            AVENIR <span style={{ fontWeight: 500, color: '#687068', fontSize: '12px' }}>· Rikolto en RDC</span>
           </span>
         </div>
       </header>
 
-      {/* Main Centered Content Wrapper */}
+      {/* Main Centered Content */}
       <main
         style={{
           flex: 1,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: 'clamp(20px, 4vw, 48px) 16px',
+          padding: 'clamp(28px, 5vw, 60px) 16px',
         }}
       >
-        <div className="avenir-login-card">
-          {/* Column 1: Humanized Visual & Agricultural Impact Story (Visible on desktop, hidden on mobile) */}
-          <div
-            className="avenir-login-visual"
-            style={{
-              position: 'relative',
-              backgroundColor: '#0E4523',
-              backgroundImage: `
-                linear-gradient(180deg, rgba(14, 69, 35, 0.88) 0%, rgba(10, 52, 27, 0.95) 100%),
-                url(/images/agri-1.jpg)
-              `,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              color: '#FFFFFF',
-              padding: 'clamp(28px, 5vw, 44px)',
-              minHeight: '380px',
-            }}
-          >
-            <div>
-              <h2
-                style={{
-                  fontSize: 'clamp(22px, 3.2vw, 28px)',
-                  fontWeight: 800,
-                  lineHeight: 1.25,
-                  margin: '0 0 14px',
-                  letterSpacing: '-0.4px',
-                }}
-              >
-                « Planifier son champ, c'est semer la prospérité pour sa famille. »
-              </h2>
-
-              <p
-                style={{
-                  fontSize: '13.5px',
-                  color: '#DCE7DF',
-                  lineHeight: '22px',
-                  margin: 0,
-                  maxWidth: '420px',
-                }}
-              >
-                Plateforme de suivi-évaluation et d'accompagnement économique des exploitations agricoles du Kwilu (Kikwit, Bulungu, Idiofa) et du Kwango (Kenge, Popokabaka).
-              </p>
-            </div>
-
-            {/* Impact Highlights Pill */}
+        <div
+          style={{
+            maxWidth: '460px',
+            width: '100%',
+            backgroundColor: '#FFFFFF',
+            borderRadius: '20px',
+            border: '1px solid #E2E8E2',
+            boxShadow: '0 12px 36px rgba(18, 36, 24, 0.05), 0 1px 3px rgba(18, 36, 24, 0.02)',
+            padding: 'clamp(24px, 5vw, 38px)',
+            boxSizing: 'border-box',
+          }}
+        >
+          {/* Card Header */}
+          <div style={{ marginBottom: '24px', textAlign: 'center' }}>
             <div
               style={{
-                marginTop: '32px',
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(10px)',
-                borderRadius: '16px',
-                padding: '16px',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                display: 'flex',
+                width: '44px',
+                height: '44px',
+                borderRadius: '12px',
+                backgroundColor: '#EBF4EC',
+                display: 'inline-flex',
                 alignItems: 'center',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                gap: '12px',
+                justifyContent: 'center',
+                marginBottom: '14px',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div
-                  style={{
-                    width: '36px',
-                    height: '36px',
-                    borderRadius: '50%',
-                    backgroundColor: '#F2B632',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Users size={18} color="#0E4523" />
-                </div>
-                <div>
-                  <div style={{ fontSize: '16px', fontWeight: 900, color: '#FFFFFF', lineHeight: 1.1 }}>
-                    8 000 ménages
-                  </div>
-                  <div style={{ fontSize: '11px', color: '#DCE7DF' }}>Objectif par saison</div>
-                </div>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11.5px', color: '#F2B632', fontWeight: 800 }}>
-                <MapPin size={13} color="#F2B632" />
-                <span>Kwilu & Kwango</span>
-              </div>
+              <ShieldCheck size={22} color="#1F6338" />
             </div>
+
+            <h1
+              style={{
+                margin: 0,
+                fontSize: '22px',
+                fontWeight: 800,
+                color: '#122017',
+                letterSpacing: '-0.3px',
+              }}
+            >
+              Espace d'Administration & Suivi
+            </h1>
+
+            <p
+              style={{
+                margin: '8px 0 0',
+                fontSize: '13px',
+                color: '#5F685F',
+                lineHeight: '20px',
+              }}
+            >
+              Portail de suivi-évaluation des exploitations agricoles et coordination de campagne (Kwilu & Kwango).
+            </p>
           </div>
 
-          {/* Column 2: Clean Humanized Login Form (White Background) */}
-          <div
-            style={{
-              padding: 'clamp(24px, 5vw, 42px)',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              backgroundColor: '#FFFFFF',
-              boxSizing: 'border-box',
-            }}
-          >
-            <div style={{ marginBottom: '22px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                <div
-                  style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '8px',
-                    backgroundColor: '#0E4523',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Sprout size={18} color="#F2B632" />
-                </div>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: '#1F6338', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
-                  PORTAIL OFFICIEL AVENIR
-                </span>
-              </div>
-              <h1
+          {/* Error Message */}
+          {errorMessage && (
+            <div
+              style={{
+                backgroundColor: '#FEF2F2',
+                border: '1px solid #FCA5A5',
+                borderRadius: '12px',
+                padding: '12px 14px',
+                marginBottom: '18px',
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '10px',
+              }}
+            >
+              <AlertCircle size={17} color="#DC2626" style={{ flexShrink: 0, marginTop: '2px' }} />
+              <span style={{ fontSize: '12.5px', color: '#991B1B', lineHeight: '18px' }}>
+                {errorMessage}
+              </span>
+            </div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleSubmit}>
+            {/* Email Field */}
+            <div style={{ marginBottom: '16px' }}>
+              <label
                 style={{
-                  margin: 0,
-                  fontSize: 'clamp(20px, 3vw, 24px)',
-                  fontWeight: 800,
+                  display: 'block',
+                  fontSize: '12.5px',
+                  fontWeight: 700,
                   color: '#122017',
-                  letterSpacing: '-0.3px',
+                  marginBottom: '6px',
                 }}
               >
-                Espace de Travail Projet AVENIR
-              </h1>
-              <p
-                style={{
-                  margin: '6px 0 0',
-                  fontSize: '13px',
-                  color: '#5F685F',
-                  lineHeight: '19px',
-                }}
-              >
-                Connectez-vous pour accéder au tableau de bord, aux référentiels de filières et au registre des simulations.
-              </p>
+                Adresse email professionnelle
+              </label>
+              <div style={{ position: 'relative' }}>
+                <input
+                  type="email"
+                  required
+                  autoComplete="username"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="admin@rikolto.org"
+                  style={{
+                    width: '100%',
+                    height: '46px',
+                    borderRadius: '11px',
+                    border: '1.5px solid #D5DDD5',
+                    backgroundColor: '#FFFFFF',
+                    padding: '0 14px 0 38px',
+                    fontSize: '13.5px',
+                    color: '#122017',
+                    outline: 'none',
+                    boxSizing: 'border-box',
+                    transition: 'border-color 0.15s ease',
+                  }}
+                  onFocus={(e) => (e.target.style.borderColor = '#1F6338')}
+                  onBlur={(e) => (e.target.style.borderColor = '#D5DDD5')}
+                />
+                <Mail
+                  size={16}
+                  color="#768278"
+                  style={{ position: 'absolute', left: '12px', top: '15px' }}
+                />
+              </div>
             </div>
 
-            {/* Error Message */}
-            {errorMessage && (
+            {/* Password Field */}
+            <div style={{ marginBottom: '16px' }}>
               <div
                 style={{
-                  backgroundColor: '#FEF2F2',
-                  border: '1px solid #FCA5A5',
-                  borderRadius: '12px',
-                  padding: '12px 14px',
-                  marginBottom: '18px',
                   display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: '10px',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '6px',
                 }}
               >
-                <AlertCircle size={17} color="#DC2626" style={{ flexShrink: 0, marginTop: '2px' }} />
-                <span style={{ fontSize: '12.5px', color: '#991B1B', lineHeight: '18px' }}>
-                  {errorMessage}
-                </span>
-              </div>
-            )}
-
-            {/* Form */}
-            <form onSubmit={handleSubmit}>
-              {/* Email Field */}
-              <div style={{ marginBottom: '16px' }}>
                 <label
                   style={{
-                    display: 'block',
                     fontSize: '12.5px',
                     fontWeight: 700,
                     color: '#122017',
-                    marginBottom: '6px',
                   }}
                 >
-                  Adresse email
+                  Mot de passe
                 </label>
-                <div style={{ position: 'relative' }}>
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="admin@rikolto.org"
-                    style={{
-                      width: '100%',
-                      height: '46px',
-                      borderRadius: '12px',
-                      border: '1.5px solid #DCE7DF',
-                      backgroundColor: '#FFFFFF',
-                      padding: '0 14px 0 38px',
-                      fontSize: '13.5px',
-                      color: '#122017',
-                      outline: 'none',
-                      boxSizing: 'border-box',
-                    }}
-                  />
-                  <Mail
-                    size={16}
-                    color="#768278"
-                    style={{ position: 'absolute', left: '12px', top: '15px' }}
-                  />
-                </div>
-              </div>
 
-              {/* Password Field */}
-              <div style={{ marginBottom: '14px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                  <label
-                    style={{
-                      fontSize: '12.5px',
-                      fontWeight: 700,
-                      color: '#122017',
-                    }}
-                  >
-                    Mot de passe
-                  </label>
-
-                  <button
-                    type="button"
-                    onClick={() => setShowHelp(!showHelp)}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: '#1F6338',
-                      fontSize: '11.5px',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      padding: 0,
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                    }}
-                  >
-                    <HelpCircle size={12} />
-                    <span>Besoin d'aide ?</span>
-                  </button>
-                </div>
-
-                <div style={{ position: 'relative' }}>
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••••••"
-                    style={{
-                      width: '100%',
-                      height: '46px',
-                      borderRadius: '12px',
-                      border: '1.5px solid #DCE7DF',
-                      backgroundColor: '#FFFFFF',
-                      padding: '0 40px 0 38px',
-                      fontSize: '13.5px',
-                      color: '#122017',
-                      outline: 'none',
-                      boxSizing: 'border-box',
-                    }}
-                  />
-                  <Lock
-                    size={16}
-                    color="#768278"
-                    style={{ position: 'absolute', left: '12px', top: '15px' }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    style={{
-                      position: 'absolute',
-                      right: '12px',
-                      top: '14px',
-                      background: 'none',
-                      border: 'none',
-                      cursor: 'pointer',
-                      padding: 0,
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}
-                  >
-                    {showPassword ? <EyeOff size={16} color="#768278" /> : <Eye size={16} color="#768278" />}
-                  </button>
-                </div>
-              </div>
-
-              {/* Help Tip */}
-              {showHelp && (
-                <div
+                <button
+                  type="button"
+                  onClick={() => setShowHelp(!showHelp)}
                   style={{
-                    backgroundColor: '#FAF8F3',
-                    border: '1px solid #DCE7DF',
-                    borderRadius: '10px',
-                    padding: '10px 12px',
-                    marginBottom: '14px',
-                    fontSize: '12px',
-                    color: '#5F685F',
-                    lineHeight: '17px',
-                  }}
-                >
-                  En cas d'oubli ou de difficulté de connexion, veuillez contacter la coordination nationale Rikolto RDC ou l'administrateur système du Projet AVENIR.
-                </div>
-              )}
-
-              {/* Remember Me */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
-                <input
-                  type="checkbox"
-                  id="rememberSession"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  style={{
-                    width: '16px',
-                    height: '16px',
-                    accentColor: '#1F6338',
-                    cursor: 'pointer',
-                  }}
-                />
-                <label
-                  htmlFor="rememberSession"
-                  style={{
-                    fontSize: '12.5px',
-                    color: '#5F685F',
-                    cursor: 'pointer',
+                    background: 'none',
+                    border: 'none',
+                    color: '#1F6338',
+                    fontSize: '11.5px',
                     fontWeight: 600,
+                    cursor: 'pointer',
+                    padding: 0,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
                   }}
                 >
-                  Garder ma session active
-                </label>
+                  <HelpCircle size={12} />
+                  <span>Besoin d'aide ?</span>
+                </button>
               </div>
 
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={loading}
+              <div style={{ position: 'relative' }}>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••••••"
+                  style={{
+                    width: '100%',
+                    height: '46px',
+                    borderRadius: '11px',
+                    border: '1.5px solid #D5DDD5',
+                    backgroundColor: '#FFFFFF',
+                    padding: '0 40px 0 38px',
+                    fontSize: '13.5px',
+                    color: '#122017',
+                    outline: 'none',
+                    boxSizing: 'border-box',
+                    transition: 'border-color 0.15s ease',
+                  }}
+                  onFocus={(e) => (e.target.style.borderColor = '#1F6338')}
+                  onBlur={(e) => (e.target.style.borderColor = '#D5DDD5')}
+                />
+                <Lock
+                  size={16}
+                  color="#768278"
+                  style={{ position: 'absolute', left: '12px', top: '15px' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: 'absolute',
+                    right: '12px',
+                    top: '14px',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                  aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                >
+                  {showPassword ? <EyeOff size={16} color="#768278" /> : <Eye size={16} color="#768278" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Help Note */}
+            {showHelp && (
+              <div
                 style={{
-                  width: '100%',
-                  height: '46px',
+                  backgroundColor: '#FAF8F3',
+                  border: '1px solid #EAE6DD',
                   borderRadius: '10px',
-                  backgroundColor: '#1F6338',
-                  color: '#FFFFFF',
-                  fontSize: '14px',
-                  fontWeight: 800,
-                  border: 'none',
-                  cursor: loading ? 'not-allowed' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  boxShadow: '0 4px 14px rgba(31, 99, 56, 0.25)',
-                  transition: 'background-color 0.15s ease',
+                  padding: '10px 12px',
+                  marginBottom: '16px',
+                  fontSize: '12px',
+                  color: '#5F685F',
+                  lineHeight: '17px',
                 }}
               >
-                {loading ? 'Connexion en cours...' : 'Se connecter à l’espace de travail →'}
-              </button>
-            </form>
+                Pour toute difficulté d'accès ou réinitialisation d'identifiants, veuillez contacter la coordination nationale Rikolto RDC ou l'administrateur système du Projet AVENIR.
+              </div>
+            )}
 
-            {/* Subtle Footer Note */}
-            <div
-              style={{
-                marginTop: '20px',
-                textAlign: 'center',
-                fontSize: '11px',
-                color: '#768278',
-                lineHeight: '16px',
-              }}
-            >
-              🔒 Accès réservé aux équipes du Projet AVENIR (Rikolto RDC & Partenaires).
+            {/* Remember Me */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '22px' }}>
+              <input
+                type="checkbox"
+                id="rememberSession"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                style={{
+                  width: '16px',
+                  height: '16px',
+                  accentColor: '#1F6338',
+                  cursor: 'pointer',
+                }}
+              />
+              <label
+                htmlFor="rememberSession"
+                style={{
+                  fontSize: '12.5px',
+                  color: '#5F685F',
+                  cursor: 'pointer',
+                  fontWeight: 500,
+                }}
+              >
+                Garder ma session active sur cet appareil
+              </label>
             </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                width: '100%',
+                height: '46px',
+                borderRadius: '11px',
+                backgroundColor: '#1F6338',
+                color: '#FFFFFF',
+                fontSize: '14px',
+                fontWeight: 700,
+                border: 'none',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                boxShadow: '0 4px 14px rgba(31, 99, 56, 0.22)',
+                transition: 'background-color 0.15s ease',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#16532B')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#1F6338')}
+            >
+              {loading ? 'Connexion en cours...' : 'Se connecter à l’espace de travail →'}
+            </button>
+          </form>
+
+          {/* Security Note */}
+          <div
+            style={{
+              marginTop: '22px',
+              paddingTop: '16px',
+              borderTop: '1px solid #F0F4F0',
+              textAlign: 'center',
+              fontSize: '11.5px',
+              color: '#768278',
+              lineHeight: '16px',
+            }}
+          >
+            Accès sécurisé pour la coordination et les équipes de terrain du Projet AVENIR.
           </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer
+        style={{
+          padding: '16px 20px',
+          textAlign: 'center',
+          fontSize: '12px',
+          color: '#7A867C',
+          borderTop: '1px solid #EAE6DD',
+          backgroundColor: '#FAF8F3',
+        }}
+      >
+        Projet AVENIR · Mis en œuvre par Rikolto en RDC avec le soutien du FIDA, de l’AFD et du FEM.
+      </footer>
     </div>
   );
 };
