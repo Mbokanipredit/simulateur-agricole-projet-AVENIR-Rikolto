@@ -918,14 +918,14 @@ export const ToolboxWorkspace: React.FC = () => {
 
   return (
     <YStack gap="$6" paddingBottom="$9">
-      {/* Header Banner (Aligned with Projet AVENIR Deep Forest Green & Golden Amber Palette) */}
+      {/* Header Banner (Clean, Humanized and Welcoming) */}
       <div
         style={{
           position: 'relative',
           borderRadius: '20px',
           overflow: 'hidden',
           backgroundColor: '#0E4523',
-          boxShadow: '0 16px 38px rgba(14, 69, 35, 0.16)',
+          boxShadow: '0 12px 32px rgba(14, 69, 35, 0.12)',
         }}
       >
         <div
@@ -935,7 +935,7 @@ export const ToolboxWorkspace: React.FC = () => {
             backgroundImage: 'url(/images/agri-4.jpg)',
             backgroundSize: 'cover',
             backgroundPosition: 'center 55%',
-            opacity: 0.2,
+            opacity: 0.18,
           }}
         />
         <div
@@ -948,36 +948,26 @@ export const ToolboxWorkspace: React.FC = () => {
         />
 
         <YStack
-          padding="clamp(18px, 4vw, 24px)"
+          padding="clamp(22px, 4.5vw, 32px)"
           gap="$3.5"
           style={{ position: 'relative', zIndex: 2 }}
         >
           <Text
-            fontSize={12}
-            fontWeight="800"
-            color="#F2B632"
-            letterSpacing={1.2}
-            textTransform="uppercase"
-          >
-            PROJET AVENIR · KWILU ET KWANGO
-          </Text>
-
-          <Text
-            fontSize="clamp(22px, 5vw, 36px)"
+            fontSize="clamp(22px, 4.5vw, 34px)"
             fontWeight="800"
             color="#FFFFFF"
-            lineHeight="clamp(28px, 6vw, 42px)"
+            lineHeight="clamp(28px, 5.5vw, 40px)"
           >
             Boîte à images sur l’entrepreneuriat agricole
           </Text>
 
           <Text
-            fontSize="clamp(13px, 3.5vw, 15px)"
+            fontSize="clamp(13.5px, 3.5vw, 15px)"
             color="#DCE7DF"
-            lineHeight="clamp(19px, 4.5vw, 23px)"
+            lineHeight="clamp(20px, 4.5vw, 24px)"
             maxWidth={780}
           >
-            Cahier de contenu illustré : les 12 images, scène par scène, comme une bande dessinée, avec les messages, les questions et la grille de contribution de l’équipe.
+            12 fiches illustrées et pédagogiques pour apprendre à gérer son champ comme une véritable activité rentable : planifier, produire avec soin, suivre ses coûts, vendre au bon prix et réinvestir.
           </Text>
 
           {/* Sub-navigation Tabs */}
@@ -991,14 +981,14 @@ export const ToolboxWorkspace: React.FC = () => {
               },
               {
                 id: 'CADRE' as const,
-                label: 'Cadre pédagogique & Objectifs',
-                shortLabel: 'Cadre & Objectifs',
+                label: 'Guide & Objectifs pédagogiques',
+                shortLabel: 'Guide & Objectifs',
                 icon: <BookOpen size={15} color={subView === 'CADRE' ? '#122017' : '#FFFFFF'} />,
               },
               {
                 id: 'GRILLE' as const,
                 label: 'Grille de travail & Contributions',
-                shortLabel: 'Grille & Contributions',
+                shortLabel: 'Grille de travail',
                 icon: <ClipboardList size={15} color={subView === 'GRILLE' ? '#122017' : '#FFFFFF'} />,
               },
             ].map((tab) => {
@@ -1038,60 +1028,6 @@ export const ToolboxWorkspace: React.FC = () => {
       ==================================================================== */}
       {subView === 'PARCOURS' && (
         <YStack gap="$5">
-          {/* Warm Amber & Sage Transversal Message Box */}
-          <YStack
-            backgroundColor="#FFF8E6"
-            borderWidth={1.5}
-            borderColor="#F2B632"
-            borderLeftWidth={6}
-            borderLeftColor="#1F6338"
-            padding="$5"
-            borderRadius={14}
-            style={{ boxShadow: '0 10px 26px rgba(14, 69, 35, 0.06)' }}
-            gap="$2"
-          >
-            <Text fontSize={12} fontWeight="800" color="#1F6338" textTransform="uppercase" letterSpacing={0.8}>
-              MESSAGE TRANSVERSAL DU PARCOURS
-            </Text>
-            <Text fontSize={18} fontWeight="800" color="#122017" lineHeight={27}>
-              Une activité agricole peut être gérée comme une entreprise : je planifie, j’investis, je produis, je suis mes dépenses et ma production, j’améliore la qualité, je cherche le marché, je vends et je réinvestis.
-            </Text>
-          </YStack>
-
-          {/* Step-by-Step Cycle Chips */}
-          <XStack gap="$2" flexWrap="wrap" alignItems="center">
-            {[
-              'Je planifie',
-              'j’investis',
-              'je produis',
-              'je suis mes dépenses et ma production',
-              'j’améliore la qualité',
-              'je cherche le marché',
-              'je vends',
-              'je réinvestis',
-            ].map((stepText, idx, arr) => (
-              <React.Fragment key={stepText}>
-                <YStack
-                  backgroundColor="#E7F3E7"
-                  borderWidth={1}
-                  borderColor="#C6DEC6"
-                  borderRadius={999}
-                  paddingHorizontal="$3.5"
-                  paddingVertical={6}
-                >
-                  <Text fontSize={13} fontWeight="700" color="#0E4523">
-                    {stepText}
-                  </Text>
-                </YStack>
-                {idx < arr.length - 1 && (
-                  <Text fontSize={14} fontWeight="800" color="#F2B632">
-                    →
-                  </Text>
-                )}
-              </React.Fragment>
-            ))}
-          </XStack>
-
           {/* 5 Phase Filter Pills (Aligned with Website Forest Green & Sage) */}
           <XStack gap="$2.5" flexWrap="wrap">
             {[

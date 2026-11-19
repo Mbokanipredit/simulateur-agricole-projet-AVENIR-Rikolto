@@ -256,7 +256,7 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
             {periodStats.totalSurfaceAreaHa} <span style={{ fontSize: '12px', color: '#768278' }}>hectares</span>
           </div>
           <div style={{ fontSize: '11px', color: '#16A34A', marginTop: '2px', fontWeight: 700 }}>
-            🌾 {periodStats.totalProductionKg.toLocaleString('fr-FR')} kg attendus
+            {periodStats.totalProductionKg.toLocaleString('fr-FR')} kg attendus
           </div>
         </div>
 
@@ -497,7 +497,7 @@ export const AdminSimulationsTab: React.FC<AdminSimulationsTabProps> = ({ onOpen
                       </td>
 
                       <td style={{ padding: '12px 14px', color: '#122017' }}>
-                        📍 {sim.province}
+                        {sim.province}
                       </td>
 
                       <td style={{ padding: '12px 14px', color: '#122017', fontWeight: 600 }}>

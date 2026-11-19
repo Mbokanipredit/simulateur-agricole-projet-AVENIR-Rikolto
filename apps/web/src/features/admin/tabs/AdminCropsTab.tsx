@@ -50,7 +50,7 @@ export const AdminCropsTab: React.FC = () => {
       nameFr: 'Nouvelle Spéculation',
       localName: '',
       category: 'FOOD_CROP',
-      icon: '🌱',
+      icon: 'Sprout',
       descriptionFr: 'Description de la filière pour le Kwilu et Kwango.',
       cycleDurationMonths: 6,
       recommendedProvince: 'Kwilu & Kwango',
@@ -251,10 +251,9 @@ export const AdminCropsTab: React.FC = () => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontSize: '22px',
                       }}
                     >
-                      {crop.icon || '🌱'}
+                      <Sprout size={20} color="#1F6338" />
                     </div>
                     <div>
                       <div style={{ fontSize: '16px', fontWeight: 800, color: '#122017' }}>
@@ -333,7 +332,7 @@ export const AdminCropsTab: React.FC = () => {
                   <div>
                     <span style={{ color: '#768278' }}>Zone cible :</span>
                     <div style={{ fontWeight: 800, color: '#122017' }}>
-                      📍 {crop.recommendedProvince}
+                      {crop.recommendedProvince}
                     </div>
                   </div>
                 </div>

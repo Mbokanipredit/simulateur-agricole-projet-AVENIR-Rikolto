@@ -344,7 +344,7 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({
               />
             </div>
             <div style={{ fontSize: '11px', color: '#768278', marginTop: '6px' }}>
-              📍 Kwilu : 58% · Kwango : 42%
+              Kwilu : 58% · Kwango : 42%
             </div>
           </div>
         </div>
@@ -838,7 +838,7 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({
 
                         <td style={{ padding: '10px 8px' }}>
                           <div style={{ color: '#122017', fontWeight: 600 }}>{sim.producerName || 'Ménage pilote'}</div>
-                          <div style={{ fontSize: '11px', color: '#687068' }}>📍 {sim.province}</div>
+                          <div style={{ fontSize: '11px', color: '#687068' }}>{sim.province}</div>
                         </td>
 
                         <td style={{ padding: '10px 8px' }}>

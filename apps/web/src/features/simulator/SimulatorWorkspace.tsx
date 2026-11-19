@@ -709,10 +709,10 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
               </span>
 
               <Text fontSize={36} fontWeight="900" color="#FFFFFF" lineHeight={42} letterSpacing={-0.6}>
-                Planifiez votre campagne et estimez vos coûts
+                Calculez facilement si votre champ est rentable
               </Text>
               <Text fontSize={15} color="rgba(255, 255, 255, 0.86)" lineHeight={23}>
-                Choisissez votre culture, ajustez la superficie de votre champ et détaillez vos dépenses étape par étape. Vos résultats financiers se mettent à jour instantanément.
+                Remplissez les 3 étapes ci-dessous : votre culture, votre récolte et vos dépenses. Le simulateur calcule directement ce qui reste dans votre poche.
               </Text>
             </YStack>
 
@@ -739,14 +739,14 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
         </div>
       </div>
 
-      {/* Main Centered Simulator Content Container Overlapping the Hero Banner */}
+      {/* Main Centered Simulator Content Container */}
       <div
         style={{
           position: 'relative',
           zIndex: 2,
           maxWidth: '1240px',
           width: '100%',
-          margin: '-54px auto 0',
+          margin: '-30px auto 0',
           padding: '0 24px 48px',
           boxSizing: 'border-box',
           display: 'flex',
@@ -754,298 +754,307 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
           gap: '28px',
         }}
       >
-        {/* Live Floating KPI Strip Overlapping the Hero Banner */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '16px',
-            backgroundColor: '#FFFFFF',
-            borderRadius: '18px',
-            padding: '20px 24px',
-            boxShadow: '0 16px 38px rgba(14, 42, 22, 0.12)',
-            border: '1px solid #E4EAE4',
-          }}
+        {/* ÉTAPE 1: Choix de la Culture & Taille du Champ */}
+        <YStack
+          backgroundColor="#FFFFFF"
+          borderRadius={18}
+          padding="clamp(18px, 4vw, 26px)"
+          borderWidth={1}
+          borderColor="#E4EAE4"
+          gap="$4"
+          style={{ boxShadow: '0 8px 24px rgba(14, 42, 22, 0.05)' }}
         >
-          <div>
-            <div style={{ fontSize: '11.5px', fontWeight: 700, color: '#5F685F', textTransform: 'uppercase' }}>
-              Culture & Parcelle
-            </div>
-            <div style={{ fontSize: '18px', fontWeight: 900, color: '#0E4523', marginTop: '4px' }}>
-              {simInput.cropName.split('(')[0].trim()} · {simInput.surfaceArea} ha
-            </div>
-          </div>
+          <XStack justifyContent="space-between" alignItems="center" flexWrap="wrap" gap="$2.5">
+            <YStack gap="$1">
+              <Text fontSize={18} fontWeight="800" color="#18241B">
+                Étape 1 : Votre Culture & Votre Terrain
+              </Text>
+              <Text fontSize={13} color="#687068">
+                Choisissez ce que vous plantez et la province où se trouve votre champ.
+              </Text>
+            </YStack>
 
-          <div>
-            <div style={{ fontSize: '11.5px', fontWeight: 700, color: '#5F685F', textTransform: 'uppercase' }}>
-              Coût Total Estimé
-            </div>
-            <div style={{ fontSize: '18px', fontWeight: 900, color: '#C86D28', marginTop: '4px' }}>
-              {fmt(results.totalCostUsd)}
-            </div>
-          </div>
+            {/* Province Selector */}
+            <XStack alignItems="center" gap="$2">
+              <MapPin size={15} color="#1F6338" />
+              <Text fontSize={12.5} fontWeight="600" color="#5F685F">
+                Province :
+              </Text>
+              {(['Kwilu', 'Kwango'] as const).map((prov) => {
+                const active = simInput.province === prov;
+                return (
+                  <Button
+                    key={prov}
+                    size="$2.5"
+                    height={32}
+                    paddingHorizontal="$3.5"
+                    borderRadius={999}
+                    backgroundColor={active ? '#1F6338' : '#F4F6F4'}
+                    onPress={() => setSimInput({ ...simInput, province: prov })}
+                  >
+                    <Text
+                      fontSize={12}
+                      fontWeight="700"
+                      color={active ? '#FFFFFF' : '#18241B'}
+                    >
+                      {prov}
+                    </Text>
+                  </Button>
+                );
+              })}
+            </XStack>
+          </XStack>
 
-          <div>
-            <div style={{ fontSize: '11.5px', fontWeight: 700, color: '#5F685F', textTransform: 'uppercase' }}>
-              Recettes Prévues
-            </div>
-            <div style={{ fontSize: '18px', fontWeight: 900, color: '#1F6338', marginTop: '4px' }}>
-              {fmt(results.totalCashRevenueUsd)}
-            </div>
-          </div>
-
+          {/* Photo Crop Cards */}
           <div
-            onClick={goToResultsPage}
             style={{
-              backgroundColor: '#F2B632',
-              borderRadius: '12px',
-              padding: '10px 16px',
-              cursor: 'pointer',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(195px, 1fr))',
+              gap: '14px',
+              width: '100%',
             }}
           >
-            <div style={{ fontSize: '11px', fontWeight: 800, color: '#4A2E0B', textTransform: 'uppercase' }}>
-              Bénéfice Net Prévu →
+            {templates.map((tpl) => {
+              const active = simInput.cropCode === tpl.code;
+              const meta = CROP_META[tpl.code] || {
+                label: tpl.nameFr,
+                desc: 'Filière locale',
+                photo: '/images/agri-4.jpg',
+                renderIcon: (color: string) => <Sprout size={18} color={color} />,
+              };
+              return (
+                <YStack
+                  key={tpl.code}
+                  backgroundColor={active ? '#F4F9F4' : '#FFFFFF'}
+                  borderRadius={12}
+                  overflow="hidden"
+                  borderWidth={active ? 2 : 1}
+                  borderColor={active ? '#1F6338' : '#EAE8E1'}
+                  cursor="pointer"
+                  onPress={() => handleSelectCropTemplate(tpl)}
+                >
+                  <div
+                    style={{
+                      position: 'relative',
+                      width: '100%',
+                      aspectRatio: '16 / 10',
+                      backgroundColor: '#E7F3E7',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <img
+                      src={meta.photo}
+                      alt={meta.label}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        objectPosition: 'center top',
+                        display: 'block',
+                      }}
+                    />
+                    {active && (
+                      <YStack
+                        style={{ position: 'absolute', top: 8, right: 8 }}
+                        width={26}
+                        height={26}
+                        borderRadius={999}
+                        backgroundColor="#1F6338"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Check size={14} color="#FFFFFF" />
+                      </YStack>
+                    )}
+                  </div>
+
+                  <YStack padding="$3" gap="$1">
+                    <XStack alignItems="center" gap="$1.5">
+                      {meta.renderIcon('#1F6338')}
+                      <Text fontSize={14.5} fontWeight="800" color="#18241B">
+                        {meta.label}
+                      </Text>
+                    </XStack>
+                    <Text fontSize={11.5} color="#687068" lineHeight={16}>
+                      {meta.desc} · Prix indicatif : {tpl.defaultSalePriceUsd} USD/kg
+                    </Text>
+                  </YStack>
+                </YStack>
+              );
+            })}
+          </div>
+
+          {/* Superficie du terrain */}
+          <YStack
+            backgroundColor="#FAF8F3"
+            padding="$4"
+            borderRadius={14}
+            borderWidth={1}
+            borderColor="#EAE8E1"
+            gap="$2"
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+              <div>
+                <Text fontSize={14} fontWeight="800" color="#18241B">
+                  Superficie de votre champ (en hectares)
+                </Text>
+                <Text fontSize={12} color="#687068">
+                  Exemple : 1 hectare correspond à un terrain de 100 mètres sur 100 mètres.
+                </Text>
+              </div>
+              <div style={{ minWidth: '180px' }}>
+                <NumberInputWithStepper
+                  value={simInput.surfaceArea}
+                  onChange={handleSurfaceChange}
+                  step={0.5}
+                  min={0.25}
+                  max={500}
+                  unitLabel="ha"
+                />
+              </div>
             </div>
-            <div style={{ fontSize: '20px', fontWeight: 900, color: '#18241B', marginTop: '2px' }}>
-              {fmt(results.netProfitUsd)}
+          </YStack>
+        </YStack>
+
+        {/* ÉTAPE 2: Récolte & Ventes au Marché */}
+        <YStack
+          backgroundColor="#FFFFFF"
+          borderRadius={18}
+          padding="clamp(18px, 4vw, 26px)"
+          borderWidth={1}
+          borderColor="#E4EAE4"
+          gap="$4"
+          style={{ boxShadow: '0 8px 24px rgba(14, 42, 22, 0.05)' }}
+        >
+          <YStack gap="$1">
+            <Text fontSize={18} fontWeight="800" color="#18241B">
+              Étape 2 : Votre Récolte & Vos Ventes au Marché
+            </Text>
+            <Text fontSize={13} color="#687068">
+              Indiquez la quantité que vous pensez récolter pour vendre et votre prix de vente au kilo.
+            </Text>
+          </YStack>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+              gap: '16px',
+            }}
+          >
+            <YStack
+              backgroundColor="#FAF8F3"
+              padding="$4"
+              borderRadius={14}
+              borderWidth={1}
+              borderColor="#EAE8E1"
+              gap="$2"
+            >
+              <Text fontSize={13.5} fontWeight="800" color="#18241B">
+                Quantité récoltée à vendre (en kg)
+              </Text>
+              <Text fontSize={12} color="#687068">
+                Poids total estimé que vous amenez au marché ou à l'organisation paysanne.
+              </Text>
+              <NumberInputWithStepper
+                value={simInput.commercializedQty}
+                onChange={handleYieldChange}
+                step={50}
+                min={10}
+                max={500000}
+                unitLabel="kg"
+              />
+            </YStack>
+
+            <YStack
+              backgroundColor="#FAF8F3"
+              padding="$4"
+              borderRadius={14}
+              borderWidth={1}
+              borderColor="#EAE8E1"
+              gap="$2"
+            >
+              <Text fontSize={13.5} fontWeight="800" color="#18241B">
+                Prix de vente espéré (USD par kg)
+              </Text>
+              <Text fontSize={12} color="#687068">
+                Prix que l'acheteur vous paie pour chaque kilo vendu.
+              </Text>
+              <NumberInputWithStepper
+                value={simInput.unitSalePriceUsd}
+                onChange={handlePriceChange}
+                step={0.1}
+                min={0.05}
+                max={100}
+                unitLabel="USD/kg"
+              />
+            </YStack>
+          </div>
+
+          {/* Note sur les ventes */}
+          <div
+            style={{
+              backgroundColor: '#F3FAF5',
+              border: '1px solid #C6DEC6',
+              borderRadius: '12px',
+              padding: '14px 18px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '12px',
+            }}
+          >
+            <div>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: '#1F6338', textTransform: 'uppercase' }}>
+                Total estimé des ventes (Ce que vous allez toucher)
+              </div>
+              <div style={{ fontSize: '12px', color: '#5F685F', marginTop: '2px' }}>
+                {simInput.commercializedQty.toLocaleString('fr-FR')} kg × {simInput.unitSalePriceUsd} USD/kg
+              </div>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ fontSize: '22px', fontWeight: 900, color: '#1F6338' }}>
+                {fmt(results.totalCashRevenueUsd)}
+              </div>
+              <div style={{ fontSize: '12px', color: '#5F685F' }}>
+                {formatMoney(results.totalCashRevenueUsd, 'CDF', simInput.exchangeRateCdfPerUsd || 2850)}
+              </div>
             </div>
           </div>
-        </div>
+        </YStack>
 
-      {/* SECTION 1: Culture & Paramètres de Récolte */}
+      {/* SECTION 3: Dépenses de Campagne */}
       <YStack
         backgroundColor="#FFFFFF"
-        borderRadius={20}
-        padding="$5"
+        borderRadius={18}
+        padding="clamp(18px, 4vw, 26px)"
         borderWidth={1}
         borderColor="#E4EAE4"
         gap="$4"
-        style={{ boxShadow: '0 12px 32px rgba(14, 42, 22, 0.06)' }}
-      >
-        <XStack justifyContent="space-between" alignItems="center" flexWrap="wrap" gap="$2">
-          <YStack gap="$1">
-            <Text fontSize={18} fontWeight="800" color="#18241B">
-              1. Choisissez votre culture et votre parcelle
-            </Text>
-            <Text fontSize={13} color="#687068">
-              Chaque culture charge un modèle de dépenses adapté aux provinces du Kwilu et du Kwango.
-            </Text>
-          </YStack>
-
-          {/* Province Selector */}
-          <XStack alignItems="center" gap="$2">
-            <MapPin size={15} color="#1F6338" />
-            <Text fontSize={12.5} fontWeight="600" color="#5F685F">
-              Province :
-            </Text>
-            {(['Kwilu', 'Kwango'] as const).map((prov) => {
-              const active = simInput.province === prov;
-              return (
-                <Button
-                  key={prov}
-                  size="$2.5"
-                  height={32}
-                  paddingHorizontal="$3"
-                  borderRadius={999}
-                  backgroundColor={active ? '#1F6338' : '#F4F6F4'}
-                  onPress={() => setSimInput({ ...simInput, province: prov })}
-                >
-                  <Text
-                    fontSize={12}
-                    fontWeight="700"
-                    color={active ? '#FFFFFF' : '#18241B'}
-                  >
-                    {prov}
-                  </Text>
-                </Button>
-              );
-            })}
-          </XStack>
-        </XStack>
-
-        {/* Photo Crop Cards using the 4 real agricultural photos in a proportional CSS Grid */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(195px, 1fr))',
-            gap: '14px',
-            width: '100%',
-          }}
-        >
-          {templates.map((tpl) => {
-            const active = simInput.cropCode === tpl.code;
-            const meta = CROP_META[tpl.code] || {
-              label: tpl.nameFr,
-              desc: 'Filière locale',
-              photo: '/images/agri-4.jpg',
-              renderIcon: (color: string) => <Sprout size={18} color={color} />,
-            };
-            return (
-              <YStack
-                key={tpl.code}
-                backgroundColor={active ? '#F4F9F4' : '#FFFFFF'}
-                borderRadius={12}
-                overflow="hidden"
-                borderWidth={active ? 2 : 1}
-                borderColor={active ? '#1F6338' : '#EAE8E1'}
-                cursor="pointer"
-                onPress={() => handleSelectCropTemplate(tpl)}
-              >
-                <div
-                  style={{
-                    position: 'relative',
-                    width: '100%',
-                    aspectRatio: '16 / 10',
-                    backgroundColor: '#E7F3E7',
-                    overflow: 'hidden',
-                  }}
-                >
-                  <img
-                    src={meta.photo}
-                    alt={meta.label}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      objectPosition: 'center top',
-                      display: 'block',
-                    }}
-                  />
-                  {active && (
-                    <YStack
-                      style={{ position: 'absolute', top: 8, right: 8 }}
-                      width={26}
-                      height={26}
-                      borderRadius={999}
-                      backgroundColor="#1F6338"
-                      alignItems="center"
-                      justifyContent="center"
-                    >
-                      <Check size={14} color="#FFFFFF" />
-                    </YStack>
-                  )}
-                </div>
-
-                <YStack padding="$3" gap="$1">
-                  <XStack alignItems="center" gap="$1.5">
-                    {meta.renderIcon('#1F6338')}
-                    <Text fontSize={14.5} fontWeight="800" color="#18241B">
-                      {meta.label}
-                    </Text>
-                  </XStack>
-                  <Text fontSize={11.5} color="#687068" lineHeight={16}>
-                    {meta.desc} · {tpl.defaultSalePriceUsd} USD/kg
-                  </Text>
-                </YStack>
-              </YStack>
-            );
-          })}
-        </div>
-
-        {/* 3 Numeric Inputs (Direct Input + -/+) */}
-        <XStack gap="$3" flexWrap="wrap" paddingTop="$2">
-          <YStack
-            flex={1}
-            minWidth={200}
-            backgroundColor="#FAF8F3"
-            padding="$3.5"
-            borderRadius={12}
-            borderWidth={1}
-            borderColor="#EAE8E1"
-            gap="$2"
-            style={{ boxSizing: 'border-box' }}
-          >
-            <Text fontSize={13} fontWeight="700" color="#18241B">
-              Superficie (hectares)
-            </Text>
-            <NumberInputWithStepper
-              value={simInput.surfaceArea}
-              onChange={handleSurfaceChange}
-              step={0.5}
-              min={0.25}
-              max={500}
-              unitLabel="ha"
-            />
-          </YStack>
-
-          <YStack
-            flex={1}
-            minWidth={200}
-            backgroundColor="#FAF8F3"
-            padding="$3.5"
-            borderRadius={12}
-            borderWidth={1}
-            borderColor="#EAE8E1"
-            gap="$2"
-            style={{ boxSizing: 'border-box' }}
-          >
-            <Text fontSize={13} fontWeight="700" color="#18241B">
-              Quantité commercialisée (kg)
-            </Text>
-            <NumberInputWithStepper
-              value={simInput.commercializedQty}
-              onChange={handleYieldChange}
-              step={50}
-              min={10}
-              max={500000}
-              unitLabel="kg"
-            />
-          </YStack>
-
-          <YStack
-            flex={1}
-            minWidth={200}
-            backgroundColor="#FAF8F3"
-            padding="$3.5"
-            borderRadius={12}
-            borderWidth={1}
-            borderColor="#EAE8E1"
-            gap="$2"
-            style={{ boxSizing: 'border-box' }}
-          >
-            <Text fontSize={13} fontWeight="700" color="#18241B">
-              Prix de vente (USD/kg)
-            </Text>
-            <NumberInputWithStepper
-              value={simInput.unitSalePriceUsd}
-              onChange={handlePriceChange}
-              step={0.1}
-              min={0.05}
-              max={100}
-              unitLabel="USD/kg"
-            />
-          </YStack>
-        </XStack>
-      </YStack>
-
-      {/* SECTION 2: Dépenses de Campagne */}
-      <YStack
-        backgroundColor="#FFFFFF"
-        borderRadius={14}
-        padding="$5"
-        borderWidth={1}
-        borderColor="#EAE8E1"
-        gap="$4"
+        style={{ boxShadow: '0 8px 24px rgba(14, 42, 22, 0.05)' }}
       >
         <XStack justifyContent="space-between" alignItems="center" flexWrap="wrap" gap="$2.5">
           <YStack gap="$1" flex={1} minWidth={220}>
             <Text fontSize={18} fontWeight="800" color="#18241B">
-              2. Notez vos dépenses par étape culturale
+              Étape 3 : Vos Dépenses pour cultiver votre champ
             </Text>
             <Text fontSize={13} color="#687068">
-              Terrain, semences, plantation, entretien, intrants, main-d’œuvre, récolte et transport.
+              Achat des semences, débroussaillage, main-d’œuvre, engrais et transport de la récolte.
             </Text>
           </YStack>
 
           <YStack
-            backgroundColor="#E7F3E7"
+            backgroundColor="#FFF8E6"
             paddingHorizontal="$3.5"
             paddingVertical="$2"
             borderRadius={999}
+            borderWidth={1}
+            borderColor="#F2B632"
             alignSelf="flex-start"
           >
-            <Text fontSize={13} fontWeight="800" color="#1F6338">
-              Coût total : {fmt(results.totalCostUsd)}
+            <Text fontSize={13} fontWeight="800" color="#8C6218">
+              Total dépenses : {fmt(results.totalCostUsd)}
             </Text>
           </YStack>
         </XStack>
@@ -1281,67 +1290,58 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
         </YStack>
       </YStack>
 
-      {/* Bottom Summary & Redirect to Results Page */}
-      <YStack
-        backgroundColor="#216139"
-        borderRadius={16}
-        padding="clamp(16px, 4vw, 24px)"
-        gap="$3.5"
+      {/* SECTION 4: Bouton pour voir les résultats complets */}
+      <div
+        style={{
+          backgroundColor: '#164E2E',
+          borderRadius: '18px',
+          padding: 'clamp(20px, 4vw, 28px)',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '20px',
+          boxShadow: '0 12px 32px rgba(22, 78, 46, 0.18)',
+        }}
       >
-        <div
+        <div style={{ flex: '1 1 280px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <span style={{ fontSize: '13px', fontWeight: 800, color: '#F2B632', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
+            Prêt à découvrir votre bénéfice ?
+          </span>
+          <div style={{ fontSize: 'clamp(20px, 4vw, 26px)', fontWeight: 800, color: '#FFFFFF', lineHeight: 1.2 }}>
+            Voir le calcul détaillé de votre rentabilité
+          </div>
+          <span style={{ fontSize: '13px', color: '#DCE8DE' }}>
+            Dépenses : {fmt(results.totalCostUsd)} · Recettes : {fmt(results.totalCashRevenueUsd)}
+          </span>
+        </div>
+
+        <button
+          type="button"
+          onClick={goToResultsPage}
           style={{
-            display: 'flex',
-            justifyContent: 'space-between',
+            minHeight: '52px',
+            padding: '12px 28px',
+            borderRadius: '999px',
+            border: 'none',
+            backgroundColor: '#F2B632',
+            color: '#18241B',
+            fontWeight: 800,
+            fontSize: '15px',
+            cursor: 'pointer',
+            display: 'inline-flex',
             alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: '16px',
-            width: '100%',
+            justifyContent: 'center',
+            gap: '10px',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
+            transition: 'transform 0.15s ease, background-color 0.15s ease',
           }}
         >
-          <div style={{ flex: '1 1 240px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <span style={{ fontSize: '13px', fontWeight: 700, color: '#F2B632' }}>
-              Récapitulatif de votre simulation
-            </span>
-            <div style={{ fontSize: 'clamp(18px, 4.5vw, 22px)', fontWeight: 800, color: '#FFFFFF' }}>
-              Bénéfice prévisionnel : {fmt(results.netProfitUsd)}
-            </div>
-            <span style={{ fontSize: '13px', color: '#DCE8DE' }}>
-              Coûts : {fmt(results.totalCostUsd)} · Recettes : {fmt(results.totalCashRevenueUsd)}
-            </span>
-          </div>
-
-          <div style={{ flex: '1 1 240px', maxWidth: '100%' }}>
-            <button
-              type="button"
-              onClick={goToResultsPage}
-              style={{
-                width: '100%',
-                minHeight: '48px',
-                padding: '10px 18px',
-                borderRadius: '999px',
-                border: 'none',
-                backgroundColor: '#F2B632',
-                color: '#18241B',
-                fontWeight: 800,
-                fontSize: 'clamp(13px, 3.2vw, 14.5px)',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                boxShadow: '0 8px 20px rgba(0,0,0,0.22)',
-                boxSizing: 'border-box',
-              }}
-            >
-              <BarChart3 size={17} color="#18241B" style={{ flexShrink: 0 }} />
-              <span style={{ textAlign: 'center' }}>
-                Calculer et voir la page des résultats
-              </span>
-              <ArrowRight size={16} color="#18241B" style={{ flexShrink: 0 }} />
-            </button>
-          </div>
-        </div>
-      </YStack>
+          <BarChart3 size={18} color="#18241B" />
+          <span>Voir mes résultats complets</span>
+          <ArrowRight size={17} color="#18241B" />
+        </button>
+      </div>
       </div>
 
       {/* Full-Width Past Simulated Projects Section (Exact match to Image 3) */}

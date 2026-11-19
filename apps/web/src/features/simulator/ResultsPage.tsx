@@ -305,18 +305,6 @@ export const ResultsPage: React.FC = () => {
             }}
           >
             <div>
-              <div
-                style={{
-                  fontSize: '11px',
-                  fontWeight: 800,
-                  color: '#1F6338',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.8px',
-                  marginBottom: '4px',
-                }}
-              >
-                Fiche Officielle de Calcul Agricole · Projet AVENIR
-              </div>
               <h1
                 style={{
                   margin: 0,
@@ -361,25 +349,6 @@ export const ResultsPage: React.FC = () => {
               gap: '14px',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              {isProfitable ? (
-                <CheckCircle2 size={20} color="#059669" />
-              ) : (
-                <AlertCircle size={20} color="#DC2626" />
-              )}
-              <span
-                style={{
-                  fontSize: '13px',
-                  fontWeight: 800,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.8px',
-                  color: isProfitable ? '#065F46' : '#991B1B',
-                }}
-              >
-                {isProfitable ? 'Résultat positif : Votre champ est rentable' : 'Attention : Risque de perte financière'}
-              </span>
-            </div>
-
             <div
               style={{
                 display: 'flex',
