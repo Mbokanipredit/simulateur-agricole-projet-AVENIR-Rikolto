@@ -990,38 +990,6 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
               />
             </YStack>
           </div>
-
-          {/* Note sur les ventes */}
-          <div
-            style={{
-              backgroundColor: '#F3FAF5',
-              border: '1px solid #C6DEC6',
-              borderRadius: '12px',
-              padding: '14px 18px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-              gap: '12px',
-            }}
-          >
-            <div>
-              <div style={{ fontSize: '12px', fontWeight: 700, color: '#1F6338', textTransform: 'uppercase' }}>
-                Total estimé des ventes (Ce que vous allez toucher)
-              </div>
-              <div style={{ fontSize: '12px', color: '#5F685F', marginTop: '2px' }}>
-                {simInput.commercializedQty.toLocaleString('fr-FR')} kg × {simInput.unitSalePriceUsd} USD/kg
-              </div>
-            </div>
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: '22px', fontWeight: 900, color: '#1F6338' }}>
-                {fmt(results.totalCashRevenueUsd)}
-              </div>
-              <div style={{ fontSize: '12px', color: '#5F685F' }}>
-                {formatMoney(results.totalCashRevenueUsd, 'CDF', simInput.exchangeRateCdfPerUsd || 2850)}
-              </div>
-            </div>
-          </div>
         </YStack>
 
       {/* SECTION 3: Dépenses de Campagne */}
@@ -1280,7 +1248,7 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
             Voir le calcul détaillé de votre rentabilité
           </div>
           <span style={{ fontSize: '13px', color: '#DCE8DE' }}>
-            Dépenses : {fmt(results.totalCostUsd)} · Recettes : {fmt(results.totalCashRevenueUsd)}
+            Découvrez si votre récolte est rentable et le bénéfice net qui restera dans votre poche.
           </span>
         </div>
 
