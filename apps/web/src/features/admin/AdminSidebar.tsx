@@ -137,62 +137,25 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           {/* Brand Header */}
           <div
             style={{
-              padding: '20px 20px 16px',
+              padding: '18px 20px',
+              backgroundColor: '#1F6338',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'space-between',
-              borderBottom: '1px solid #F0F4F0',
+              justifyContent: 'flex-start',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div
-                style={{
-                  width: '34px',
-                  height: '34px',
-                  borderRadius: '9px',
-                  backgroundColor: '#1F6338',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Sprout size={18} color="#FFFFFF" />
-              </div>
-              <div>
-                <div style={{ fontSize: '16px', fontWeight: 800, color: '#18241B', letterSpacing: '0.2px', lineHeight: 1.15 }}>
-                  AVENIR
-                </div>
-                <div style={{ fontSize: '11px', color: '#687068', fontWeight: 500 }}>
-                  Rikolto · Kwilu & Kwango
-                </div>
-              </div>
-            </div>
-
-            {/* Online Status Pill */}
-            <div
-              title={isOnline ? 'Connecté (Base de données active)' : 'Mode Hors-Ligne'}
+            <span
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '5px',
-                padding: '3px 8px',
-                borderRadius: '999px',
-                backgroundColor: isOnline ? '#EBF4EC' : '#FEF3C7',
-                fontSize: '11px',
+                fontSize: '15px',
                 fontWeight: 700,
-                color: isOnline ? '#1F6338' : '#8C6218',
+                color: '#FFFFFF',
+                letterSpacing: '0.8px',
+                textTransform: 'uppercase',
+                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
               }}
             >
-              <div
-                style={{
-                  width: '6px',
-                  height: '6px',
-                  borderRadius: '50%',
-                  backgroundColor: isOnline ? '#16A34A' : '#D97706',
-                }}
-              />
-              <span>{isOnline ? 'En ligne' : 'Hors-ligne'}</span>
-            </div>
+              PROJET AVENIR
+            </span>
           </div>
 
           {/* Current User Card */}

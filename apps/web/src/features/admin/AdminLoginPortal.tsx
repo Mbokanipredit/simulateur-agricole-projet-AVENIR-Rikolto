@@ -89,7 +89,7 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        fontFamily: "'Plus Jakarta Sans', sans-serif",
+        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
         color: '#122017',
         boxSizing: 'border-box',
       }}
@@ -450,21 +450,6 @@ export const AdminLoginPortal: React.FC<AdminLoginPortalProps> = ({
               {loading ? 'Connexion en cours...' : 'Se connecter à l’espace de travail →'}
             </button>
           </form>
-
-          {/* Security Note */}
-          <div
-            style={{
-              marginTop: '22px',
-              paddingTop: '16px',
-              borderTop: '1px solid #F0F4F0',
-              textAlign: 'center',
-              fontSize: '11.5px',
-              color: '#768278',
-              lineHeight: '16px',
-            }}
-          >
-            Accès sécurisé pour la coordination et les équipes de terrain du Projet AVENIR.
-          </div>
         </div>
       </main>
 

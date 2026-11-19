@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAtom, useSetAtom } from 'jotai';
-import { Menu, X, ArrowLeft, ShieldCheck, Wifi, WifiOff, Search, Bell } from 'lucide-react';
+import { Menu, X, ShieldCheck, Wifi, WifiOff, Search } from 'lucide-react';
 import { AuthPortalUserDto, SavedSimulationDto } from '../../api/generated/avenirApi';
 import {
   activeMainSectionAtom,
@@ -132,7 +132,7 @@ export const AdminApp: React.FC<AdminAppProps> = ({ onBackToPublicSite }) => {
         display: 'flex',
         minHeight: '100vh',
         backgroundColor: '#FAF8F3',
-        fontFamily: "'Plus Jakarta Sans', sans-serif",
+        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
       }}
     >
       {/* Sidebar Navigation */}
@@ -237,83 +237,6 @@ export const AdminApp: React.FC<AdminAppProps> = ({ onBackToPublicSite }) => {
 
           {/* Right Header Status & User Profile Chip */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
-            <button
-              type="button"
-              onClick={handleBackToPublic}
-              style={{
-                padding: '6px 12px',
-                borderRadius: '999px',
-                backgroundColor: '#FAF8F3',
-                border: '1.5px solid #1F6338',
-                color: '#1F6338',
-                fontSize: '12px',
-                fontWeight: 800,
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '5px',
-                transition: 'all 0.15s ease',
-              }}
-            >
-              <ArrowLeft size={13} color="#1F6338" />
-              <span>Site public</span>
-            </button>
-
-            {/* Online Status Pill */}
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                backgroundColor: '#FAF8F3',
-                padding: '5px 10px',
-                borderRadius: '999px',
-                border: '1px solid #DCE7DF',
-              }}
-            >
-              <div
-                style={{
-                  width: '8px',
-                  height: '8px',
-                  borderRadius: '50%',
-                  backgroundColor: isOnline ? '#16A34A' : '#F59E0B',
-                }}
-              />
-              <span style={{ fontSize: '11px', fontWeight: 700, color: '#122017' }}>
-                {isOnline ? 'En ligne' : 'Hors-ligne'}
-              </span>
-            </div>
-
-            {/* Notification Bell */}
-            <div
-              style={{
-                position: 'relative',
-                width: '34px',
-                height: '34px',
-                borderRadius: '50%',
-                backgroundColor: '#FAF8F3',
-                border: '1px solid #DCE7DF',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#5F685F',
-                cursor: 'pointer',
-              }}
-            >
-              <Bell size={15} />
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '6px',
-                  right: '6px',
-                  width: '6px',
-                  height: '6px',
-                  borderRadius: '50%',
-                  backgroundColor: '#F2B632',
-                }}
-              />
-            </div>
-
             {/* User Profile Header Chip */}
             <div
               style={{

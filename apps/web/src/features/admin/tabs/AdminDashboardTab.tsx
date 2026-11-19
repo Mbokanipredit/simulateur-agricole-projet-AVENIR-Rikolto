@@ -162,25 +162,6 @@ export const AdminDashboardTab: React.FC<AdminDashboardTabProps> = ({
         }}
       >
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-            <span
-              style={{
-                fontSize: '11.5px',
-                fontWeight: 700,
-                color: '#1F6338',
-                backgroundColor: '#EBF4EC',
-                padding: '3px 10px',
-                borderRadius: '999px',
-              }}
-            >
-              Suivi-Évaluation (M&E) · Rikolto en RDC
-            </span>
-            <span style={{ fontSize: '12px', color: '#8A968C' }}>•</span>
-            <span style={{ fontSize: '12px', color: '#687068', fontWeight: 500 }}>
-              Campagne Agricole Kwilu & Kwango 2026
-            </span>
-          </div>
-
           <h1
             style={{
               margin: 0,
