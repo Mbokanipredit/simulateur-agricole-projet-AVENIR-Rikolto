@@ -5,16 +5,6 @@ import {
   ArrowRight,
   Plus,
   Trash2,
-  Sprout,
-  Coffee,
-  Leaf,
-  Wheat,
-  Shovel,
-  Scissors,
-  Package,
-  Users,
-  ShoppingBasket,
-  Truck,
   BarChart3,
   Check,
   FolderDown,
@@ -55,50 +45,33 @@ const CROP_META: Record<
     label: string;
     desc: string;
     photo: string;
-    renderIcon: (color: string) => React.ReactNode;
   }
 > = {
   CACAO: {
     label: 'Cacao',
     desc: 'Fèves fermentées et séchées',
     photo: '/images/agri-3.jpg',
-    renderIcon: (color) => <Sprout size={18} color={color} />,
   },
   CAFE_ROBUSTA: {
     label: 'Café Robusta',
     desc: 'Cerises rouges et café marchand',
     photo: '/images/agri-1.jpg',
-    renderIcon: (color) => <Coffee size={18} color={color} />,
   },
   MANIOC: {
     label: 'Manioc',
     desc: 'Cossettes et tubercules frais',
     photo: '/images/agri-2.jpeg',
-    renderIcon: (color) => <Leaf size={18} color={color} />,
   },
   MAIS_GRAIN: {
     label: 'Maïs grain',
     desc: 'Maïs grain sec égrené',
     photo: '/images/agri-4.jpg',
-    renderIcon: (color) => <Wheat size={18} color={color} />,
   },
   ARACHIDE_NIEBE: {
     label: 'Arachide / Niébé',
     desc: 'Gousses et graines sèches',
     photo: '/images/agri-3.jpg',
-    renderIcon: (color) => <Sprout size={18} color={color} />,
   },
-};
-
-const STAGE_ICONS: Record<ExpenseStageCode, (color: string) => React.ReactNode> = {
-  LAND_PREP: (color) => <Shovel size={16} color={color} />,
-  SEEDS: (color) => <Sprout size={16} color={color} />,
-  PLANTING: (color) => <Leaf size={16} color={color} />,
-  MAINTENANCE: (color) => <Scissors size={16} color={color} />,
-  INPUTS: (color) => <Package size={16} color={color} />,
-  LABOR: (color) => <Users size={16} color={color} />,
-  HARVEST: (color) => <ShoppingBasket size={16} color={color} />,
-  LOGISTICS: (color) => <Truck size={16} color={color} />,
 };
 
 export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
@@ -869,12 +842,9 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
                   </div>
 
                   <YStack padding="$3" gap="$1">
-                    <XStack alignItems="center" gap="$1.5">
-                      {meta.renderIcon('#1F6338')}
-                      <Text fontSize={14.5} fontWeight="800" color="#18241B">
-                        {meta.label}
-                      </Text>
-                    </XStack>
+                    <Text fontSize={15} fontWeight="800" color="#18241B">
+                      {meta.label}
+                    </Text>
                     <Text fontSize={11.5} color="#687068" lineHeight={16}>
                       {meta.desc} · Prix indicatif : {tpl.defaultSalePriceUsd} USD/kg
                     </Text>
@@ -891,7 +861,7 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
             borderRadius={14}
             borderWidth={1}
             borderColor="#EAE8E1"
-            gap="$2"
+            gap="$3"
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
               <div>
@@ -912,6 +882,36 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
                   unitLabel="ha"
                 />
               </div>
+            </div>
+
+            {/* Quick Choice Chips for Surface */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '12px', color: '#5F685F', fontWeight: 600 }}>
+                Choix rapide :
+              </span>
+              {[0.5, 1, 2, 3, 5, 10].map((surf) => {
+                const active = simInput.surfaceArea === surf;
+                return (
+                  <button
+                    key={surf}
+                    type="button"
+                    onClick={() => handleSurfaceChange(surf)}
+                    style={{
+                      padding: '5px 12px',
+                      borderRadius: '999px',
+                      border: active ? '1.5px solid #1F6338' : '1px solid #D5DDD5',
+                      backgroundColor: active ? '#1F6338' : '#FFFFFF',
+                      color: active ? '#FFFFFF' : '#122017',
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      transition: 'all 0.15s ease',
+                    }}
+                  >
+                    {surf} ha
+                  </button>
+                );
+              })}
             </div>
           </YStack>
         </YStack>
@@ -1043,23 +1043,9 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
               Achat des semences, débroussaillage, main-d’œuvre, engrais et transport de la récolte.
             </Text>
           </YStack>
-
-          <YStack
-            backgroundColor="#FFF8E6"
-            paddingHorizontal="$3.5"
-            paddingVertical="$2"
-            borderRadius={999}
-            borderWidth={1}
-            borderColor="#F2B632"
-            alignSelf="flex-start"
-          >
-            <Text fontSize={13} fontWeight="800" color="#8C6218">
-              Total dépenses : {fmt(results.totalCostUsd)}
-            </Text>
-          </YStack>
         </XStack>
 
-        {/* Clean Stage Filter Pills (No Emojis) */}
+        {/* Clean Stage Filter Pills (No Icons) */}
         <XStack gap="$2" flexWrap="wrap">
           <Button
             size="$2.5"
@@ -1080,7 +1066,6 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
           </Button>
           {EXPENSE_STAGES.map((st) => {
             const active = activeStageFilter === st.code;
-            const renderIcon = STAGE_ICONS[st.code];
             return (
               <Button
                 key={st.code}
@@ -1092,16 +1077,13 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
                 borderColor={active ? '#1F6338' : '#EAE8E1'}
                 onPress={() => setActiveStageFilter(st.code)}
               >
-                <XStack alignItems="center" gap="$1.5">
-                  {renderIcon(active ? '#FFFFFF' : '#1F6338')}
-                  <Text
-                    fontSize={12}
-                    fontWeight="700"
-                    color={active ? '#FFFFFF' : '#18241B'}
-                  >
-                    {st.shortLabelFr}
-                  </Text>
-                </XStack>
+                <Text
+                  fontSize={12}
+                  fontWeight="700"
+                  color={active ? '#FFFFFF' : '#18241B'}
+                >
+                  {st.shortLabelFr}
+                </Text>
               </Button>
             );
           })}
@@ -1111,7 +1093,6 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
         <YStack gap="$2.5">
           {filteredExpenses.map((item) => {
             const stMeta = EXPENSE_STAGES.find((s) => s.code === item.stage);
-            const renderIcon = STAGE_ICONS[item.stage] || ((c: string) => <Sprout size={16} color={c} />);
             const lineTotal = item.quantity * item.unitCostUsd;
             return (
               <div
@@ -1126,20 +1107,6 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
               >
                 {/* Title & Stage */}
                 <div className="avenir-expense-title">
-                  <div
-                    style={{
-                      width: '36px',
-                      height: '36px',
-                      borderRadius: '8px',
-                      backgroundColor: '#E7F3E7',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                    }}
-                  >
-                    {renderIcon('#1F6338')}
-                  </div>
                   <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '3px' }}>
                     <Input
                       height={34}
@@ -1204,6 +1171,7 @@ export const SimulatorWorkspace: React.FC<SimulatorWorkspaceProps> = ({
                     circular
                     backgroundColor="#FEE2E2"
                     onPress={() => handleDeleteExpense(item.id)}
+                    title="Supprimer cette ligne"
                   >
                     <Trash2 size={14} color="#B91C1C" />
                   </Button>
